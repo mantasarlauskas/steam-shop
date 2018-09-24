@@ -1,0 +1,49 @@
+.nav {
+  height: 56px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+
+  .menu-icon {
+    svg {
+      @extend %center-vertically;
+      left: 15px;
+      height: 40px;
+      color: white;
+      line-height: 56px;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    &:active::after {
+      position: absolute;
+      top: 5px;
+      left: 1px;
+      display: inline-block;
+      content: "";
+      height: 45px;
+      width: 45px;
+      border-radius: 50%;
+      background: #FFF;
+      opacity: 0.05;           
+    }  
+  }
+
+  .search-input {
+    position: relative;
+
+    input.form-control { @extend %center-vertically; }      
+  }
+
+  .user-actions {
+    position: relative;
+
+    .avatar {
+      @extend %center-vertically;
+      height: 45px;
+      border-radius: 50%;
+      right: 10%;
+      cursor: pointer;   
+    }
+  }
+}
