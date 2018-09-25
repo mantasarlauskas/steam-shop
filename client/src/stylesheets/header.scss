@@ -31,8 +31,7 @@
 
   .search-input {
     position: relative;
-
-    input.form-control { @extend %center-vertically; }      
+    input.form-control { @extend %center-element; width: 80%; }      
   }
 
   .user-actions {
@@ -40,10 +39,15 @@
 
     .avatar {
       @extend %center-vertically;
-      height: 45px;
+      height: 40px;
       border-radius: 50%;
       right: 10%;
       cursor: pointer;   
+    }
+
+    .dropdown-item {
+      @extend %align-icons;
+      svg { margin-right: 10px; }
     }
   }
 }

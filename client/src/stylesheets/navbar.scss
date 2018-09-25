@@ -1,0 +1,32 @@
+.navigation-bar {
+  position: fixed;
+  left: -200px;
+  width: 200px;
+  height: calc(100vh - 56px);
+  animation: hide 0.5s;
+
+  &.active {
+    left: 0;
+    animation: show 0.5s;
+  }
+
+  .list-group-item {
+    @extend %align-icons;
+    border: none;
+    border-radius: 0;
+    color: #FFF; 
+    cursor: pointer;
+    svg { margin-right: 25px; }
+    &:hover { color: #999; }
+  }
+}
+
+@keyframes show {
+  from { left: -200px; }
+  to { left: 0; }
+}
+
+@keyframes hide {
+  from { left: 0; }
+  to { left: -200px; }
+}

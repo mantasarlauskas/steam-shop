@@ -1,9 +1,9 @@
 import React from 'react';
-import { FaBars } from 'react-icons/fa';
+import { FaBars, FaCog, FaSignOutAlt } from 'react-icons/fa';
 
-export default () => (
+export default ({ toggleNavbar }) => (
   <header className="nav navbar-expand-lg bg-dark">
-    <div className="menu-icon">
+    <div className="menu-icon" onClick={toggleNavbar}>
       <FaBars />
     </div>
     <div className="search-input">
@@ -16,10 +16,9 @@ export default () => (
           alt="User avatar" 
           data-toggle="dropdown" 
         />
-        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a className="dropdown-item" href="#">Action</a>
-          <a className="dropdown-item" href="#">Another action</a>
-          <a className="dropdown-item" href="#">Something else here</a>
+        <div className="dropdown-menu dropdown-menu-right">
+          <a className="dropdown-item" href="#"><FaCog /> Nustatymai</a>
+          <a className="dropdown-item" href="#"><FaSignOutAlt /> Atsijungti</a>
         </div>
     </div>
   </header>
