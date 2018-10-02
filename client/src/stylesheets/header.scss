@@ -1,7 +1,11 @@
 .nav {
   height: 56px;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   display: grid;
+  z-index: 1;
   grid-template-columns: 25% 50% 25%;
 
   .menu-icon {
@@ -34,15 +38,46 @@
     input.form-control { @extend %center-element; width: 80%; }      
   }
 
+  .user-login  {
+    position: relative;
+    
+    .toggle-login-button { 
+      @extend %center-vertically; 
+      right: 20%;
+      color: #FFF;
+      cursor: pointer;
+    }
+    
+  }
+
   .user-actions {
     position: relative;
+    color: #FFF;
 
-    .avatar {
+    .user-shopping-cart { 
       @extend %center-vertically;
-      height: 40px;
-      border-radius: 50%;
+      cursor: pointer; 
+      right: calc(10% + 70px);
+      &:active { transform: translateY(-45%); }
+
+      .badge { 
+        display: inline-block;
+        vertical-align: top; 
+        height: 16px;
+        font-size: 10px;
+        margin-left: 5px;
+      }
+    }
+
+    .dropdown {
+      @extend %center-vertically;
       right: 10%;
-      cursor: pointer;   
+
+      .avatar {
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+      }    
     }
 
     .dropdown-item {

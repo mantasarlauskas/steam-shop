@@ -1,9 +1,11 @@
 .navigation-bar {
   position: fixed;
+  top: 56px;
   left: -200px;
   width: 200px;
   height: calc(100vh - 56px);
   animation: hide 0.5s;
+  z-index: 1;
 
   &.active {
     left: 0;
