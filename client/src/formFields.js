@@ -39,3 +39,28 @@ export const registrationFields = [
     type: "password"
   }
 ];
+
+export const productFields = [
+  {
+    id: "title",
+    title: "Pavadinimas",
+    component: "input",
+    type: "text"
+  },
+  {
+    id: "price",
+    title: "Kaina",
+    component: "input",
+    type: "number"
+  },
+  {
+    id: "description",
+    title: "Aprašymas",
+    component: "textarea"
+  },
+  {
+    id: "logo",
+    title: "Produkto paveikslėlis",
+    component: "image"
+  }
+];

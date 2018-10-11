@@ -1,23 +1,46 @@
 const Sequelize = require('sequelize');
 const sequelize = require('./connection');
 
-module.exports = {
-  User: sequelize.define('user', {
-      username: {
-        type: Sequelize.STRING,
-        primaryKey: true
-      },
-      email: {
-        type: Sequelize.STRING
-      },
-      password: {
-        type: Sequelize.STRING
-      },
-      registration_date: {
-        type: Sequelize.DATE
-      }
+exports.User = sequelize.define('user', {
+    username: {
+      type: Sequelize.STRING,
+      primaryKey: true
     },
-    { timestamps: false }
-  ),
-  sequelize
-}
+    email: {
+      type: Sequelize.STRING
+    },
+    password: {
+      type: Sequelize.STRING
+    },
+    registration_date: {
+      type: Sequelize.DATE
+    },
+    role: {
+      type: Sequelize.INTEGER
+    },
+    isBanned: {
+      type: Sequelize.INTEGER
+    }
+  },
+  { timestamps: false }
+);
+
+exports.Product = sequelize.define('product', {
+    title: {
+      type: Sequelize.STRING
+    },
+    price: {
+      type: Sequelize.DOUBLE
+    },
+    logo: {
+      type: Sequelize.STRING
+    },
+    count: {
+      type: Sequelize.INTEGER
+    },
+    description: {
+      type: Sequelize.STRING
+    }
+  },
+  { timestamps: false }
+);

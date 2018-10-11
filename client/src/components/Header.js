@@ -1,12 +1,14 @@
 import React from 'react';
 import { FaBars, FaCog, FaSignOutAlt, FaShoppingCart } from 'react-icons/fa';
-import Login from '../containers/LoginContainer';
-import Registration from '../containers/RegistrationContainer';
+import Login from '../containers/LoginForm';
+import Registration from '../containers/RegistrationForm';
+import { Link } from 'react-router-dom';
+import { loginFields, registrationFields } from '../formFields';
 
-export default ({ toggleNavbar, loggedIn, showLogin }) => (
+export default ({ toggleNavbar, loggedIn, showLogin, logout }) => (
   <header>
-    <Login /> 
-    <Registration />
+    <Login form="loginForm" fields={loginFields} additionalText="Registracija" /> 
+    <Registration form="registrationForm" fields={registrationFields} />
     <div className="nav navbar-expand-lg bg-dark">
       <div className="menu-icon" onClick={toggleNavbar}>
         <FaBars />
@@ -34,8 +36,8 @@ export default ({ toggleNavbar, loggedIn, showLogin }) => (
                 data-toggle="dropdown" 
               />
               <div className="dropdown-menu dropdown-menu-right">
-                <a className="dropdown-item" href="#"><FaCog /> Nustatymai</a>
-                <a className="dropdown-item" href="#"><FaSignOutAlt /> Atsijungti</a>
+                <Link className="dropdown-item" to="/options"><FaCog /> Nustatymai</Link>
+                <Link className="dropdown-item" to="/" onClick={logout}><FaSignOutAlt /> Atsijungti</Link>
               </div>
             </div>
           </div>

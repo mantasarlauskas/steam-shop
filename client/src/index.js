@@ -3,17 +3,15 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './stylesheets/index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Main from './components/Main';
-import { Provider } from 'react-redux';
+import App from './containers/AppContainer';
 import store from './store';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
+import { Provider } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
+  
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <Switch>
-        <Route exact path="/" component={Main} />
-      </Switch>
+      <App store={store} />
     </Router>
   </Provider>, 
   document.getElementById('root')

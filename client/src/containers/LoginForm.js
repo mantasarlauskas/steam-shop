@@ -1,18 +1,30 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { reduxForm } from 'redux-form';
-import Form from '../components/Form';
-import { loginUser, resetErrorMessage } from '../actions/auth';
+import { reduxForm, reset } from 'redux-form';
+import Form from '../components/ModalForm';
+import { loginUser, resetErrorMessage, resetSuccessMessage } from '../actions/auth';
+import { hideLoginForm, showRegistrationForm } from '../actions/forms';
 
-const mapStateToProps = ({ auth: { errorMessage, successMessage } }) => ({
+const mapStateToProps = ({ auth: { errorMessage, successMessage }, forms: { loginForm } }) => ({
   errorMessage,
-  successMessage
+  successMessage,
+  isOpen: loginForm
 });
 
 const mapDispatchToProps = dispatch => ({
   onSubmit: (fields) => {
     dispatch(resetErrorMessage());
     dispatch(loginUser(fields));  
+  },
+  closeModal: () => {
+    dispatch(resetSuccessMessage());
+    dispatch(resetErrorMessage());
+    dispatch(hideLoginForm());
+    dispatch(reset('loginForm'));
+  },
+  targetData: () => {
+    dispatch(hideLoginForm());
+    dispatch(showRegistrationForm());
   }
 });
 

@@ -1,11 +1,25 @@
-import React from 'react';
-import { FaHome, FaShoppingCart } from 'react-icons/fa';
+import React, { Fragment } from 'react';
+import { FaHome, FaShoppingCart, FaUserAlt, FaUpload } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
-export default ({ navbar }) => (
-  <nav className={navbar ? "navigation-bar bg-dark active" : "navigation-bar bg-dark"}>
-    <ul className="list-group">
-      <li className="list-group-item bg-dark"><FaHome /> Pagrindinis</li>
-      <li className="list-group-item bg-dark"><FaShoppingCart /> Užsakymai</li>
-    </ul>
-  </nav>
+const adminPages = () => (
+  <Fragment>
+    <Link className="list-group-item bg-dark" to="/users"><FaUserAlt /> Vartotojai</Link>
+    <Link className="list-group-item bg-dark" to="/upload"><FaUpload /> Prekių įkėlimas</Link>
+  </Fragment>
 );
+
+export default ({ navbar, role }) => {
+  if(navbar !== null) {
+    return (
+      <nav className={navbar ? "navigation-bar bg-dark active" : "navigation-bar bg-dark"}>
+        <ul className="list-group">
+          <Link className="list-group-item bg-dark" to="/"><FaHome /> Pagrindinis</Link>
+          <li className="list-group-item bg-dark"><FaShoppingCart /> Užsakymai</li>
+          { role === 1 && adminPages() }
+        </ul>
+      </nav>
+    );
+  }
+  return null;
+};

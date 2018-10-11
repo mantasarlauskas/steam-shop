@@ -16,6 +16,23 @@
   align-items: center;
 }
 
+.app {
+  position: relative;
+  top: 56px;
+}
+
+.card {
+  width: 300px;
+  height: 500px;
+  .card-img-top {
+    height: 300px;
+  }
+}
+
+.editUserForm {
+  .form-control { background: lightyellow };
+}
+
 .btn-link {
   cursor: pointer;
 }
