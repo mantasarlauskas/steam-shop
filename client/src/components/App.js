@@ -7,7 +7,8 @@ import jwt from 'jsonwebtoken';
 import Header from '../containers/HeaderContainer';
 import Navbar from '../containers/NavbarContainer';
 import NoMatch from './NoMatch';
-import Upload from './Upload';
+import ProductUpload from './ProductUpload';
+import KeyUpload from './KeyUpload';
 
 class App extends Component {
   componentDidUpdate(prevProps) {
@@ -24,7 +25,8 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Main} />
           <Route path="/options" component={Options} />
-          <Route path="/upload" component={Upload} />
+          <Route path="/product-upload" component={ProductUpload} />
+          <Route path="/key-upload" component={KeyUpload} />
           <Route path="/users" component={Users} /> 
           <Route component={NoMatch} />
         </Switch>

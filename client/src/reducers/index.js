@@ -6,6 +6,7 @@ import forms from './forms';
 import pagination from './pagination';
 import products from './products';
 import token from './token';
+import keys from './keys';
 import { reducer as form } from 'redux-form';
 
 export default combineReducers({
@@ -13,6 +14,7 @@ export default combineReducers({
   navbar,
   forms,
   form,
+  keys,
   products,
   token,
   pagination

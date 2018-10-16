@@ -11,21 +11,8 @@ class Main extends Component {
     games.length === 0 && dispatch(getProducts());
   }
 
-  displayGames() {
-    const { games } = this.props;
-    for(let i = 0; i < games.length; i = i + 3) {
-      return (
-        <div key={i} className="row">
-          { games[i] && <ProductCard key={games[i].id} {...games[i]} /> }
-          { games[i + 1] && <ProductCard key={games[i + 1].id} {...games[i + 1]} /> }
-          { games[i + 2] && <ProductCard key={games[i + 2].id} {...games[i + 2]} /> }
-        </div>
-      );
-    }
-  }
-
   render() {
-    const { isFetching } = this.props;
+    const { isFetching, games } = this.props;
     return (
       <div className="app">
         <Carousel />
@@ -33,7 +20,9 @@ class Main extends Component {
           (
             <div className="container mt-2">
               <h3>Rekomenduojami</h3>
-              { this.displayGames() }
+              <div className="product-container">
+              { games.map(game => <ProductCard key={game.id} {...game} />) }
+              </div>
             </div>
           ) :
           <p>Kraunama...</p>

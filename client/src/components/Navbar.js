@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 const adminPages = () => (
   <Fragment>
     <Link className="list-group-item bg-dark" to="/users"><FaUserAlt /> Vartotojai</Link>
-    <Link className="list-group-item bg-dark" to="/upload"><FaUpload /> Prekių įkėlimas</Link>
+    <Link className="list-group-item bg-dark" to="/product-upload"><FaUpload /> Žaidimų įkėlimas</Link>
+    <Link className="list-group-item bg-dark" to="/key-upload"><FaUpload /> Raktų įkėlimas</Link>
   </Fragment>
 );
 

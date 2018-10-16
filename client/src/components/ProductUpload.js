@@ -4,9 +4,6 @@ import { productFields } from '../formFields';
 
 export default () => (
   <div className="app">
-    <ProductForm 
-      form="productForm" 
-      fields={productFields}
-    />
+    <ProductForm form="productForm" fields={productFields} />
   </div>
 );

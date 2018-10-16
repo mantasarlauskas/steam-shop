@@ -1,8 +1,8 @@
 .navigation-bar {
   position: fixed;
   top: 56px;
-  left: -200px;
-  width: 200px;
+  left: -250px;
+  width: 250px;
   height: calc(100vh - 56px);
   animation: hide 0.5s;
   z-index: 1;
@@ -24,11 +24,11 @@
 }
 
 @keyframes show {
-  from { left: -200px; }
+  from { left: -250px; }
   to { left: 0; }
 }
 
 @keyframes hide {
   from { left: 0; }
-  to { left: -200px; }
+  to { left: -250px; }
 }

@@ -30,5 +30,5 @@ export const addProduct = fields => async (dispatch, getState) => {
   const { data: { secure_url } } = await axios.post(CLOUDINARY_UPLOAD_URL, formData, { headers: { 'Content-Type': "multipart/form-data" } });
   console.log({ ...fields, logo: secure_url });
   await ajax('products', 'POST', dispatch, undefined, undefined, { ...fields, logo: secure_url }, getState().token);
-  dispatch(addProduct({ ...fields, logo: secure_url }));
+  dispatch(insertProduct({ ...fields, logo: secure_url }));
 };

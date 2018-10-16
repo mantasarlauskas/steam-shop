@@ -13,7 +13,10 @@ const persistedState = loadState();
 const store = createStore(rootReducer, persistedState, applyMiddleware(logger, thunk, multi));
 
 store.subscribe(() => {
-  saveState({ token: store.getState().token });
+  saveState({ 
+    token: store.getState().token,
+    products: store.getState().products 
+  });
 });
 
 export default store;
