@@ -7,6 +7,7 @@ import pagination from './pagination';
 import products from './products';
 import token from './token';
 import keys from './keys';
+import search from './search';
 import { reducer as form } from 'redux-form';
 
 export default combineReducers({
@@ -17,5 +18,6 @@ export default combineReducers({
   keys,
   products,
   token,
-  pagination
+  pagination,
+  search
 });

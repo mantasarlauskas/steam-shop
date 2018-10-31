@@ -129,7 +129,17 @@ app.put('/users', ({ headers: { authorization }, body: { id } }, res) => {
 });
 
 app.get('/products', (req, res) => {
-  Product.findAll().then(data => res.send(data));
+  Product.hasMany(Key, { foreignKey: 'game_id', sourceKey: 'id' });
+  Product.findAll({
+    attributes: ['id', 'title', 'price', 'logo', 'description', [sequelize.fn('COUNT', sequelize.col('game_id')), 'count']],
+    include: [{
+      model: Key,
+      as: 'steam-keys',
+      attributes: [],
+      required: false
+    }],
+    group: 'product.id',
+  }).then(data => res.send(data));
 });
 
 app.post('/products', ({ body, headers: { authorization } }, res) => {

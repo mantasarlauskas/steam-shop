@@ -1,10 +1,10 @@
 const Sequelize = require('sequelize');
 
 module.exports = new Sequelize({
-  host: 'www.db4free.net',
+  host: 'localhost',
   database: 'steamshop',
-  username: 'rootrootadminas',
-  password: 'rootrootadminas',
+  username: 'root',
+  password: 'root',
   dialect: 'mysql',
   operatorsAliases: false
 });

@@ -8,14 +8,15 @@ import multi from 'redux-multi'
 const logger = createLogger({
   predicate: (getState, action) => action.type && !action.type.includes('@@redux-form'),
 });
-const persistedState = loadState();
+//const persistedState = loadState();
 
-const store = createStore(rootReducer, persistedState, applyMiddleware(logger, thunk, multi));
+
+const store = createStore(rootReducer, applyMiddleware(logger, thunk, multi));
 
 store.subscribe(() => {
   saveState({ 
     token: store.getState().token,
-    products: store.getState().products 
+  //  products: store.getState().products 
   });
 });
 

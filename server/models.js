@@ -35,9 +35,6 @@ exports.Product = sequelize.define('product', {
     logo: {
       type: Sequelize.STRING
     },
-    count: {
-      type: Sequelize.INTEGER
-    },
     description: {
       type: Sequelize.STRING
     }

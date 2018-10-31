@@ -28,7 +28,6 @@ export const addProduct = fields => async (dispatch, getState) => {
   formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
   formData.append("file", new Blob([fields.logo[0]], { type: "image/png; image/jpeg"}));
   const { data: { secure_url } } = await axios.post(CLOUDINARY_UPLOAD_URL, formData, { headers: { 'Content-Type': "multipart/form-data" } });
-  console.log({ ...fields, logo: secure_url });
   await ajax('products', 'POST', dispatch, undefined, undefined, { ...fields, logo: secure_url }, getState().token);
   dispatch(insertProduct({ ...fields, logo: secure_url }));
 };
