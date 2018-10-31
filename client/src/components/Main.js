@@ -5,12 +5,6 @@ import { connect } from 'react-redux';
 import { getProducts } from '../actions/products';
 
 class Main extends Component {
-
-  componentDidMount() {
-    const { games, dispatch } = this.props;
-    games.length === 0 && dispatch(getProducts());
-  }
-
   render() {
     const { isFetching, games } = this.props;
     return (
@@ -18,8 +12,8 @@ class Main extends Component {
         <Carousel />
         { isFetching === false ?
           (
-            <div className="container mt-2">
-              <h3>Rekomenduojami</h3>
+            <div className="container-fluid mt-2">
+              <h3 className="product-container-title">Rekomenduojami</h3>
               <div className="product-container">
               { games.map(game => <ProductCard key={game.id} {...game} />) }
               </div>

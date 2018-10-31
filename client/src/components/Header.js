@@ -4,7 +4,7 @@ import Login from '../containers/LoginForm';
 import Registration from '../containers/RegistrationForm';
 import { Link } from 'react-router-dom';
 import { loginFields, registrationFields } from '../formFields';
-import SearchCard from './SearchCard';
+import Search from './Search';
 
 class Header extends Component {
   searchForProducts = ({ target: { value } }) => {
@@ -22,12 +22,7 @@ class Header extends Component {
           <div className="menu-icon" onClick={toggleNavbar}>
             <FaBars />
           </div>
-          <div className="search-input">
-            <input type="text" className="form-control" placeholder="Ieškoti" onChange={this.searchForProducts} />
-            <div className="search-cards">
-            { games.map(({ id, ...game }) => <SearchCard key={id} game={game} />) }
-            </div>
-          </div>
+          <Search games={games} searchForProducts={this.searchForProducts}/>
           { !loggedIn ? (
               <div className="user-login">
                 <div className="toggle-login-button" onClick={showLogin}>

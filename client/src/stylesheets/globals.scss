@@ -16,17 +16,16 @@
   align-items: center;
 }
 
+%responsive-cards {
+  @media screen and (min-width: 1360px) { width: 80%; }
+  @media screen and (max-width: 1360px) { width: 70%; }
+  @media screen and (max-width: 1100px) { width: 75%; }
+  @media screen and (max-width: 1000px) { width: 90%; }
+}
+
 .app {
   position: relative;
   top: 56px;
-}
-
-.product-card {
-  width: 300px;
-  height: 500px;
-  .card-img-top {
-    height: 300px;
-  }
 }
 
 .editUserForm {

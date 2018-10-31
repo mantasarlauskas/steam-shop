@@ -33,11 +33,6 @@
     }  
   }
 
-  .search-input {
-    position: relative;
-    input.form-control { @extend %center-element; width: 80%; }      
-  }
-
   .user-login  {
     position: relative;
     

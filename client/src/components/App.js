@@ -9,8 +9,15 @@ import Navbar from '../containers/NavbarContainer';
 import NoMatch from './NoMatch';
 import ProductUpload from './ProductUpload';
 import KeyUpload from './KeyUpload';
+import Product from '../containers/ProductContainer';
 
 class App extends Component {
+  componentWillMount() {
+    const { games, requestProducts } = this.props;
+    console.log("a");
+    games.length === 0 && requestProducts();
+  }
+
   componentDidUpdate(prevProps) {
     const { location, resetUserEditForm, resetNavbar } = this.props;
     location !== prevProps.location && prevProps.location.pathname === "/options" && resetUserEditForm();
@@ -28,6 +35,7 @@ class App extends Component {
           <Route path="/product-upload" component={ProductUpload} />
           <Route path="/key-upload" component={KeyUpload} />
           <Route path="/users" component={Users} /> 
+          <Route exact path="/product/:id" component={Product} />
           <Route component={NoMatch} />
         </Switch>
       );
@@ -36,6 +44,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Main} />
           <Route path="/options" component={Options} />
+          <Route exact path="/product/:id" component={Product} />
           <Route component={NoMatch} />
         </Switch>
       );
@@ -43,6 +52,7 @@ class App extends Component {
       routes = (
         <Switch>
           <Route exact path="/" component={Main} />
+          <Route exact path="/product/:id" component={Product} />
           <Route component={NoMatch} />
         </Switch>
       );

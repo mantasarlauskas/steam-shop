@@ -5,5 +5,5 @@ const searchKeywordSelector = ({ search }) => search;
 
 export const productSearchSelector = createSelector(
   [productSelector, searchKeywordSelector],
-  (products, keyword) => products.filter(product => keyword !== '' && product.title.toUpperCase().includes(keyword.toUpperCase()))
+  (products, keyword) => keyword !== '' ? products.filter(product => product.title.toUpperCase().includes(keyword.toUpperCase())) : null
 );

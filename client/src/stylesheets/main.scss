@@ -1,4 +1,21 @@
+.product-container-title {
+    @extend %responsive-cards;
+    @media screen and (max-width: 850px) { width: 348px; }
+    margin: 0 auto 10px auto;
+}
+
 .product-container {
-    display: grid;
-    grid-template-columns: auto auto auto;
+    @extend %responsive-cards;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    @media screen and (max-width: 850px) { width: 100%; }
+    @media screen and (max-width: 750px) { justify-content: center; }
+
+    .product-card {
+        width: 350px;
+        height: 550px;
+        margin-bottom: 20px;
+    }
 }
