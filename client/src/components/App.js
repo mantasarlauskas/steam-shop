@@ -10,6 +10,7 @@ import NoMatch from './NoMatch';
 import ProductUpload from './ProductUpload';
 import KeyUpload from './KeyUpload';
 import Product from '../containers/ProductContainer';
+import Cart from '../containers/CartContainer';
 
 class App extends Component {
   componentWillMount() {
@@ -36,6 +37,7 @@ class App extends Component {
           <Route path="/key-upload" component={KeyUpload} />
           <Route path="/users" component={Users} /> 
           <Route exact path="/product/:id" component={Product} />
+          <Route path="/cart" component={Cart} /> 
           <Route component={NoMatch} />
         </Switch>
       );
@@ -45,6 +47,7 @@ class App extends Component {
           <Route exact path="/" component={Main} />
           <Route path="/options" component={Options} />
           <Route exact path="/product/:id" component={Product} />
+          <Route path="/cart" component={Cart} /> 
           <Route component={NoMatch} />
         </Switch>
       );

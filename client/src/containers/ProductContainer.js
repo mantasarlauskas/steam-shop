@@ -1,8 +1,14 @@
 import { connect } from 'react-redux';
 import Product from '../components/Product';
+import { addProductToCart } from '../actions/cart';
+import { findProductSelector } from '../selectors/products';
 
-const mapStateToProps = ({ products: { games } }, { match: { params: { id } } }) => ({
-  product: games.find(game =>  game.id === parseInt(id))
+const mapStateToProps = (state, { match: { params: { id } } }) => ({
+  product: findProductSelector(state, id)
 });
 
-export default connect(mapStateToProps)(Product);
+const mapDispatchToProps = dispatch => ({
+  addToCart: id => dispatch(addProductToCart(id))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Product);

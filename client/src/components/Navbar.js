@@ -16,7 +16,7 @@ export default ({ navbar, role }) => {
       <nav className={navbar ? "navigation-bar bg-dark active" : "navigation-bar bg-dark"}>
         <ul className="list-group">
           <Link className="list-group-item bg-dark" to="/"><FaHome /> Pagrindinis</Link>
-          <li className="list-group-item bg-dark"><FaShoppingCart /> Užsakymai</li>
+          <Link className="list-group-item bg-dark" to="/cart"><FaShoppingCart /> Krepšelis</Link>
           { role === 1 && adminPages() }
         </ul>
       </nav>

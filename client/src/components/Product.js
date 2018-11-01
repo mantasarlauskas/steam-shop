@@ -1,8 +1,9 @@
 import React from 'react';
+import { FaPlusCircle } from 'react-icons/fa';
 
-export default ({ product }) => { 
+export default ({ product, addToCart }) => { 
     if(product) {
-        const { title, logo } = product; 
+        const { title, logo, id } = product; 
         return (
             <div className="app container product">
                 <h1 className="product-title">{ title }</h1>
@@ -12,7 +13,7 @@ export default ({ product }) => {
                         <img src={logo} alt="Product cover" />
                     </div>
                     <div className="product-info">
-        
+                        <FaPlusCircle onClick={() => addToCart(id)} />
                     </div>
                 </div>
             </div>

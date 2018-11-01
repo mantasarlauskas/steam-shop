@@ -13,7 +13,7 @@ class Header extends Component {
   }
 
   render() {
-    const { toggleNavbar, loggedIn, showLogin, logout, games } = this.props;
+    const { toggleNavbar, loggedIn, showLogin, logout, games, cartCount } = this.props;
     return (
       <header>
         <Login form="loginForm" fields={loginFields} additionalText="Registracija" /> 
@@ -31,10 +31,10 @@ class Header extends Component {
               </div>
             ) : (
               <div className="user-actions">
-                <div className="user-shopping-cart">
+                <Link className="user-shopping-cart" to="/cart">
                   <FaShoppingCart size={24} />
-                  <span className="badge badge-danger">0</span>
-                </div>
+                  <span className="badge badge-danger">{ cartCount }</span>
+                </Link>
                 <div className="dropdown">
                   <img 
                     className="img-thumbnail avatar" 

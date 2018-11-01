@@ -2,6 +2,8 @@
 
 src/**/*.css
 
+.vscode
+
 # dependencies
 /**/node_modules
 

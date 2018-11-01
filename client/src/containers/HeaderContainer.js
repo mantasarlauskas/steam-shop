@@ -5,10 +5,12 @@ import { showLoginForm } from '../actions/forms';
 import { resetToken } from '../actions/auth';
 import { setSearchPhrase } from '../actions/search';
 import { productSearchSelector } from '../selectors/products';
+import { cartCountSelector } from '../selectors/cart';
 
 const mapStateToProps = ({ token, ...state }) => ({
   loggedIn: token,
-  games: productSearchSelector(state)
+  games: productSearchSelector(state),
+  cartCount: cartCountSelector(state)
 });
 
 const mapDispatchToProps = dispatch => ({
