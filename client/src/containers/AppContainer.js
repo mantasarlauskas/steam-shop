@@ -3,12 +3,14 @@ import { reset } from 'redux-form';
 import { resetSuccessMessage } from '../actions/auth';
 import { resetNavbar } from '../actions/navbar';
 import { getProducts } from '../actions/products';
+import { getCart } from '../actions/cart';
 import App from '../components/App';
 import { withRouter } from 'react-router-dom';
 
-const mapStateToProps = ({ products: { games }, token }) => ({
+const mapStateToProps = ({ products: { games }, token, cart }) => ({
   token,
-  games
+  games,
+  cart
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -17,7 +19,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(resetSuccessMessage());
     dispatch(reset("editUserForm"));
   },
-  requestProducts: () => dispatch(getProducts())
+  requestProducts: () => dispatch(getProducts()),
+  requestCart: () => dispatch(getCart())
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

@@ -14,9 +14,9 @@ import Cart from '../containers/CartContainer';
 
 class App extends Component {
   componentWillMount() {
-    const { games, requestProducts } = this.props;
-    console.log("a");
+    const { games, requestProducts, cart, requestCart } = this.props;
     games.length === 0 && requestProducts();
+    cart.length === 0 && requestCart();
   }
 
   componentDidUpdate(prevProps) {

@@ -17,15 +17,8 @@ export const findProductSelector = createSelector(
 
 export const cartProductSelector = createSelector(
   [productSelector, cartSelector],
-  (products, cart) => {
-    const arr = [];
-    cart.forEach(item => {
-      let i = 0;
-      while(i < item.count) {
-        arr.push(products.find(product => product.id === item.id))
-        i++;
-      }
-    });
-    return arr;
-  }
+  (products, cart) => cart.map(item => ({
+    ...products.find(product => product.id === item.id),
+    count: item.count
+  }))
 );
