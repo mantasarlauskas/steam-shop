@@ -52,3 +52,14 @@ exports.Key = sequelize.define('steam-key', {
   },
   { timestamps: false }
 );
+
+exports.Cart = sequelize.define('cart', {
+  game_id: {
+    type: Sequelize.INTEGER
+  },
+  username: {
+    type: Sequelize.STRING
+  }
+},
+{ timestamps: false }
+);

@@ -2,6 +2,7 @@ import C from '../constants';
 import { ajax } from '../server';
 import { hideRegistrationForm, showLoginForm, hideLoginForm } from './forms';
 import { reset } from 'redux-form';
+import axios from "axios";
 
 const setErrorMessage = message => ({
   type: C.SET_ERROR_MESSAGE,
@@ -57,9 +58,17 @@ export const unbanUser = userID => (dispatch, getState) =>
   ajax('users', 'PUT', dispatch, undefined, undefined, userID, getState().token)
   .then(error => !error && dispatch(updateUnbannedUser(userID.id)));
 
-export const loginUser = fields => dispatch => 
+export const loginUser = fields => dispatch => { 
+  axios({
+    method: 'post',
+    url: 'http://localhost:5000/login',
+    data: fields
+  })
+    .then((response) => console.log(response))
+    .catch(error => console.log("erroras:" + error));
   ajax('login', 'POST', dispatch, setErrorMessage, setToken, fields)
   .then(error => !error && dispatch([reset('loginForm'), hideLoginForm()]));
+}
 
 export const updateUser = fields => (dispatch, getState) => 
   ajax('users', 'POST', dispatch, undefined, setSuccessMessage, fields, getState().token);

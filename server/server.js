@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const http = require('http').Server(app);
 const bcrypt = require('bcrypt');
-const { User, Product, Key } = require('./models');
+const { User, Product, Key, Cart } = require('./models');
 const sequelize = require('./connection');
 const jwt = require('jsonwebtoken');
 
@@ -149,7 +149,6 @@ app.post('/products', ({ body, headers: { authorization } }, res) => {
       if(err) {
         res.status(400).json("Neteisingas tokenas");
       } else if(user.role === 1) {
-        console.log(body);
         Product.create(body).then(() => res.status(200).json("Produktas pridėtas"));
       } else {
         res.status(400).json("Vartotojas negali pridėti produktų");
@@ -168,11 +167,44 @@ app.post('/keys', ({ body, headers: { authorization } }, res) => {
       if(err) {
         res.status(400).json("Neteisingas tokenas");
       } else if(user.role === 1) {
-        console.log(body);
         Key.create(body).then(() => res.status(200).json("Raktas pridėtas"));
       } else {
         res.status(400).json("Vartotojas negali pridėti raktų");
       } 
+    });
+  } else {
+    res.status(400).json("Tokenas nėra prisegtas");
+  }
+});
+
+app.post('/cart', ({ body, headers: { authorization } }, res) => {
+  const token = getToken(authorization);
+  if(token) {
+    jwt.verify(token, 'key', (err, user) => {
+      if(err) {
+        res.status(400).json("Neteisingas tokenas");
+      } else {
+        Cart.create({ ...body, username: user.username }).then(() => res.status(200).json("Krepšelis papildytas"));
+      }
+    });
+  } else {
+    res.status(400).json("Tokenas nėra prisegtas");
+  }
+});
+
+app.get('/cart', ({ headers: { authorization } }, res) => {
+  const token = getToken(authorization);
+  if(token) {
+    jwt.verify(token, 'key', (err, user) => {
+      if(err) {
+        res.status(400).json("Neteisingas tokenas");
+      } else {
+        Cart.findAll({
+          where: {
+            username: user.username
+          }
+        }).then(data => res.send(parseResults(data)));
+      }
     });
   } else {
     res.status(400).json("Tokenas nėra prisegtas");

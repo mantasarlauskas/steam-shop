@@ -2,6 +2,8 @@
 
 src/**/*.css
 
+.idea
+
 .vscode
 
 # dependencies

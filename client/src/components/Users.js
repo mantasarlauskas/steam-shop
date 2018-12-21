@@ -46,15 +46,14 @@ class Users extends Component {
     const { isFetching, filteredUsers, pagination: { currentPage } } = this.props;
     if(isFetching === false) {
       return (
-        <div className="app">
-          <table className="table table-dark">
+        <div className="app users">
+          <table className="users__table">
           <thead>
             <tr>
               <th scope="col">#</th>
               <th scope="col">Slapyvardis</th>
               <th scope="col">El. paštas</th>
               <th scope="col">Rolė</th>
-              <th scope="col">Ar užblokuotas?</th>
               <th scope="col">Veiksmai</th>
             </tr>
           </thead>
@@ -65,7 +64,6 @@ class Users extends Component {
                   <td>{ username }</td>
                   <td>{ email }</td>
                   <td>{ role }</td>
-                  <td>{ isBanned }</td>
                   <td>
                     { role === 0 && isBanned === 0 ? 
                         <button 
