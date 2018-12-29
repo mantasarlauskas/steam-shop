@@ -2,7 +2,7 @@ import C from '../constants';
 
 const initialState = {
   currentPage: 0,
-  itemsPerPage: 10
+  itemsPerPage: 9
 };
 
 export default (state = initialState, action) => {
@@ -11,9 +11,9 @@ export default (state = initialState, action) => {
       return {
         ...state,
         currentPage: action.payload
-      }
+      };
     case C.RESET_PAGE:
-      return initialState
+      return initialState;
     default:
       return state
   }

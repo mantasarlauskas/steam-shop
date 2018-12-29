@@ -2,8 +2,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { reduxForm, reset } from 'redux-form';
 import Form from '../components/ModalForm';
-import { loginUser, resetErrorMessage, resetSuccessMessage } from '../actions/auth';
-import { hideLoginForm, showRegistrationForm } from '../actions/forms';
+import {closeLogin, redirectFromLoginToRegistration, submitLogin} from "../thunks/auth";
 
 const mapStateToProps = ({ auth: { errorMessage, successMessage }, forms: { loginForm } }) => ({
   errorMessage,
@@ -12,20 +11,9 @@ const mapStateToProps = ({ auth: { errorMessage, successMessage }, forms: { logi
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSubmit: (fields) => {
-    dispatch(resetErrorMessage());
-    dispatch(loginUser(fields));  
-  },
-  closeModal: () => {
-    dispatch(resetSuccessMessage());
-    dispatch(resetErrorMessage());
-    dispatch(hideLoginForm());
-    dispatch(reset('loginForm'));
-  },
-  targetData: () => {
-    dispatch(hideLoginForm());
-    dispatch(showRegistrationForm());
-  }
+  onSubmit: fields => dispatch(submitLogin(fields)),
+  closeModal: () => dispatch(closeLogin()),
+  targetData: () => dispatch(redirectFromLoginToRegistration())
 });
 
 export default compose(

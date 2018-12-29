@@ -2,8 +2,9 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { reduxForm, reset } from 'redux-form';
 import Form from '../components/Form';
-import { updateUser, resetErrorMessage, resetSuccessMessage } from '../actions/auth';
+import { resetErrorMessage, resetSuccessMessage } from '../actions/auth';
 import jwt from 'jsonwebtoken';
+import {updateUser} from "../thunks/users";
 
 const mapStateToProps = ({ auth: { successMessage }, token }) => ({
   successMessage,

@@ -1,7 +1,7 @@
 import C from '../constants';
 
 export const toggleNavbar = () => ({
-  type: C.SHOW_NAVBAR
+  type: C.TOGGLE_NAVBAR
 });
 
 export const resetNavbar = () => ({

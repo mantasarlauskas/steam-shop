@@ -23,9 +23,10 @@
   @media screen and (max-width: 1000px) { width: 90%; }
 }
 
-.app {
-  position: relative;
-  top: 56px;
+.title {
+  font-family: Roboto,sans-serif;
+  font-weight: bold;
+  font-size: 34px;
 }
 
 .editUserForm {

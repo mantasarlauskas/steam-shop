@@ -1,9 +1,9 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Product from '../components/Product';
-import { addProductToCart } from '../actions/cart';
-import { findProductSelector } from '../selectors/products';
+import {addProductToCart} from '../thunks/cart';
+import {findProductSelector} from '../selectors/products';
 
-const mapStateToProps = (state, { match: { params: { id } } }) => ({
+const mapStateToProps = (state, {match: {params: {id}}}) => ({
   product: findProductSelector(state, id)
 });
 

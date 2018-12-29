@@ -1,13 +1,22 @@
-import { createSelector } from 'reselect';
+import {createSelector} from 'reselect';
 
-const productSelector = ({ products: { games } }) => games;
-const searchKeywordSelector = ({ search }) => search;
-const cartSelector = ({ cart }) => cart;
+const productSelector = ({products}) => products;
+const searchKeywordSelector = ({search}) => search;
+const cartSelector = ({cart}) => cart;
 const propsSelector = (state, props) => props;
+const paginationSelector = state => state.pagination;
+
+export const productPaginationSelector = createSelector(
+  [productSelector, paginationSelector],
+  (products, {currentPage, itemsPerPage}) => products.filter((product, index) => index >= currentPage * itemsPerPage &&
+    index < currentPage * itemsPerPage + itemsPerPage)
+);
 
 export const productSearchSelector = createSelector(
   [productSelector, searchKeywordSelector],
-  (products, keyword) => keyword !== '' ? products.filter(product => product.title.toUpperCase().includes(keyword.toUpperCase())) : null
+  (products, keyword) => keyword !== '' ?
+    products.filter(product => product.title.toUpperCase().includes(keyword.toUpperCase())) :
+    null
 );
 
 export const findProductSelector = createSelector(
@@ -18,7 +27,7 @@ export const findProductSelector = createSelector(
 export const cartProductSelector = createSelector(
   [productSelector, cartSelector],
   (products, cart) => cart.map(item => ({
-    ...products.find(product => product.id === item.id),
-    count: item.count
+    ...products.find(product => product.id === item.game_id),
+    cartCount: item.count
   }))
 );

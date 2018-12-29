@@ -1,12 +1,12 @@
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { reduxForm, reset } from 'redux-form';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
+import {reduxForm, reset} from 'redux-form';
 import Form from '../components/Form';
-import { addKey } from '../actions/keys';
+import {addKey} from '../thunks/keys';
 
-const mapStateToProps = ({ products: { games }, auth: { successMessage } }) => ({
+const mapStateToProps = ({products, auth: {successMessage}}) => ({
   successMessage,
-  items: games
+  items: products
 });
 
 const mapDispatchToProps = dispatch => ({

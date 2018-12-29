@@ -1,5 +1,4 @@
-
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 import navbar from './navbar';
 import auth from './auth';
 import forms from './forms';
@@ -9,7 +8,8 @@ import token from './token';
 import keys from './keys';
 import search from './search';
 import cart from './cart';
-import { reducer as form } from 'redux-form';
+import orders from './orders';
+import {reducer as form} from 'redux-form';
 
 export default combineReducers({
   auth,
@@ -21,5 +21,6 @@ export default combineReducers({
   token,
   pagination,
   search,
-  cart
+  cart,
+  orders
 });

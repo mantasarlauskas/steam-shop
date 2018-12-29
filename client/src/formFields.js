@@ -1,4 +1,4 @@
-import { Input, Textarea, Image, Select } from './components/Fields';
+import {Input, Textarea, Image, Select} from './components/Fields';
 
 export const loginFields = [
   {
