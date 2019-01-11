@@ -5,7 +5,7 @@ import {loginUser, registerUser} from "./users";
 
 export const submitRegistration = fields => dispatch => {
   dispatch(resetErrorMessage());
-  dispatch(registerUser({username: fields.username, email: fields.email, password: fields.password1}));
+  dispatch(registerUser(fields));
 };
 
 export const closeRegistration = () => dispatch => {

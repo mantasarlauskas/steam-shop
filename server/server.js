@@ -4,7 +4,7 @@ const app = express();
 const http = require('http').Server(app);
 const bcrypt = require('bcrypt');
 const db = require('./models/index');
-const {Cart, Key, Product, User, Order} = db;
+const {Cart, Key, Product, User, Order, Review} = db;
 const jwt = require('jsonwebtoken');
 
 app.use(express.static(__dirname));
@@ -361,6 +361,29 @@ app.get('/order/:id', ({headers: {authorization}, params: {id}}, res) => {
   } else {
     res.status(400).json("Tokenas nėra prisegtas");
   }
+});
+
+app.post('/review', ({body, headers: {authorization}}, res) => {
+  const token = getToken(authorization);
+  if (token) {
+    jwt.verify(token, 'key', (err, user) => {
+      if (err) {
+        res.status(400).json("Neteisingas tokenas");
+      } else {
+        Review
+          .create({ ...body, user_id: user.id})
+          .then(() => res.status(200).json("Atsiliepimas pridėtas"));
+      }
+    });
+  } else {
+    res.status(400).json("Tokenas nėra prisegtas");
+  }
+});
+
+app.get('/review/:id', ({params: {id}}, res) => {
+  Review
+    .findAll({ where: { game_id: id } })
+    .then(data => res.send(parseResults(data)));
 });
 
 const server = http.listen(5000, () => {

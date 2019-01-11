@@ -4,7 +4,9 @@ import {addProductToCart} from '../thunks/cart';
 import {findProductSelector} from '../selectors/products';
 
 const mapStateToProps = (state, {match: {params: {id}}}) => ({
-  product: findProductSelector(state, id)
+  product: findProductSelector(state, id),
+  id: parseInt(id),
+  token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({
