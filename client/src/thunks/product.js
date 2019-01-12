@@ -1,6 +1,7 @@
 import {addProducts} from '../actions/products';
 import {url, config} from '../server';
 import axios from 'axios';
+import {setDefaultMaxPrice, setDefaultMinPrice} from "../actions/filter";
 
 const CLOUDINARY_UPLOAD_PRESET = 'steam-shop';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/mantasarlauskas/image/upload';
@@ -17,10 +18,20 @@ const uploadImage = logo => {
     });
 };
 
+const setPrices = data => dispatch => {
+  const minPrice = data.reduce((min, {price}) => min > price ? price : min, data[0].price);
+  dispatch(setDefaultMinPrice(Math.floor(minPrice)));
+  const maxPrice = data.reduce((max, {price}) => max < price ? price : max, 0);
+  dispatch(setDefaultMaxPrice(Math.ceil(maxPrice)));
+};
+
 export const getProducts = () => dispatch => {
   axios
     .get(`${url}/products`)
-    .then(({data}) => dispatch(addProducts(data)));
+    .then(({data}) => {
+      dispatch(addProducts(data));
+      dispatch(setPrices(data));
+    });
 };
 
 export const addProduct = fields => async (dispatch, getState) => {

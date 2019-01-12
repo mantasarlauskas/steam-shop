@@ -9,6 +9,7 @@ import keys from './keys';
 import search from './search';
 import cart from './cart';
 import orders from './orders';
+import filter from './filter';
 import {reducer as form} from 'redux-form';
 
 export default combineReducers({
@@ -16,6 +17,7 @@ export default combineReducers({
   navbar,
   forms,
   form,
+  filter,
   keys,
   products,
   token,

@@ -18,12 +18,14 @@ import Order from "../containers/OrderContainer";
 class App extends Component {
   constructor(props) {
     super(props);
+
     props.onLoad();
   }
 
   render() {
     const {token} = this.props;
     let routes;
+
     if (token && jwt.decode(token).role === 1) {
       routes = (
         <Switch>
@@ -63,6 +65,7 @@ class App extends Component {
         </Switch>
       );
     }
+
     return (
       <Fragment>
         <Header/>

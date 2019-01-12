@@ -9,7 +9,7 @@ const mapStateToProps = ({ navbar, token }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onPageChange: () => dispatch(resetNavbar())
+  onReset: () => dispatch(resetNavbar())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

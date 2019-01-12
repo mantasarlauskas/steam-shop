@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { registrationFields } from '../formFields';
 import EditUserForm from '../containers/EditUserForm';
 
 class Options extends Component {
@@ -11,11 +10,7 @@ class Options extends Component {
   render() {
     return (
       <div className="app">
-        <EditUserForm 
-          nameOfClass="editUserForm" 
-          form="editUserForm" 
-          fields={registrationFields.filter(field => field.id !== "username")}
-        />
+
       </div>
     );
   }

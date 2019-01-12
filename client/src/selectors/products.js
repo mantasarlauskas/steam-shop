@@ -5,9 +5,36 @@ const searchKeywordSelector = ({search}) => search;
 const cartSelector = ({cart}) => cart;
 const propsSelector = (state, props) => props;
 const paginationSelector = state => state.pagination;
+const minPriceSelector = ({filter: {minPrice}}) => minPrice;
+const maxPriceSelector = ({filter: {maxPrice}}) => maxPrice;
+const sortSelector = ({filter: {sort}}) => sort;
+
+export const productByPriceSelector = createSelector(
+  [productSelector, minPriceSelector, maxPriceSelector],
+  (products, minPrice, maxPrice) => products.filter(({price}) => price >= minPrice && price <= maxPrice)
+);
+
+const productSortSelector = createSelector(
+  [productByPriceSelector, sortSelector],
+  (products, sort) => {
+    let newProducts = [...products];
+    switch (sort) {
+      case 'NAME_DESC':
+        return newProducts.sort((a, b) => (a.title.toUpperCase() < b.title.toUpperCase()) ?
+          1 : ((b.title.toUpperCase() < a.title.toUpperCase()) ? -1 : 0));
+      case 'PRICE_ASC':
+        return newProducts.sort((a, b) => a.price - b.price);
+      case 'PRICE_DESC':
+        return newProducts.sort((a, b) => b.price - a.price);
+      default:
+        return newProducts.sort((a, b) => (a.title.toUpperCase() > b.title.toUpperCase()) ?
+          1 : ((b.title.toUpperCase() > a.title.toUpperCase()) ? -1 : 0));
+    }
+  }
+);
 
 export const productPaginationSelector = createSelector(
-  [productSelector, paginationSelector],
+  [productSortSelector, paginationSelector],
   (products, {currentPage, itemsPerPage}) => products.filter((product, index) => index >= currentPage * itemsPerPage &&
     index < currentPage * itemsPerPage + itemsPerPage)
 );

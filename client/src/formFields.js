@@ -1,47 +1,5 @@
 import {Input, Textarea, Image, Select} from './components/Fields';
 
-export const loginFields = [
-  {
-    id: "username",
-    title: "Prisijungimo vardas",
-    component: Input,
-    type: "text"
-  },
-  {
-    id: "password",
-    title: "Slaptažodis",
-    component: Input,
-    type: "password"
-  }
-];
-
-export const registrationFields = [
-  {
-    id: "email",
-    title: "El. paštas",
-    component: Input,
-    type: "email"
-  },
-  {
-    id: "username",
-    title: "Prisijungimo vardas",
-    component: Input,
-    type: "text"
-  },
-  {
-    id: "password1",
-    title: "Slaptažodis",
-    component: Input,
-    type: "password"
-  },
-  {
-    id: "password2",
-    title: "Slaptažodio pakartojimas",
-    component: Input,
-    type: "password"
-  }
-];
-
 export const productFields = [
   {
     id: "title",

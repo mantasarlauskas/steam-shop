@@ -2,7 +2,6 @@ import React, {Component, Fragment} from 'react';
 import Login from '../containers/LoginForm';
 import Registration from '../containers/RegistrationForm';
 import {Link} from 'react-router-dom';
-import {loginFields, registrationFields} from '../formFields';
 import Search from './Search';
 import {withStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -106,8 +105,8 @@ class Header extends Component {
     const {toggleNavbar, loggedIn, showLogin, games, cartCount, classes} = this.props;
     return (
       <header>
-        <Login form="loginForm" fields={loginFields} additionalText="Registracija"/>
-        <Registration form="registrationForm" fields={registrationFields}/>
+        <Login/>
+        <Registration/>
         <div className={classes.root}>
           <AppBar className={classes.bar} position="static">
             <Toolbar>

@@ -382,7 +382,14 @@ app.post('/review', ({body, headers: {authorization}}, res) => {
 
 app.get('/review/:id', ({params: {id}}, res) => {
   Review
-    .findAll({ where: { game_id: id } })
+    .findAll({
+      where: { game_id: id } ,
+      include: [{
+        model: User,
+        required: true,
+        attributes: ['username']
+      }]
+    })
     .then(data => res.send(parseResults(data)));
 });
 
