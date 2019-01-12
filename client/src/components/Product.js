@@ -1,5 +1,4 @@
-import React, {Component} from 'react';
-import {FaPlusCircle} from 'react-icons/fa';
+import React, {Component, Fragment} from 'react';
 import Button from '@material-ui/core/Button';
 import axios from "axios";
 import {config, url} from "../server";
@@ -9,6 +8,8 @@ import {withStyles} from '@material-ui/core/styles';
 import {styles} from '../styles/product';
 import Typography from '@material-ui/core/Typography';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import StarRatings from 'react-star-ratings';
+import TextField from '@material-ui/core/TextField';
 
 class Product extends Component {
   constructor(props) {
@@ -16,7 +17,11 @@ class Product extends Component {
 
     this.state = {
       review: '',
-      reviews: []
+      reviews: null,
+      rating: 0,
+      emptyError: false,
+      starError: false,
+      form: false
     };
 
     this.getReviews();
@@ -38,44 +43,137 @@ class Product extends Component {
       .then(() => this.getReviews())
   };
 
-  handleTextChange = e => {
+  handleTextChange = ({target: {value}}) => {
     this.setState({
-      review: e.target.value
+      review: value
     });
   };
 
+  handleRatingChange = rating => {
+    this.setState({
+      rating
+    });
+  };
+
+  toggleReviewForm = () => {
+    this.setState(prevState => ({
+      form: !prevState.form
+    }));
+  };
+
   handleReviewSubmit = e => {
-    const {review} = this.state;
+    const {review, rating} = this.state;
     const {product: {id}} = this.props;
 
     e.preventDefault();
 
-    review.length > 0 && this.addReview({text: review, game_id: id});
+    if (review.length > 0 && rating > 0) {
+      this.addReview({
+        text: review,
+        game_id: id,
+        rating
+      });
+      this.setState({
+        emptyError: false,
+        starError: false,
+        form: false,
+        review: '',
+        rating: 0
+      });
+    } else if (review.length === 0 && rating === 0) {
+      this.setState({
+        emptyError: true,
+        starError: true
+      });
+    } else if(review.length === 0) {
+      this.setState({
+        emptyError: true,
+        starError: false
+      });
+    } else {
+      this.setState({
+        emptyError: false,
+        starError: true
+      });
+    }
   };
 
   render() {
     const {product, addToCart, token, classes} = this.props;
+    const {reviews, rating, emptyError, starError, form} = this.state;
 
-    console.log(this.state.reviews);
-
-    if (product) {
+    if (product && reviews) {
       const {title, logo, id, count, description, price} = product;
-      const {reviews} = this.state;
 
       const reviewForm = (
-        <form onSubmit={this.handleReviewSubmit}>
-          <textarea onChange={this.handleTextChange}/>
-          <Button type="submit" variant="contained" color="primary">
-            Patvirtinti
-          </Button>
-        </form>
+        <Paper className={classes.reviewForm}>
+          <form onSubmit={this.handleReviewSubmit}>
+            <Typography variant="h6" gutterBottom>
+              Atsiliepimo forma
+            </Typography>
+            <hr/>
+            <StarRatings
+              rating={rating}
+              starRatedColor="yellow"
+              starHoverColor="yellow"
+              changeRating={this.handleRatingChange}
+              starDimension="25px"
+              starSpacing="2px"
+            />
+            {starError && (
+              <Typography className={classes.formError}>
+                Pasirinkite įvertinimą
+              </Typography>
+            )}
+            <TextField
+              error={emptyError}
+              id="review"
+              label="Atsiliepimas"
+              multiline
+              margin="normal"
+              variant="outlined"
+              fullWidth
+              onChange={this.handleTextChange}
+            />
+            {emptyError && (
+              <Typography className={classes.formError}>
+                Atsiliepimas negali būti tuščias
+              </Typography>
+            )}
+            <Button className={classes.reviewButton} type="submit" variant="contained" color="primary">
+              Patvirtinti
+            </Button>
+          </form>
+        </Paper>
       );
 
-      const showReview = ({User: {username}, id, text}) => (
-        <div key={id}>
-          Vartotojas: {username}
-          Atsiliepimasl: {text}
-        </div>
+      const showReview = ({User: {username}, id, text, rating, createdAt}) => (
+        <Paper className={classes.review} key={id}>
+          <Grid container>
+            <Grid item xs={6}>
+              <Typography variant="h6" gutterBottom>
+                {username}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="body1" className={classes.date}>
+                {new Date(createdAt).toLocaleString()}
+              </Typography>
+            </Grid>
+          </Grid>
+          <StarRatings
+            rating={rating}
+            starDimension="25px"
+            starSpacing="2px"
+            starRatedColor="yellow"
+          />
+          <Typography variant="body1" className={classes.rating}>
+            {rating}/5
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            {text}
+          </Typography>
+        </Paper>
       );
 
       return (
@@ -95,7 +193,16 @@ class Product extends Component {
                 <Typography variant="h5" gutterBottom>
                   {title}
                 </Typography>
+                <StarRatings
+                  rating={reviews.reduce((sum, {rating}) => sum + rating, 0)/reviews.length || 0}
+                  starDimension="25px"
+                  starSpacing="2px"
+                  starRatedColor="yellow"
+                />
                 <Typography variant="body2" gutterBottom>
+                  {reviews.length} atsiliepimai(-ų)
+                </Typography>
+                <Typography variant="body1" gutterBottom>
                   {description}
                 </Typography>
                 <Typography className={classes.price} variant="h4" gutterBottom>
@@ -107,7 +214,7 @@ class Product extends Component {
                   </Typography>
                 ) : (
                   <Typography className={classes.error} variant="body1" gutterBottom>
-                    Apgailestaujame, tačiau prekės sandelyje nebeturime
+                    Apgailestaujame, tačiau prekės šiuo metu sandelyje neturime
                   </Typography>
                 )}
                 {count > 0 && (
@@ -121,8 +228,29 @@ class Product extends Component {
               </Paper>
             </Grid>
           </Grid>
-          {token && reviewForm}
-          {reviews.map(showReview)}
+          {token && (
+            <Fragment>
+              <Button
+                className={classes.reviewButton}
+                type="submit"
+                variant="contained"
+                color="primary"
+                onClick={this.toggleReviewForm}
+              >
+                {form ? 'Uždaryti atsiliepimo formą' : 'Rašyti atsiliepimą'}
+              </Button>
+              {form && reviewForm}
+            </Fragment>
+          )}
+          <Typography variant="h5" gutterBottom>
+            Atsiliepimai
+          </Typography>
+          <hr/>
+          {reviews.length > 0 ? reviews.slice(0).reverse().map(showReview) : (
+            <Typography variant="body1" gutterBottom>
+              Atsiliepimų kol kas dar nėra
+            </Typography>
+          )}
         </div>
       );
     } else {

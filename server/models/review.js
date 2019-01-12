@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
   const Review = sequelize.define('Review', {
     game_id: DataTypes.INTEGER,
     user_id: DataTypes.INTEGER,
-    text: DataTypes.STRING
+    text: DataTypes.STRING,
+    rating: DataTypes.INTEGER
   }, {});
   Review.associate = function(models) {
     Review.belongsTo(models.User, {foreignKey: 'user_id'});

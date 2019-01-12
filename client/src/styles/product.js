@@ -36,5 +36,28 @@ export const styles = theme => ({
     top: '50%',
     left: '50%',
     transform: 'translateY(-50%) translateX(-50%)'
+  },
+  review: {
+    padding: 10,
+    margin: '20px 0'
+  },
+  rating: {
+    display: 'inline-block',
+    marginLeft: 10,
+    height: 25,
+    fontSize: 15
+  },
+  date: {
+    float: 'right'
+  },
+  reviewForm: {
+    padding: 15,
+    marginBottom: 20
+  },
+  reviewButton: {
+    margin: '20px 0'
+  },
+  formError: {
+    color: theme.palette.error.dark
   }
 });
