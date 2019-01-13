@@ -8,14 +8,19 @@ import {withStyles} from '@material-ui/core/styles';
 import {styles} from '../styles/product';
 import Typography from '@material-ui/core/Typography';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import StarRatings from 'react-star-ratings';
 import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import {Link} from 'react-router-dom';
+import jwt from 'jsonwebtoken';
 
 class Product extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.initialState = {
       review: '',
       reviews: null,
       rating: 0,
@@ -23,6 +28,8 @@ class Product extends Component {
       starError: false,
       form: false
     };
+
+    this.state = this.initialState;
 
     this.getReviews();
   }
@@ -41,6 +48,19 @@ class Product extends Component {
     axios
       .post(`${url}/review`, data, config(token))
       .then(() => this.getReviews())
+  };
+
+  deleteReview = data => {
+    const {token} = this.props;
+
+    axios
+    ({
+      method: 'delete',
+      url: `${url}/review`,
+      data,
+      ...config(token)
+    })
+      .then(() => this.getReviews());
   };
 
   handleTextChange = ({target: {value}}) => {
@@ -73,13 +93,7 @@ class Product extends Component {
         game_id: id,
         rating
       });
-      this.setState({
-        emptyError: false,
-        starError: false,
-        form: false,
-        review: '',
-        rating: 0
-      });
+      this.setState(this.initialState);
     } else if (review.length === 0 && rating === 0) {
       this.setState({
         emptyError: true,
@@ -98,12 +112,21 @@ class Product extends Component {
     }
   };
 
+  handleReviewRemove = id => {
+    const {history, onRemove} = this.props;
+
+    onRemove(id);
+    history.push('/games');
+  };
+
   render() {
-    const {product, addToCart, token, classes} = this.props;
+    const {product, addToCart, token, classes, onRemove} = this.props;
     const {reviews, rating, emptyError, starError, form} = this.state;
+    const user = jwt.decode(token);
 
     if (product && reviews) {
-      const {title, logo, id, count, description, price} = product;
+      const {title, logo, id, totalCount, usedCount, description, price} = product;
+      const count = totalCount - parseInt(usedCount || 0);
 
       const reviewForm = (
         <Paper className={classes.reviewForm}>
@@ -147,7 +170,7 @@ class Product extends Component {
         </Paper>
       );
 
-      const showReview = ({User: {username}, id, text, rating, createdAt}) => (
+      const showReview = ({User: {username}, id, user_id, text, rating, createdAt}) => (
         <Paper className={classes.review} key={id}>
           <Grid container>
             <Grid item xs={6}>
@@ -158,6 +181,11 @@ class Product extends Component {
             <Grid item xs={6}>
               <Typography variant="body1" className={classes.date}>
                 {new Date(createdAt).toLocaleString()}
+                {user && (user.role === 1 || user.id === user_id) && (
+                  <IconButton>
+                    <DeleteIcon onClick={() => this.deleteReview({user_id, id})}/>
+                  </IconButton>
+                )}
               </Typography>
             </Grid>
           </Grid>
@@ -190,9 +218,31 @@ class Product extends Component {
             </Grid>
             <Grid item xs={6}>
               <Paper className={classes.paper}>
-                <Typography variant="h5" gutterBottom>
-                  {title}
-                </Typography>
+                <Grid container>
+                  <Grid item xs={totalCount === 0 ? 10 : 11}>
+                    <Typography variant="h5" gutterBottom>
+                      {title}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={totalCount === 0 ? 2 : 1}>
+                    <Grid container>
+                      <Grid item xs={totalCount === 0 ? 6 : 12}>
+                        <Link to={`/product-upload/${id}`}>
+                          <IconButton>
+                              <EditIcon/>
+                          </IconButton>
+                        </Link>
+                      </Grid>
+                      <Grid item xs={6}>
+                        {totalCount === 0 && (
+                          <IconButton>
+                            <DeleteIcon onClick={() => this.handleReviewRemove(id)}/>
+                          </IconButton>
+                        )}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
                 <StarRatings
                   rating={reviews.reduce((sum, {rating}) => sum + rating, 0)/reviews.length || 0}
                   starDimension="25px"
@@ -209,21 +259,27 @@ class Product extends Component {
                   {price}$
                 </Typography>
                 {count > 0 ? (
-                  <Typography className={classes.success} variant="body1" gutterBottom>
-                    Prekės kiekis sandelyje: {count} vnt.
-                  </Typography>
+                  <Fragment>
+                    <Typography className={classes.success} variant="body1" gutterBottom>
+                      Prekės kiekis sandelyje: {count} vnt.
+                    </Typography>
+                    {token ? (
+                      <div align="center">
+                        <Button className={classes.submit} onClick={() => addToCart(id)}>
+                          <ShoppingCartIcon spacing={8}/>
+                          Į krepšelį
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className={classes.error}>
+                        Norėdami pirkti turite prisijungti
+                      </div>
+                    )}
+                  </Fragment>
                 ) : (
                   <Typography className={classes.error} variant="body1" gutterBottom>
                     Apgailestaujame, tačiau prekės šiuo metu sandelyje neturime
                   </Typography>
-                )}
-                {count > 0 && (
-                  <div align="center">
-                    <Button className={classes.submit} onClick={() => addToCart(id)}>
-                      <ShoppingCartIcon spacing={8}/>
-                      Į krepšelį
-                    </Button>
-                  </div>
                 )}
               </Paper>
             </Grid>
@@ -256,7 +312,7 @@ class Product extends Component {
     } else {
       return (
         <div>
-          Tokios prekes nera
+          Tokios prekės nėra
         </div>
       );
     }

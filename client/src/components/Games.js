@@ -59,31 +59,14 @@ class Games extends Component {
     if (minPrice !== null && maxPrice !== null) {
       return (
         <div className={classes.games + ' container'}>
-          <Grid container spacing={24}>
-            <Grid item xs={6}>
-              <h1 className="title">
-                Žaidimai
-              </h1>
-            </Grid>
-            <Grid item xs={6}>
-              <div className={classes.filter}>
-                <Typography variant="body2" gutterBottom>
-                  Rikiavimas:
-                </Typography>
-                <select onChange={this.handleSortChange}>
-                  <option value="NAME_ASC">Pagal pavadinimą didėjimo tvarka</option>
-                  <option value="NAME_DESC">Pagal pavadinimą mažėjimo tvarka</option>
-                  <option value="PRICE_ASC">Pagal kainą didėjimo tvarka</option>
-                  <option value="PRICE_DESC">Pagal kainą mažėjimo tvarka</option>
-                </select>
-              </div>
-            </Grid>
-          </Grid>
+          <h1 className="title">
+            Žaidimai
+          </h1>
           <hr/>
           <Grid container spacing={24}>
-            <Grid item xs={4}>
+            <Grid item xs={12}>
               <Grid container>
-                <Grid item xs={12}>
+                <Grid item xs={4}>
                   <Typography variant="body1" gutterBottom>
                     Kaina:
                   </Typography>
@@ -107,35 +90,54 @@ class Games extends Component {
                     </Grid>
                   </Grid>
                 </Grid>
+                <Grid item xs={8}>
+                  <div className={classes.filter}>
+                    <Typography variant="body2" gutterBottom>
+                      Rikiavimas:
+                    </Typography>
+                    <select onChange={this.handleSortChange}>
+                      <option value="NAME_ASC">Pagal pavadinimą didėjimo tvarka</option>
+                      <option value="NAME_DESC">Pagal pavadinimą mažėjimo tvarka</option>
+                      <option value="PRICE_ASC">Pagal kainą didėjimo tvarka</option>
+                      <option value="PRICE_DESC">Pagal kainą mažėjimo tvarka</option>
+                    </select>
+                  </div>
+                </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={8} container spacing={24}>
-              {products.map(({id, logo, title, price}) => {
-                return (
-                  <Grid key={id} item xs={4}>
-                    <Link to={`/product/${id}`}>
-                      <Card className={classes.card}>
-                        <CardActionArea>
-                          <CardMedia
-                            className={classes.media}
-                            image={logo}
-                            title={title}
-                          />
-                          <CardContent className={classes.content}>
-                            <Typography gutterBottom variant="h5" component="h2">
-                              {title}
-                            </Typography>
-                            <Typography variant="body2" gutterBottom>
-                              Kaina: {price}$
-                            </Typography>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-                    </Link>
-                  </Grid>
-                )
-              })}
-              {pagination}
+            <Grid item xs={12} container spacing={24}>
+              {products.length > 0 ? (
+                products.map(({id, logo, title, price}) => {
+                  return (
+                    <Grid key={id} item xs={4}>
+                      <Link to={`/product/${id}`}>
+                        <Card className={classes.card}>
+                          <CardActionArea>
+                            <CardMedia
+                              className={classes.media}
+                              image={logo}
+                              title={title}
+                            />
+                            <CardContent className={classes.content}>
+                              <Typography gutterBottom variant="h5" component="h2">
+                                {title}
+                              </Typography>
+                              <Typography variant="body2" gutterBottom>
+                                Kaina: {price}$
+                              </Typography>
+                            </CardContent>
+                          </CardActionArea>
+                        </Card>
+                      </Link>
+                    </Grid>
+                  )
+                })
+              ) : (
+                <Typography variant="h6">
+                  Prekių nerasta
+                </Typography>
+              )}
+              {products.length > 0 && pagination}
             </Grid>
           </Grid>
         </div>

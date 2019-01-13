@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
 import Pagination from './Pagination';
+import {withStyles} from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import {styles} from '../styles/orders';
 
 class Users extends Component {
   constructor(props) {
@@ -18,27 +26,28 @@ class Users extends Component {
   }
 
   render() {
-    const { filteredUsers, pagination: { currentPage }, onUserUnban, onUserBan } = this.props;
+    const { filteredUsers, pagination: { currentPage }, onUserUnban, onUserBan, classes} = this.props;
+
     return (
-      <div className="app users">
-        <table className="users__table">
-          <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Slapyvardis</th>
-            <th scope="col">El. paštas</th>
-            <th scope="col">Rolė</th>
-            <th scope="col">Veiksmai</th>
-          </tr>
-          </thead>
-          <tbody>
+      <Paper>
+        <Table className="users__table">
+          <TableHead>
+            <TableRow>
+              <TableCell>#</TableCell>
+              <TableCell>Slapyvardis</TableCell>
+              <TableCell>El. paštas</TableCell>
+              <TableCell>Rolė</TableCell>
+              <TableCell>Veiksmai</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
           { filteredUsers.map(({ username, email, role, isBanned, id }, index) => (
-            <tr key={username}>
-              <th scope="row">{ currentPage * 10 + index + 1 }</th>
-              <td>{ username }</td>
-              <td>{ email }</td>
-              <td>{ role }</td>
-              <td>
+            <TableRow key={username}>
+              <TableCell scope="row">{ currentPage * 10 + index + 1 }</TableCell>
+              <TableCell>{ username }</TableCell>
+              <TableCell>{ email }</TableCell>
+              <TableCell>{ role }</TableCell>
+              <TableCell>
                 {
                   role === 0 && isBanned === false &&
                     <button className="btn btn-warning" onClick={() => onUserBan({id})}>
@@ -51,16 +60,16 @@ class Users extends Component {
                       Atblokuoti
                     </button>
                 }
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))
           }
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
         { this.showPagination() }
-      </div>
+      </Paper>
     );
   }
 };
 
-export default Users;
+export default withStyles(styles)(Users);

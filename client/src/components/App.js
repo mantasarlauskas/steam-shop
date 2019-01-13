@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 import Header from '../containers/HeaderContainer';
 import Navbar from '../containers/NavbarContainer';
 import NoMatch from './NoMatch';
-import ProductUpload from './ProductUpload';
+import ProductFormContainer from '../containers/ProductFormContainer';
 import KeyUpload from './KeyUpload';
 import Product from '../containers/ProductContainer';
 import Cart from '../containers/CartContainer';
@@ -32,13 +32,14 @@ class App extends Component {
           <Route exact path="/" component={Main}/>
           <Route exact path="/games" component={Games}/>
           <Route path="/options" component={Options}/>
-          <Route path="/product-upload" component={ProductUpload}/>
+          <Route exact path="/product-upload" component={ProductFormContainer}/>
           <Route path="/key-upload" component={KeyUpload}/>
           <Route path="/users" component={Users}/>
-          <Route exact path="/product/:id" component={Product}/>
+          <Route path="/product/:id" component={Product}/>
           <Route path="/cart" component={Cart}/>
           <Route path="/orders" component={Orders}/>
-          <Route exact path="/order/:id" component={Order}/>
+          <Route path="/order/:id" component={Order}/>
+          <Route path="/product-upload/:id" component={ProductFormContainer}/>
           <Route component={NoMatch}/>
         </Switch>
       );

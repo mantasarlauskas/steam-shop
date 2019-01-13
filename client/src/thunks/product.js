@@ -2,6 +2,7 @@ import {addProducts} from '../actions/products';
 import {url, config} from '../server';
 import axios from 'axios';
 import {setDefaultMaxPrice, setDefaultMinPrice} from "../actions/filter";
+import {getCart} from "./cart";
 
 const CLOUDINARY_UPLOAD_PRESET = 'steam-shop';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/mantasarlauskas/image/upload';
@@ -38,5 +39,31 @@ export const addProduct = fields => async (dispatch, getState) => {
   const {data: {secure_url}} = await uploadImage(fields.logo[0]);
   axios
     .post(`${url}/products`, {...fields, logo: secure_url}, config(getState().token))
+    .then(() => dispatch(getProducts()));
+};
+
+export const removeProduct = id => (dispatch, getState) => {
+  axios
+    ({
+      method: 'delete',
+      url: `${url}/products`,
+      data: {id},
+      ...config(getState().token)
+    })
+    .then(() => {
+      dispatch(getProducts());
+    });
+};
+
+export const editProduct = fields => async (dispatch, getState) => {
+  if (fields.logo === null) {
+    fields.logo = getState().products.find(product => product.id === fields.id).logo;
+  } else {
+    const {data: {secure_url}} = await uploadImage(fields.logo[0]);
+    fields.logo = secure_url;
+  }
+
+  axios
+    .put(`${url}/products`, fields, config(getState().token))
     .then(() => dispatch(getProducts()));
 };

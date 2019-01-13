@@ -1,12 +1,13 @@
 export const styles = {
   card: {
-    maxWidth: 345
+    maxWidth: 345,
+    border: '1px #bdbdbd solid'
   },
   media: {
-    height: 140
+    height: 200
   },
   content: {
-    height: 130
+    height: 150
   },
   games: {
     padding: '50px 10px'

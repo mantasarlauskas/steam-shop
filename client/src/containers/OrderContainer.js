@@ -4,7 +4,8 @@ import {orderProductSelector} from "../selectors/order";
 import {getOrders} from "../thunks/order";
 
 const mapStateToProps = (state, {match: {params: {id}}}) => ({
-  products: orderProductSelector(state, id)
+  products: orderProductSelector(state, id),
+  id
 });
 
 const mapDispatchToProps = dispatch => ({

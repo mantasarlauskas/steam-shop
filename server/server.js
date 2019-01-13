@@ -145,14 +145,17 @@ app.get('/products', (req, res) => {
         'price',
         'logo',
         'description',
-        [db.sequelize.fn('COUNT', db.sequelize.col('game_id')), 'count']
+        'timesBought',
+        [db.sequelize.fn('COUNT', db.sequelize.col('Keys.game_id')), 'totalCount'],
+        [db.sequelize.fn('SUM', db.sequelize.col('Keys.isUsed')), 'usedCount']
       ],
-      include: [{
-        model: Key,
-        where: {isUsed: false},
-        attributes: [],
-        required: false
-      }],
+      include: [
+        {
+          model: Key,
+          attributes: [],
+          required: false
+        }
+      ],
       group: 'Product.id',
     })
     .then(data => res.send(data));
@@ -175,6 +178,52 @@ app.post('/products', ({body, headers: {authorization}}, res) => {
   }
 });
 
+
+app.put('/products', ({body, headers: {authorization}}, res) => {
+  const token = getToken(authorization);
+  if (token) {
+    jwt.verify(token, 'key', (err, user) => {
+      if (err) {
+        res.status(400).json("Neteisingas tokenas");
+      } else if (user.role === 1) {
+        Product.update(body, {where: {id: body.id}})
+          .then(() => res.status(200).json("Sėkmingai atblokuotas"));
+      } else {
+        res.status(400).json("Vartotojas nėra administratorius");
+      }
+    });
+  } else {
+    res.status(400).json("Tokenas nėra prisegtas");
+  }
+});
+
+app.delete('/products', ({body, headers: {authorization}}, res) => {
+  const token = getToken(authorization);
+  if (token) {
+    jwt.verify(token, 'key', (err, user) => {
+      if (err) {
+        res.status(400).json("Neteisingas tokenas");
+      } else {
+        Review
+          .findAll({where: {game_id: body.id}})
+          .then(reviews => {
+            reviews.forEach(review => review.destroy())
+          })
+          .then(() => {
+            Product
+              .find({where: {id: body.id}})
+              .then(product => {
+                product
+                  .destroy()
+                  .then(() => res.status(200).json("Sėkmingai pašalintas"))
+              });
+          });
+      }
+    });
+  } else {
+    res.status(400).json("Tokenas nėra prisegtas");
+  }
+});
 
 app.post('/keys', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
@@ -290,7 +339,15 @@ app.post('/order', ({body, headers: {authorization}}, res) => {
                 }
               })
               .then(data => {
-                data.forEach(cart => cart.update({order_id: parseResults(order).id}));
+                data.forEach(cart => {
+                  cart
+                    .update({order_id: parseResults(order).id})
+                    .then(() => {
+                      Product
+                        .find({where: {id: cart.game_id}})
+                        .then(product => product && product.update({timesBought: parseInt(product.timesBought) + 1}));
+                    });
+                });
                 res.status(200).json("Užsakymas sėkmingai sukurtas");
               });
           });
@@ -373,6 +430,27 @@ app.post('/review', ({body, headers: {authorization}}, res) => {
         Review
           .create({ ...body, user_id: user.id})
           .then(() => res.status(200).json("Atsiliepimas pridėtas"));
+      }
+    });
+  } else {
+    res.status(400).json("Tokenas nėra prisegtas");
+  }
+});
+
+app.delete('/review', ({body: {user_id, id, ...data}, headers: {authorization}}, res) => {
+  const token = getToken(authorization);
+  if (token) {
+    jwt.verify(token, 'key', (err, user) => {
+      if (err) {
+        res.status(400).json("Neteisingas tokenas");
+      } else if (user.role === 1 || user.id === user_id) {
+        Review
+          .destroy({
+            where: {id: id, user_id: user_id}
+          })
+          .then(() => res.status(200).json("Sėkmingai pašalintas"));
+      } else {
+        res.status(400).json("Vartotojas neturi teisės šalinti atsiliepimą");
       }
     });
   } else {

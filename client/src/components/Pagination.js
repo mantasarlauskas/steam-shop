@@ -15,5 +15,7 @@ export default ({ pageCount, changePage }) => (
     nextLinkClassName="page-link"
     previousLinkClassName="page-link"
     activeClassName="active"
+    nextLabel="Pirmyn"
+    previousLabel="Atgal"
   />
 );

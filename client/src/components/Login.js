@@ -15,7 +15,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.initialState = {
       username: {
         empty: false,
         value: ''
@@ -25,6 +25,8 @@ class Login extends Component {
         value: ''
       }
     };
+
+    this.state = this.initialState;
   }
 
   handleChange = name => ({target: {value}}) => {
@@ -49,6 +51,7 @@ class Login extends Component {
         username: username.value,
         password: password.value
       });
+      this.setState(this.initialState);
     }
   };
 
