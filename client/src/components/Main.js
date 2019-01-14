@@ -4,6 +4,7 @@ import ProductCard from './ProductCard';
 import { connect } from 'react-redux';
 
 class Main extends Component {
+
   render() {
     const { games } = this.props;
     return (

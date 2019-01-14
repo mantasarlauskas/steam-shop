@@ -29,6 +29,9 @@ class Navbar extends Component {
         <Link className="list-group-item bg-dark" to="/users" onClick={onReset}>
           <FaUserAlt/> Vartotojai
         </Link>
+        <Link className="list-group-item bg-dark" to="/keys" onClick={onReset}>
+          <FaUserAlt/> Raktai
+        </Link>
         <Link className="list-group-item bg-dark" to="/product-upload" onClick={onReset}>
           <FaUpload/> Žaidimų įkėlimas
         </Link>

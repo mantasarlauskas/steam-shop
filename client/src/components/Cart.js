@@ -52,7 +52,7 @@ class Cart extends Component {
                   const count = totalCount - parseInt(usedCount);
 
                   return (
-                    <Paper key={id} className={`${classes.paper} ${classes.product}`}>
+                    <Paper key={id} className={classes.product}>
                       <Grid container>
                         <Grid item xs={3}>
                           <img className="img-fluid" src={logo} alt="Game logo"/>

@@ -11,11 +11,11 @@ export const submitRegistration = fields => dispatch => {
 export const closeRegistration = () => dispatch => {
   dispatch(resetErrorMessage());
   dispatch(hideRegistrationForm());
-  dispatch(reset('registrationForm'));
 };
 
 export const submitLogin = fields => dispatch => {
   dispatch(resetErrorMessage());
+  dispatch(resetSuccessMessage());
   dispatch(loginUser(fields));
 };
 
@@ -23,7 +23,6 @@ export const closeLogin = () => dispatch => {
   dispatch(resetSuccessMessage());
   dispatch(resetErrorMessage());
   dispatch(hideLoginForm());
-  dispatch(reset('loginForm'));
 };
 
 export const redirectFromLoginToRegistration = () => dispatch => {

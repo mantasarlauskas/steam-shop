@@ -26,11 +26,11 @@ const getToken = authorization => {
 
 app.post('/login', ({body: {username, password}}, res) => {
   User
-    .findAll({
+    .find({
       where: {username: username}
     })
     .then(results => {
-      const data = parseResults(results)[0];
+      const data = parseResults(results);
       if (!data) {
         res.status(400).json("Toks vartotojas neegzistuoja");
       } else if (data.isBanned === true) {
@@ -61,18 +61,45 @@ app.post('/register', ({body: {username, email, password}}, res) => {
     );
 });
 
-app.post('/users', ({body: {username, ...data}, headers: {authorization}}, res) => {
+app.post('/password', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
     jwt.verify(token, 'key', (err, user) => {
       if (err) {
         res.status(400).json("Neteisingas tokenas");
-      } else if (user.username === username) {
-        User.update({
-          ...data,
-          password: bcrypt.hashSync(data.password, 10)
-        }, {where: {username: username}})
-          .then(() => res.status(200).json("Profilis buvo sėkmingai redaguotas"));
+      } else {
+        User
+          .find({where:{id: user.id}})
+          .then(data => {
+            if (bcrypt.compareSync(body.currentPassword, data.password)) {
+              data
+                .update({password: bcrypt.hashSync(body.newPassword, 10)})
+                .then(() => res.status(200).json("Slaptažodis pakeistas"))
+            } else {
+              res.status(400).json("Neteisingas vartotojo slaptažodis");
+            }
+          })
+      }
+    });
+  } else {
+    res.status(400).json("Tokenas nėra prisegtas");
+  }
+});
+
+app.post('/users', ({body, headers: {authorization}}, res) => {
+  const token = getToken(authorization);
+  if (token) {
+    jwt.verify(token, 'key', (err, user) => {
+      if (err) {
+        res.status(400).json("Neteisingas tokenas");
+      } else if (user.id === body.id) {
+        User
+          .find({where:{id: body.id}})
+          .then(user => {
+            user
+              .update(body)
+              .then(() => res.status(200).json("Profilis buvo sėkmingai redaguotas"));
+          });
       } else {
         res.status(400).json("Vartotojas negali redaguoti kito vartotojo");
       }
@@ -92,6 +119,29 @@ app.get('/users', ({headers: {authorization}}, res) => {
         User.findAll().then(data => res.send(parseResults(data)));
       } else {
         res.status(400).json("Vartotojas nėra administratorius");
+      }
+    });
+  } else {
+    res.status(400).json("Tokenas nėra prisegtas");
+  }
+});
+
+app.get('/users/:id', ({headers: {authorization}, params: {id}}, res) => {
+  const token = getToken(authorization);
+  if (token) {
+    jwt.verify(token, 'key', (err, user) => {
+      if (err) {
+        res.status(400).json("Neteisingas tokenas");
+      } else {
+        User
+          .find({where: {id}})
+          .then(data => {
+            if (data.id === user.id) {
+              res.json(jwt.sign(parseResults(data), 'key'));
+            } else {
+              res.status(400).json("Netinkamas vartotojas");
+            }
+          });
       }
     });
   } else {
@@ -187,7 +237,7 @@ app.put('/products', ({body, headers: {authorization}}, res) => {
         res.status(400).json("Neteisingas tokenas");
       } else if (user.role === 1) {
         Product.update(body, {where: {id: body.id}})
-          .then(() => res.status(200).json("Sėkmingai atblokuotas"));
+          .then(() => res.status(200).json("Sėkmingai atnaujintas"));
       } else {
         res.status(400).json("Vartotojas nėra administratorius");
       }
@@ -235,6 +285,132 @@ app.post('/keys', ({body, headers: {authorization}}, res) => {
         Key.create(body).then(() => res.status(200).json("Raktas pridėtas"));
       } else {
         res.status(400).json("Vartotojas negali pridėti raktų");
+      }
+    });
+  } else {
+    res.status(400).json("Tokenas nėra prisegtas");
+  }
+});
+
+app.put('/keys', ({body, headers: {authorization}}, res) => {
+  const token = getToken(authorization);
+  if (token) {
+    jwt.verify(token, 'key', (err, user) => {
+      if (err) {
+        res.status(400).json("Neteisingas tokenas");
+      } else if (user.role === 1) {
+        Key
+          .update(body, {where: {id: body.id}})
+          .then(() => res.status(200).json("Sėkmingai atnaujintas"));
+      } else {
+        res.status(400).json("Vartotojas nėra administratorius");
+      }
+    });
+  } else {
+    res.status(400).json("Tokenas nėra prisegtas");
+  }
+});
+
+app.delete('/keys', ({body, headers: {authorization}}, res) => {
+  const token = getToken(authorization);
+  if (token) {
+    jwt.verify(token, 'key', (err, user) => {
+      if (err) {
+        res.status(400).json("Neteisingas tokenas");
+      } else {
+        Key
+          .find({where: {id: body.id}})
+          .then(key => {
+            key
+              .destroy()
+              .then(() => res.status(200).json("Sėkmingai pašalintas"))
+          })
+      }
+    });
+  } else {
+    res.status(400).json("Tokenas nėra prisegtas");
+  }
+});
+
+
+app.get('/keys', ({body, headers: {authorization}}, res) => {
+  const token = getToken(authorization);
+  if (token) {
+    jwt.verify(token, 'key', (err, user) => {
+      if (err) {
+        res.status(400).json("Neteisingas tokenas");
+      } else if (user.role === 1) {
+        Key
+          .findAll({
+            order: [
+              ['createdAt', 'DESC']
+            ],
+            include: [{
+              model: Product,
+              required: true,
+              attributes: ['title']
+            }]
+          })
+          .then(data => res.send(data));
+      } else {
+
+      }
+    });
+  } else {
+    res.status(400).json("Tokenas nėra prisegtas");
+  }
+});
+
+
+app.get('/order-keys/:id', ({headers: {authorization}, params: {id}}, res) => {
+  const token = getToken(authorization);
+  if (token) {
+    jwt.verify(token, 'key', (err, user) => {
+      if (err) {
+        res.status(400).json("Neteisingas tokenas");
+      } else {
+        Cart
+          .findAll({
+            where: {order_id: id},
+            include: [
+              {
+                model: Key,
+                required: true,
+                attributes: ['steam_key']
+              },
+              {
+                model: Product,
+                required: true,
+                attributes: ['title']
+              }
+            ]
+          })
+          .then(cart => {
+            if (cart && (user.role === 1 || user.id === cart[0].user_id)) {
+              res.send(cart);
+            } else {
+              res.status(400).json("Vartotojas negali gauti raktų");
+            }
+          })
+      }
+    });
+  } else {
+    res.status(400).json("Tokenas nėra prisegtas");
+  }
+});
+
+app.get('/keys/:id', ({headers: {authorization}, params: {id}}, res) => {
+  const token = getToken(authorization);
+  if (token) {
+    jwt.verify(token, 'key', (err, user) => {
+      if (err) {
+        res.status(400).json("Neteisingas tokenas");
+      } else if (user.role === 1) {
+        Key
+          .find({where: {id: id}})
+          .then(data => res.send(data));
+      } else {
+        res.status(400).json("Vartotojas negali gauti raktų");
       }
     });
   } else {
@@ -383,9 +559,12 @@ app.get('/orders', ({body, headers: {authorization}}, res) => {
               required: true,
               attributes: ['createdAt']
             }],
-            group: ['Cart.game_id','Order.id'],
+            group: ['Cart.game_id','Order.id', 'Order.createdAt'],
+            order: [
+              ['Order', 'createdAt', 'DESC']
+            ]
           })
-          .then(data => res.send(parseResults(data)));
+          .then(data => res.send(data));
       }
     });
   } else {

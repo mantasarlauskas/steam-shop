@@ -5,7 +5,6 @@ import forms from './forms';
 import pagination from './pagination';
 import products from './products';
 import token from './token';
-import keys from './keys';
 import search from './search';
 import cart from './cart';
 import orders from './orders';
@@ -18,7 +17,6 @@ export default combineReducers({
   forms,
   form,
   filter,
-  keys,
   products,
   token,
   pagination,

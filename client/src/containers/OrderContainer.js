@@ -5,6 +5,7 @@ import {getOrders} from "../thunks/order";
 
 const mapStateToProps = (state, {match: {params: {id}}}) => ({
   products: orderProductSelector(state, id),
+  token: state.token,
   id
 });
 

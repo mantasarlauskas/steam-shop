@@ -4,18 +4,42 @@ import {withStyles} from "@material-ui/core";
 import {styles} from "../styles/cart";
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import axios from "axios";
+import {config, url} from "../server";
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Button from "./Keys";
+import {Link} from "react-router-dom";
 
 class Order extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      keys: []
+    };
+
     props.onLoad();
+    this.getOrderKeys();
   }
+
+  getOrderKeys = () => {
+    const {token, id} = this.props;
+
+    axios
+      .get(`${url}/order-keys/${id}`, config(token))
+      .then(({data}) => this.setState({keys:data}));
+  };
 
   render() {
     const { products, classes, id } = this.props;
+    const {keys} = this.state;
 
-    if (products.length > 0) {
+    if (products.length > 0 && keys.length > 0) {
+      console.log(keys);
       return (
         <div className={`${classes.paper} container`}>
           <h1 className="title">Užsakymas nr.{id}</h1>
@@ -49,7 +73,7 @@ class Order extends Component {
               </Grid>
             </Grid>
             {products.map(({id, logo, title, price, cartCount}) =>
-              <Paper key={id} className={`${classes.paper} ${classes.product}`}>
+              <Paper key={id} className={classes.product}>
                 <Grid container>
                   <Grid item xs={3}>
                     <img className="img-fluid" src={logo} alt="Game logo"/>
@@ -77,6 +101,28 @@ class Order extends Component {
                 </Typography>
               </Grid>
             </Grid>
+          </Paper>
+          <h1 className="title">Raktai</h1>
+          <hr/>
+          <Paper className={classes.key}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Žaidimas</TableCell>
+                  <TableCell>Raktas</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {keys.map(({id, Key:{steam_key}, Product: {title}}) => (
+                  <TableRow key={id}>
+                    <TableCell>{id}</TableCell>
+                    <TableCell>{title}</TableCell>
+                    <TableCell>{steam_key}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </Paper>
         </div>
       )

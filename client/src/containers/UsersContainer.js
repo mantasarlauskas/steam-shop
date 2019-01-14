@@ -1,14 +1,11 @@
 import {connect} from 'react-redux';
 import Users from '../components/Users';
-import {usersPaginationSelector} from "../selectors/users";
 import {banUser, getUsers, unbanUser} from "../thunks/users";
 import {setPage} from "../actions/pagination";
 
-const mapStateToProps = (state => ({
-  pagination: state.pagination,
-  users: state.auth.users,
-  filteredUsers: usersPaginationSelector(state)
-}));
+const mapStateToProps = ({auth: {users}}) => ({
+  users
+});
 
 const mapDispatchToProps = dispatch => ({
   onUsersLoad: () => dispatch(getUsers()),

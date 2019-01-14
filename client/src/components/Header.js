@@ -87,8 +87,8 @@ class Header extends Component {
       >
         <MenuItem onClick={this.handleMenuClose}>
           <SettingsIcon className={classes.linkIcon}/>
-          <Link className={classes.linkDark} to="/options">
-            Nustatymai
+          <Link className={classes.linkDark} to="/profile">
+            Profilis
           </Link>
         </MenuItem>
         <MenuItem onClick={this.handleMenuClose}>

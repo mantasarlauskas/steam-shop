@@ -1,8 +1,14 @@
 import {config, url} from '../server';
 import axios from 'axios';
-import {reset} from 'redux-form';
 import {hideLoginForm, hideRegistrationForm, showLoginForm} from '../actions/forms';
-import {setErrorMessage, setSuccessMessage, setToken, addUsers} from '../actions/auth';
+import {
+  setErrorMessage,
+  setSuccessMessage,
+  setToken,
+  addUsers,
+  resetErrorMessage,
+  resetSuccessMessage
+} from '../actions/auth';
 
 export const banUser = userID => (dispatch, getState) => {
   axios
@@ -31,7 +37,6 @@ export const loginUser = fields => dispatch => {
     .post(`${url}/login`, fields)
     .then(({data}) => {
       dispatch(setToken(data));
-      dispatch(reset('loginForm'));
       dispatch(hideLoginForm());
     })
     .catch(({response: {data}}) => {
@@ -40,10 +45,26 @@ export const loginUser = fields => dispatch => {
 };
 
 export const updateUser = fields => (dispatch, getState) => {
+  dispatch(resetSuccessMessage());
   axios
     .post(`${url}/users`, fields, config(getState().token))
     .then(({data}) => {
       dispatch(setSuccessMessage(data));
+      dispatch(getUsers());
+      dispatch(getUser(fields.id));
+    });
+};
+
+export const changePassword = fields => (dispatch, getState) => {
+  dispatch(resetSuccessMessage());
+  dispatch(resetErrorMessage());
+  axios
+    .post(`${url}/password`, fields, config(getState().token))
+    .then(({data}) => {
+      dispatch(setSuccessMessage(data));
+    })
+    .catch(({response: {data}}) => {
+      dispatch(setErrorMessage(data));
     });
 };
 
@@ -52,7 +73,6 @@ export const registerUser = fields => dispatch => {
     .post(`${url}/register`, fields)
     .then(({data}) => {
       dispatch(setSuccessMessage(data));
-      dispatch(reset('registrationForm'));
       dispatch(hideRegistrationForm());
       dispatch(showLoginForm());
     })
@@ -65,4 +85,10 @@ export const getUsers = () => (dispatch, getState) => {
   axios
     .get(`${url}/users`, config(getState().token))
     .then(({data}) => dispatch(addUsers(data)));
+};
+
+export const getUser = id => (dispatch, getState) => {
+  axios
+    .get(`${url}/users/${id}`, config(getState().token))
+    .then(({data}) => dispatch(setToken(data)));
 };

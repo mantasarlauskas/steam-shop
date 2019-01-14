@@ -4,6 +4,11 @@ export const styles = theme => ({
     marginBottom: 10
   },
   product: {
+    border: '1px #bdbdbd solid',
+    padding: 15,
+    margin: '15px 0'
+  },
+  key: {
     border: '1px #bdbdbd solid'
   },
   heading: {

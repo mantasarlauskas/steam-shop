@@ -8,6 +8,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Cart.associate = function(models) {
     Cart.belongsTo(models.Order, {foreignKey: 'order_id'});
+    Cart.belongsTo(models.Key, {foreignKey: 'key_id'});
+    Cart.belongsTo(models.Product, {foreignKey: 'game_id'});
   };
   return Cart;
 };

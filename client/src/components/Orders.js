@@ -11,16 +11,51 @@ import Paper from '@material-ui/core/Paper';
 import {styles} from '../styles/orders';
 import ZoomIcon from '@material-ui/icons/ZoomIn';
 import Typography from '@material-ui/core/Typography';
+import TablePagination from '@material-ui/core/TablePagination';
 
 class Orders extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      page: 0,
+      rowsPerPage: 10,
+      paginatedOrders: []
+    };
+
     props.onLoad();
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.orders !== this.props.orders && this.props.orders) {
+      this.paginateOrders();
+    }
+  }
+
+  paginateOrders = () => {
+    const {orders} = this.props;
+
+    this.setState(({page, rowsPerPage}) => ({
+      paginatedOrders: orders.filter((order, index) => index >= page * rowsPerPage &&
+        index < page * rowsPerPage + rowsPerPage)
+    }))
+  };
+
+  handleChangePage = (event, page) => {
+    this.setState({
+      page
+    }, this.paginateOrders);
+  };
+
+  handleChangeRowsPerPage = ({target: {value}}) => {
+    this.setState({
+      rowsPerPage: value
+    }, this.paginateOrders);
+  };
+
   render() {
     const {orders, classes} = this.props;
+    const {rowsPerPage, page, paginatedOrders} = this.state;
 
     return (
       <div className={`${classes.root} container`}>
@@ -39,13 +74,13 @@ class Orders extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orders.map(({id, createdAt}) => (
+                {paginatedOrders.map(({id, createdAt}) => (
                   <TableRow className={classes.row} key={id}>
                     <TableCell>{id}</TableCell>
                     <TableCell>Sukurtas: {new Date(createdAt).toLocaleString()}</TableCell>
                     <TableCell>
                       <Link to={`/order/${id}`}>
-                        <Button className={classes.button} variant="contained" color="primary">
+                        <Button className={classes.button} variant="outlined" color="primary">
                           <ZoomIcon />
                           Peržiūrėti užsakymą
                         </Button>
@@ -55,6 +90,16 @@ class Orders extends Component {
                 ))}
               </TableBody>
             </Table>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={orders.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              labelRowsPerPage="Užsakymų kiekis puslapyje"
+              onChangePage={this.handleChangePage}
+              onChangeRowsPerPage={this.handleChangeRowsPerPage}
+            />
           </Paper>
         ) : (
           <Typography variant="h6">

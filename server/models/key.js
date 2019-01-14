@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   Key.associate = function(models) {
-    // associations can be defined here
+    Key.belongsTo(models.Product, {foreignKey: 'game_id'});
   };
   return Key;
 };

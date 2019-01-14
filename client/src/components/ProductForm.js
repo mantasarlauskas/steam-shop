@@ -91,8 +91,8 @@ class ProductForm extends Component {
   setError = name => {
     this.setState(prevState => ({
       [name]: {
-        empty: true,
-        ...prevState[name]
+        ...prevState[name],
+        empty: true
       }
     }))
   };

@@ -120,7 +120,7 @@ class Product extends Component {
   };
 
   render() {
-    const {product, addToCart, token, classes, onRemove} = this.props;
+    const {product, addToCart, token, classes} = this.props;
     const {reviews, rating, emptyError, starError, form} = this.state;
     const user = jwt.decode(token);
 
@@ -224,24 +224,26 @@ class Product extends Component {
                       {title}
                     </Typography>
                   </Grid>
-                  <Grid item xs={totalCount === 0 ? 2 : 1}>
-                    <Grid container>
-                      <Grid item xs={totalCount === 0 ? 6 : 12}>
-                        <Link to={`/product-upload/${id}`}>
-                          <IconButton>
+                  {user && user.role === 1 && (
+                    <Grid item xs={totalCount === 0 ? 2 : 1}>
+                      <Grid container>
+                        <Grid item xs={totalCount === 0 ? 6 : 12}>
+                          <Link to={`/product-upload/${id}`}>
+                            <IconButton>
                               <EditIcon/>
-                          </IconButton>
-                        </Link>
-                      </Grid>
-                      <Grid item xs={6}>
-                        {totalCount === 0 && (
-                          <IconButton>
-                            <DeleteIcon onClick={() => this.handleReviewRemove(id)}/>
-                          </IconButton>
-                        )}
+                            </IconButton>
+                          </Link>
+                        </Grid>
+                        <Grid item xs={6}>
+                          {totalCount === 0 && (
+                            <IconButton>
+                              <DeleteIcon onClick={() => this.handleReviewRemove(id)}/>
+                            </IconButton>
+                          )}
+                        </Grid>
                       </Grid>
                     </Grid>
-                  </Grid>
+                  )}
                 </Grid>
                 <StarRatings
                   rating={reviews.reduce((sum, {rating}) => sum + rating, 0)/reviews.length || 0}

@@ -1,3 +1,5 @@
+import green from "@material-ui/core/colors/green";
+
 export const styles = theme => ({
   root: {
     marginTop: 30
@@ -32,5 +34,15 @@ export const styles = theme => ({
   },
   errorIcon: {
     marginRight: 10
+  },
+  select: {
+    marginBottom: 15,
+    width: 400
+  },
+  success: {
+    backgroundColor: green[600],
+    position: 'relative',
+    left: '50%',
+    transform: 'translateX(-50%)'
   }
 });
