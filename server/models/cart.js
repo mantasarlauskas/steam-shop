@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     key_id: DataTypes.INTEGER,
     order_id: DataTypes.INTEGER
   }, {});
-  Cart.associate = function(models) {
+  Cart.associate = function (models) {
     Cart.belongsTo(models.Order, {foreignKey: 'order_id'});
     Cart.belongsTo(models.Key, {foreignKey: 'key_id'});
     Cart.belongsTo(models.Product, {foreignKey: 'game_id'});

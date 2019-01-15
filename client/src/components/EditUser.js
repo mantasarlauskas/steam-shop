@@ -91,7 +91,7 @@ class EditUser extends Component {
     });
 
     if (this.checkIfEmpty()) {
-      onEdit( {
+      onEdit({
         id: user.id,
         email: email.value
       });

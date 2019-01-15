@@ -1,13 +1,13 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Header from '../components/Header';
-import { toggleNavbar } from '../actions/navbar';
-import { showLoginForm } from '../actions/forms';
-import { resetToken } from '../actions/auth';
-import { setSearchPhrase } from '../actions/search';
-import { productSearchSelector } from '../selectors/products';
-import { cartCountSelector } from '../selectors/cart';
+import {toggleNavbar} from '../actions/navbar';
+import {showLoginForm} from '../actions/forms';
+import {resetToken} from '../actions/auth';
+import {setSearchPhrase} from '../actions/search';
+import {productSearchSelector} from '../selectors/products';
+import {cartCountSelector} from '../selectors/cart';
 
-const mapStateToProps = ({ token, navbar, ...state }) => ({
+const mapStateToProps = ({token, navbar, ...state}) => ({
   loggedIn: token,
   games: productSearchSelector(state),
   cartCount: cartCountSelector(state)

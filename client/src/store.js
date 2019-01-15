@@ -5,11 +5,8 @@ import thunk from 'redux-thunk';
 import {loadState, saveState} from './localStorage';
 import multi from 'redux-multi'
 
-const logger = createLogger({
-  predicate: (getState, action) => action.type && !action.type.includes('@@redux-form'),
-});
 const persistedState = loadState();
-const store = createStore(rootReducer, persistedState, applyMiddleware(logger, thunk, multi));
+const store = createStore(rootReducer, persistedState, applyMiddleware(createLogger(), thunk, multi));
 
 store.subscribe(() => {
   saveState({

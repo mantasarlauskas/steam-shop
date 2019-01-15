@@ -1,8 +1,7 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Games from '../components/Games';
 import {productByPriceSelector, productSortSelector} from "../selectors/products";
-import {resetFilter} from "../actions/filter";
-import {changeMaxPrice, changeMinPrice, changeSort} from "../thunks/filter";
+import {resetFilter, setMaxPrice, setMinPrice, setSort} from "../actions/filter";
 
 const mapStateToProps = state => ({
   games: productSortSelector(state),
@@ -15,9 +14,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onLoad: () => dispatch(resetFilter()),
-  onMinPriceChange: price => dispatch(changeMinPrice(price)),
-  onMaxPriceChange: price => dispatch(changeMaxPrice(price)),
-  onSortChange: sort => dispatch(changeSort(sort))
+  onMinPriceChange: price => dispatch(setMinPrice(price)),
+  onMaxPriceChange: price => dispatch(setMaxPrice(price)),
+  onSortChange: sort => dispatch(setSort(sort))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Games);

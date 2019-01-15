@@ -211,7 +211,7 @@ class ProductForm extends Component {
                 autoComplete="off"
                 margin="normal"
                 type="number"
-                inputProps={{ min: "0", step: "1" }}
+                inputProps={{min: "0", step: "1"}}
                 onChange={this.handleChange("price")}
                 variant="outlined"
                 fullWidth
@@ -232,7 +232,7 @@ class ProductForm extends Component {
                 type="file"
                 alt="Product Logo"
                 accept="image/png,image/jpeg"
-                style={{ display: 'none' }}
+                style={{display: 'none'}}
                 id="logo"
                 onChange={this.handleFileChange}
               />

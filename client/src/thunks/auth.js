@@ -1,6 +1,5 @@
 import {resetErrorMessage, resetSuccessMessage} from "../actions/auth";
 import {hideLoginForm, hideRegistrationForm, showRegistrationForm} from "../actions/forms";
-import {reset} from "redux-form";
 import {loginUser, registerUser} from "./users";
 
 export const submitRegistration = fields => dispatch => {

@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import Button from '@material-ui/core/Button';
 import {Link} from 'react-router-dom';
 import {withStyles} from '@material-ui/core/styles';
@@ -122,15 +122,15 @@ class Keys extends Component {
                           <Grid item xs={6}>
                             <Link to={`/key-upload/${id}`}>
                               <IconButton>
-                                <EditIcon />
+                                <EditIcon/>
                               </IconButton>
                             </Link>
                           </Grid>
-                            <Grid item xs={6}>
-                              <IconButton>
-                                <DeleteIcon onClick={() => this.handleRemove(id)}/>
-                              </IconButton>
-                            </Grid>
+                          <Grid item xs={6}>
+                            <IconButton>
+                              <DeleteIcon onClick={() => this.handleRemove(id)}/>
+                            </IconButton>
+                          </Grid>
                         </Grid>
                       )}
                     </TableCell>

@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     price: DataTypes.DOUBLE,
     logo: DataTypes.STRING,
-    description: DataTypes.STRING,
+    description: DataTypes.TEXT,
     likeCount: DataTypes.INTEGER,
     dislikeCount: DataTypes.INTEGER,
     timesBought: {
@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 0
     }
   }, {});
-  Product.associate = function(models) {
+  Product.associate = function (models) {
     Product.hasMany(models.Key, {
       foreignKey: 'game_id',
       sourceKey: 'id'

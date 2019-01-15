@@ -29,10 +29,6 @@ class Login extends Component {
     this.state = this.initialState;
   }
 
-  componentDidMount() {
-    console.log("hahaha");
-  }
-
   handleChange = name => ({target: {value}}) => {
     this.setState({
       [name]: {

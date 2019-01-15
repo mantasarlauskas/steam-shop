@@ -24,6 +24,9 @@ const getToken = authorization => {
   return authorization && authorization.split(' ')[0] === "Bearer" ? authorization.split(' ')[1] : null;
 };
 
+/**
+ * Route skirtas prisijungimo autentifikavimui
+ */
 app.post('/login', ({body: {username, password}}, res) => {
   User
     .find({
@@ -45,6 +48,9 @@ app.post('/login', ({body: {username, password}}, res) => {
     });
 });
 
+/**
+ * Route skirtas naujo vartotojo reigstracijai
+ */
 app.post('/register', ({body: {username, email, password}}, res) => {
   User
     .findOrCreate({
@@ -61,6 +67,9 @@ app.post('/register', ({body: {username, email, password}}, res) => {
     );
 });
 
+/**
+ * Route skirtas slaptažodžio keitimui
+ */
 app.post('/password', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -69,7 +78,7 @@ app.post('/password', ({body, headers: {authorization}}, res) => {
         res.status(400).json("Neteisingas tokenas");
       } else {
         User
-          .find({where:{id: user.id}})
+          .find({where: {id: user.id}})
           .then(data => {
             if (bcrypt.compareSync(body.currentPassword, data.password)) {
               data
@@ -86,6 +95,9 @@ app.post('/password', ({body, headers: {authorization}}, res) => {
   }
 });
 
+/**
+ * Route skirtas profilio redagavimui (el.paštui)
+ */
 app.post('/users', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -94,7 +106,7 @@ app.post('/users', ({body, headers: {authorization}}, res) => {
         res.status(400).json("Neteisingas tokenas");
       } else if (user.id === body.id) {
         User
-          .find({where:{id: body.id}})
+          .find({where: {id: body.id}})
           .then(user => {
             user
               .update(body)
@@ -109,6 +121,9 @@ app.post('/users', ({body, headers: {authorization}}, res) => {
   }
 });
 
+/**
+ * Route, kuris grąžina visų vartotojų sąrašą
+ */
 app.get('/users', ({headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -126,6 +141,9 @@ app.get('/users', ({headers: {authorization}}, res) => {
   }
 });
 
+/**
+ * Route, skirtas gauti tokeną prisijungusiam vartotojui
+ */
 app.get('/users/:id', ({headers: {authorization}, params: {id}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -149,7 +167,9 @@ app.get('/users/:id', ({headers: {authorization}, params: {id}}, res) => {
   }
 });
 
-
+/**
+ * Route skirtas vartotojo užblokavimui
+ */
 app.delete('/users', ({headers: {authorization}, body: {id}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -168,6 +188,9 @@ app.delete('/users', ({headers: {authorization}, body: {id}}, res) => {
   }
 });
 
+/**
+ * Route skirtas vartotojo atblokavimui
+ */
 app.put('/users', ({headers: {authorization}, body: {id}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -186,6 +209,9 @@ app.put('/users', ({headers: {authorization}, body: {id}}, res) => {
   }
 });
 
+/**
+ * Route skirtas visų produktų (žaidimų) grąžinimui
+ */
 app.get('/products', (req, res) => {
   Product
     .findAll({
@@ -211,6 +237,9 @@ app.get('/products', (req, res) => {
     .then(data => res.send(data));
 });
 
+/**
+ * Route skirtas naujų produktų (žaidimų) pridėjimui
+ */
 app.post('/products', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -228,7 +257,9 @@ app.post('/products', ({body, headers: {authorization}}, res) => {
   }
 });
 
-
+/**
+ * Route skirtas produkto (žaidimų) atnaujinimui (redagavimui)
+ */
 app.put('/products', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -247,6 +278,9 @@ app.put('/products', ({body, headers: {authorization}}, res) => {
   }
 });
 
+/**
+ * Route skirtas pašalinti produktą (žaidimą)
+ */
 app.delete('/products', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -275,6 +309,9 @@ app.delete('/products', ({body, headers: {authorization}}, res) => {
   }
 });
 
+/**
+ * Route skirtas rakto pridėjimui
+ */
 app.post('/keys', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -292,6 +329,9 @@ app.post('/keys', ({body, headers: {authorization}}, res) => {
   }
 });
 
+/**
+ * Route skirtas rakto redagavimui
+ */
 app.put('/keys', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -311,6 +351,9 @@ app.put('/keys', ({body, headers: {authorization}}, res) => {
   }
 });
 
+/**
+ * Route skirtas rakto pašalinimui
+ */
 app.delete('/keys', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -332,7 +375,9 @@ app.delete('/keys', ({body, headers: {authorization}}, res) => {
   }
 });
 
-
+/**
+ * Route skirtas visų raktų grąžinimui
+ */
 app.get('/keys', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -353,7 +398,7 @@ app.get('/keys', ({body, headers: {authorization}}, res) => {
           })
           .then(data => res.send(data));
       } else {
-
+        res.status(400).json("Vartotojas nėra administratorius");
       }
     });
   } else {
@@ -361,7 +406,9 @@ app.get('/keys', ({body, headers: {authorization}}, res) => {
   }
 });
 
-
+/**
+ * Route skirtas nurodyto užsakymo raktų grąžinimui
+ */
 app.get('/order-keys/:id', ({headers: {authorization}, params: {id}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -386,12 +433,13 @@ app.get('/order-keys/:id', ({headers: {authorization}, params: {id}}, res) => {
             ]
           })
           .then(cart => {
-            if (cart && (user.role === 1 || user.id === cart[0].user_id)) {
-              res.send(cart);
-            } else {
-              res.status(400).json("Vartotojas negali gauti raktų");
+              if (cart && (user.role === 1 || user.id === cart[0].user_id)) {
+                res.send(cart);
+              } else {
+                res.status(400).json("Vartotojas negali gauti raktų");
+              }
             }
-          })
+          )
       }
     });
   } else {
@@ -399,6 +447,9 @@ app.get('/order-keys/:id', ({headers: {authorization}, params: {id}}, res) => {
   }
 });
 
+/**
+ * Route skirtas nurodyto rakto grąžinimui
+ */
 app.get('/keys/:id', ({headers: {authorization}, params: {id}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -418,6 +469,9 @@ app.get('/keys/:id', ({headers: {authorization}, params: {id}}, res) => {
   }
 });
 
+/**
+ * Route skirtas pridėti prekę į krepšelį
+ */
 app.post('/cart', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -445,6 +499,9 @@ app.post('/cart', ({body, headers: {authorization}}, res) => {
   }
 });
 
+/**
+ * Route skirtas prekės iš krepšelio šalinimui
+ */
 app.delete('/cart', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -472,6 +529,9 @@ app.delete('/cart', ({body, headers: {authorization}}, res) => {
   }
 });
 
+/**
+ * Route skirtas vartotojo krepšelio grąžinimui
+ */
 app.get('/cart', ({headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -497,6 +557,9 @@ app.get('/cart', ({headers: {authorization}}, res) => {
   }
 });
 
+/**
+ * Route skirtas užsakymo suformavimui
+ */
 app.post('/order', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -534,6 +597,9 @@ app.post('/order', ({body, headers: {authorization}}, res) => {
   }
 });
 
+/**
+ * Route skirtas vartotojo užsakymų grąžinimui
+ */
 app.get('/orders', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -559,7 +625,7 @@ app.get('/orders', ({body, headers: {authorization}}, res) => {
               required: true,
               attributes: ['createdAt']
             }],
-            group: ['Cart.game_id','Order.id', 'Order.createdAt'],
+            group: ['Cart.game_id', 'Order.id', 'Order.createdAt'],
             order: [
               ['Order', 'createdAt', 'DESC']
             ]
@@ -572,6 +638,9 @@ app.get('/orders', ({body, headers: {authorization}}, res) => {
   }
 });
 
+/**
+ * Route skirtas nurodyto užsakymo grąžinimui
+ */
 app.get('/order/:id', ({headers: {authorization}, params: {id}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -599,6 +668,9 @@ app.get('/order/:id', ({headers: {authorization}, params: {id}}, res) => {
   }
 });
 
+/**
+ * Route skirtas atsiliepimo pridėjimui
+ */
 app.post('/review', ({body, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -607,7 +679,7 @@ app.post('/review', ({body, headers: {authorization}}, res) => {
         res.status(400).json("Neteisingas tokenas");
       } else {
         Review
-          .create({ ...body, user_id: user.id})
+          .create({...body, user_id: user.id})
           .then(() => res.status(200).json("Atsiliepimas pridėtas"));
       }
     });
@@ -616,6 +688,9 @@ app.post('/review', ({body, headers: {authorization}}, res) => {
   }
 });
 
+/**
+ * Route skirtas atsiliepimo pašalinimui
+ */
 app.delete('/review', ({body: {user_id, id, ...data}, headers: {authorization}}, res) => {
   const token = getToken(authorization);
   if (token) {
@@ -637,10 +712,13 @@ app.delete('/review', ({body: {user_id, id, ...data}, headers: {authorization}},
   }
 });
 
+/**
+ * Route skirtas nurodytos prekės(žaidimo) atsiliepimų grąžinimui
+ */
 app.get('/review/:id', ({params: {id}}, res) => {
   Review
     .findAll({
-      where: { game_id: id } ,
+      where: {game_id: id},
       include: [{
         model: User,
         required: true,

@@ -14,12 +14,12 @@ export const addProductToCart = id => (dispatch, getState) => {
 
 export const removeProductFromCart = id => (dispatch, getState) => {
   axios
-    ({
-      method: 'delete',
-      url: `${url}/cart`,
-      data: {game_id: id},
-      ...config(getState().token)
-    })
+  ({
+    method: 'delete',
+    url: `${url}/cart`,
+    data: {game_id: id},
+    ...config(getState().token)
+  })
     .then(() => {
       dispatch(getCart());
       dispatch(getProducts());

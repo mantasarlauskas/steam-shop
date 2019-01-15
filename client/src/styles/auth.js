@@ -18,7 +18,6 @@ export const styles = theme => ({
     paddingBottom: theme.spacing.unit * 3,
     paddingLeft: theme.spacing.unit * 4,
     paddingRight: theme.spacing.unit * 4,
-    outline: 'none'
   },
   field: {
     width: '100%'

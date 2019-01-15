@@ -16,41 +16,12 @@ import Badge from '@material-ui/core/Badge';
 import SettingsIcon from '@material-ui/icons/Settings';
 import LogoutIcon from '@material-ui/icons/ExitToApp';
 import CartIcon from '@material-ui/icons/ShoppingCart';
-
-const styles = {
-  root: {
-    flexGrow: 1
-  },
-  bar: {
-    backgroundColor: '#343a40'
-  },
-  linkDark: {
-    color: '#000',
-    '&:hover': {
-      color: '#000',
-    },
-  },
-  link: {
-    color: '#FFF',
-    '&:hover': {
-      color: '#FFF',
-    },
-  },
-  linkIcon: {
-    marginRight: 10
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  }
-};
+import {styles} from '../styles/header';
 
 class Header extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       anchorEl: null
     }
@@ -70,6 +41,7 @@ class Header extends Component {
 
   searchForProducts = ({target: {value}}) => {
     const {setSearchPhrase} = this.props;
+
     setSearchPhrase(value);
   };
 
@@ -124,7 +96,9 @@ class Header extends Component {
               <div className={classes.grow}/>
               {!loggedIn ? (
                 <Button color="inherit" onClick={showLogin}>
-                  Prisijungimas
+                  <div className={classes.login}>
+                    Prisijungimas
+                  </div>
                 </Button>
               ) : (
                 <Fragment>

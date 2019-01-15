@@ -16,7 +16,7 @@ import IconButton from '@material-ui/core/IconButton';
 import {Link} from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import withWidth from '@material-ui/core/withWidth';
-import { compose } from 'redux';
+import {compose} from 'redux';
 
 class Product extends Component {
   constructor(props) {
@@ -56,12 +56,12 @@ class Product extends Component {
     const {token} = this.props;
 
     axios
-      ({
-        method: 'delete',
-        url: `${url}/review`,
-        data,
-        ...config(token)
-      })
+    ({
+      method: 'delete',
+      url: `${url}/review`,
+      data,
+      ...config(token)
+    })
       .then(() => this.getReviews());
   };
 
@@ -101,7 +101,7 @@ class Product extends Component {
         emptyError: true,
         starError: true
       });
-    } else if(review.length === 0) {
+    } else if (review.length === 0) {
       this.setState({
         emptyError: true,
         starError: false
@@ -240,7 +240,7 @@ class Product extends Component {
             )}
           </Grid>
           <StarRatings
-            rating={reviews.reduce((sum, {rating}) => sum + rating, 0)/reviews.length || 0}
+            rating={reviews.reduce((sum, {rating}) => sum + rating, 0) / reviews.length || 0}
             starDimension="25px"
             starSpacing="2px"
             starRatedColor="yellow"
@@ -288,28 +288,28 @@ class Product extends Component {
           <hr/>
           <Grid container spacing={24}>
             {width === 'lg' || width === 'xl' ? (
-                <Fragment>
-                  <Grid item lg={6}>
-                    <Paper className={classes.paper}>
-                      {displayCover(classes.image)}
-                    </Paper>
-                  </Grid>
-                  <Grid item lg={6}>
-                    <Paper className={classes.paper}>
-                      {displayInfo}
-                    </Paper>
-                  </Grid>
-                </Fragment>
-              ) : (
-                <Grid item xs={12}>
+              <Fragment>
+                <Grid item lg={6}>
                   <Paper className={classes.paper}>
-                    <div className={classes.imageSmallWrapper}>
-                      {displayCover(classes.imageSmall)}
-                    </div>
+                    {displayCover(classes.image)}
+                  </Paper>
+                </Grid>
+                <Grid item lg={6}>
+                  <Paper className={classes.paper}>
                     {displayInfo}
                   </Paper>
                 </Grid>
-              )
+              </Fragment>
+            ) : (
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                  <div className={classes.imageSmallWrapper}>
+                    {displayCover(classes.imageSmall)}
+                  </div>
+                  {displayInfo}
+                </Paper>
+              </Grid>
+            )
             }
           </Grid>
           {token && (

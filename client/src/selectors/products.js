@@ -4,7 +4,6 @@ const productSelector = ({products}) => products;
 const searchKeywordSelector = ({search}) => search;
 const cartSelector = ({cart}) => cart;
 const propsSelector = (state, props) => props;
-const paginationSelector = state => state.pagination;
 const minPriceSelector = ({filter: {minPrice}}) => minPrice;
 const maxPriceSelector = ({filter: {maxPrice}}) => maxPrice;
 const sortSelector = ({filter: {sort}}) => sort;

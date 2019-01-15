@@ -1,9 +1,9 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Form from '../components/Login';
 import {closeLogin, redirectFromLoginToRegistration, submitLogin} from "../thunks/auth";
 import {setErrorMessage} from "../actions/auth";
 
-const mapStateToProps = ({ auth: { errorMessage, successMessage }, forms: { loginForm } }) => ({
+const mapStateToProps = ({auth: {errorMessage, successMessage}, forms: {loginForm}}) => ({
   errorMessage,
   successMessage,
   isOpen: loginForm

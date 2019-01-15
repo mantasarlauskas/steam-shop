@@ -81,22 +81,22 @@ class Users extends Component {
                   <TableCell>{role === 1 ? 'Administratorius' : 'Klientas'}</TableCell>
                   <TableCell>
                     {role === 0 && isBanned === false && (
-                        <Button className={classes.error} onClick={() => onUserBan({id})}>
+                      <Button className={classes.error} onClick={() => onUserBan({id})}>
                           <span className={classes.message}>
                             <ErrorIcon className={classes.icon}/>
                             Užblokuoti
                           </span>
-                        </Button>
-                      )
+                      </Button>
+                    )
                     }
                     {role === 0 && isBanned === true && (
-                        <Button className={classes.error} onClick={() => onUserUnban({id})}>
+                      <Button className={classes.error} onClick={() => onUserUnban({id})}>
                         <span className={classes.message}>
                           <ErrorIcon className={classes.icon}/>
                           Atblokuoti
                         </span>
-                        </Button>
-                      )
+                      </Button>
+                    )
                     }
                   </TableCell>
                 </TableRow>

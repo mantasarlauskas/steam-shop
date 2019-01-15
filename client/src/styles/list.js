@@ -34,5 +34,8 @@ export const styles = theme => ({
   },
   main: {
     padding: 25
+  },
+  empty: {
+    marginLeft: 10
   }
 });

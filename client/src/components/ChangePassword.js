@@ -39,7 +39,7 @@ class ChangePassword extends Component {
       })
     }
 
-    if(prevProps.errorMessage !== errorMessage && errorMessage) {
+    if (prevProps.errorMessage !== errorMessage && errorMessage) {
       this.setState({
         error: errorMessage
       })
@@ -78,7 +78,7 @@ class ChangePassword extends Component {
       emptyError = true;
     }
 
-    if(password2.value === '') {
+    if (password2.value === '') {
       this.setError('password2');
       emptyError = true;
     }

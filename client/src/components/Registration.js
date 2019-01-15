@@ -52,9 +52,9 @@ class Registration extends Component {
     if (username.value.length === 0 || email.value.length === 0
       || password1.value.length === 0 || password2.value.length === 0) {
       onError("Formoje negali būti tuščių laukelių");
-    } else if(username.value.length < 6) {
+    } else if (username.value.length < 6) {
       onError("Vardas turi būti sudarytas bent iš 6 simbolių");
-    } else if(password1.value.length < 6) {
+    } else if (password1.value.length < 6) {
       onError("Slaptažodis turi būti sudarytas bent iš 6 simbolių");
     } else if (password1.value !== password2.value) {
       onError("Slaptažodžiai turi sutapti");

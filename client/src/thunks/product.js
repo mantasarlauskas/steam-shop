@@ -2,7 +2,6 @@ import {addProducts} from '../actions/products';
 import {url, config} from '../server';
 import axios from 'axios';
 import {setDefaultMaxPrice, setDefaultMinPrice} from "../actions/filter";
-import {getCart} from "./cart";
 
 const CLOUDINARY_UPLOAD_PRESET = 'steam-shop';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/mantasarlauskas/image/upload';
@@ -44,12 +43,12 @@ export const addProduct = fields => async (dispatch, getState) => {
 
 export const removeProduct = id => (dispatch, getState) => {
   axios
-    ({
-      method: 'delete',
-      url: `${url}/products`,
-      data: {id},
-      ...config(getState().token)
-    })
+  ({
+    method: 'delete',
+    url: `${url}/products`,
+    data: {id},
+    ...config(getState().token)
+  })
     .then(() => {
       dispatch(getProducts());
     });

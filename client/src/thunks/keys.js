@@ -16,11 +16,11 @@ export const editKey = key => (dispatch, getState) => {
 
 export const removeKey = id => (dispatch, getState) => {
   axios
-    ({
-      method: 'delete',
-      url: `${url}/keys`,
-      data: {id},
-      ...config(getState().token)
-    })
+  ({
+    method: 'delete',
+    url: `${url}/keys`,
+    data: {id},
+    ...config(getState().token)
+  })
     .then(() => dispatch(getProducts()));
 };

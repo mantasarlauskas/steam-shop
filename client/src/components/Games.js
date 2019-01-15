@@ -166,7 +166,7 @@ class Games extends Component {
                 )
               })
             ) : (
-              <Typography variant="h6">
+              <Typography className={classes.empty} variant="h6">
                 Prekių nerasta
               </Typography>
             )}

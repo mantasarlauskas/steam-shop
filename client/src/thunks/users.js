@@ -12,23 +12,23 @@ import {
 
 export const banUser = userID => (dispatch, getState) => {
   axios
-    ({
-      method: 'delete',
-      url: `${url}/users`,
-      data: userID,
-      ...config(getState().token)
-    })
+  ({
+    method: 'delete',
+    url: `${url}/users`,
+    data: userID,
+    ...config(getState().token)
+  })
     .then(() => dispatch(getUsers()));
 };
 
 export const unbanUser = userID => (dispatch, getState) => {
   axios
-    ({
-      method: 'put',
-      url: `${url}/users`,
-      data: userID,
-      ...config(getState().token)
-    })
+  ({
+    method: 'put',
+    url: `${url}/users`,
+    data: userID,
+    ...config(getState().token)
+  })
     .then(() => dispatch(getUsers()));
 };
 

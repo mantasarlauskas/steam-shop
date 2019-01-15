@@ -11,7 +11,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import IconButton from "./Cart";
 import {compose} from 'redux';
 import withWidth from '@material-ui/core/withWidth';
 
