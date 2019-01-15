@@ -9,7 +9,7 @@ export default () => (
     </ol>
     <div className="carousel-inner">
       <div className="carousel-item active">
-        <img className="d-block w-100" src="/img/f1.jpg" alt="First slide"/>
+        <img className="d-block w-100" src="/img/pubg.jpg" alt="First slide"/>
       </div>
       <div className="carousel-item">
         <img className="d-block w-100" src="/img/cs.jpg" alt="Second slide"/>

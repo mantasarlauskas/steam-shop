@@ -13,12 +13,13 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import axios from "axios";
 import {config, url} from "../server";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 class KeyForm extends Component {
   constructor(props) {
     super(props);
 
-    this.initialState = {
+    this.state = {
       game_id: {
         value: '',
         empty: false
@@ -28,10 +29,9 @@ class KeyForm extends Component {
         empty: false
       },
       key: null,
-      error: false
+      error: false,
+      success: false
     };
-
-    this.state = this.initialState;
 
     props.id && this.getKey();
   }
@@ -90,7 +90,8 @@ class KeyForm extends Component {
 
     if (count > 0) {
       this.setState({
-        error: true
+        error: true,
+        success: false
       });
     }
 
@@ -99,7 +100,7 @@ class KeyForm extends Component {
 
   handleSubmit = event => {
     const {game_id, steam_key, key} = this.state;
-    const {onEdit, onAdd, history} = this.props;
+    const {onEdit, onAdd} = this.props;
 
     event.preventDefault();
 
@@ -118,14 +119,30 @@ class KeyForm extends Component {
         onAdd(values);
       }
 
-      this.setState(this.initialState);
-      history.push('/keys');
+      this.setState({
+        error: false,
+        success: true
+      })
     }
   };
 
   render() {
     const {classes, id, products} = this.props;
-    const {steam_key, game_id, error, key} = this.state;
+    const {steam_key, game_id, error, key, success} = this.state;
+
+    const displayMessage = (className, message, Icon) => {
+      return (
+        <SnackbarContent
+          className={className}
+          message={
+            <span>
+              <Icon className={classes.errorIcon}/>
+              {message}
+            </span>
+          }
+        />
+      )
+    };
 
     if (id && !key) {
       return (
@@ -141,17 +158,8 @@ class KeyForm extends Component {
           </h1>
           <hr/>
           <Paper className={classes.body}>
-            {error && (
-              <SnackbarContent
-                className={classes.error}
-                message={
-                  <span>
-                  <ErrorIcon className={classes.errorIcon}/>
-                  Formoje negali būti tuščių laukų
-                </span>
-                }
-              />
-            )}
+            {error && displayMessage(classes.error, 'Formoje negali būti tuščių laukų', ErrorIcon)}
+            {success && displayMessage(classes.success, 'Raktas sėkmingai pridėtas', CheckCircleIcon)}
             <form onSubmit={this.handleSubmit} noValidate>
               <FormControl>
                 <InputLabel htmlFor="game">Pasirinkite žaidimą</InputLabel>

@@ -339,9 +339,9 @@ class Product extends Component {
       );
     } else {
       return (
-        <div>
+        <Typography className={classes.empty} variant="h6">
           Tokios prekės nėra
-        </div>
+        </Typography>
       );
     }
   }

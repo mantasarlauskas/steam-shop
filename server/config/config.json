@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "root",
-    "password": "root",
-    "database": "steamshop",
-    "host": "127.0.0.1",
+    "username": "manarl@steam-shop-server",
+    "password": "Arkliozmona123.",
+    "database": "steam-shop",
+    "host": "steam-shop-server.mysql.database.azure.com",
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
-    "password": "root",
-    "database": "steamshop",
-    "host": "127.0.0.1",
+    "username": "manarl@steam-shop-server",
+    "password": "Arkliozmona123.",
+    "database": "steam-shop",
+    "host": "steam-shop-server.mysql.database.azure.com",
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": "root",
-    "database": "steamshop",
-    "host": "127.0.0.1",
+    "username": "mmanarl@steam-shop-server",
+    "password": "Arkliozmona123.",
+    "database": "steam-shop",
+    "host": "steam-shop-server.mysql.database.azure.com",
     "dialect": "mysql"
   }
 }

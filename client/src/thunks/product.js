@@ -19,9 +19,9 @@ const uploadImage = logo => {
 };
 
 const setPrices = data => dispatch => {
-  const minPrice = data.reduce((min, {price}) => min > price ? price : min, data[0].price);
+  const minPrice = data.length > 0 ? data.reduce((min, {price}) => min > price ? price : min, data[0].price) : 0;
   dispatch(setDefaultMinPrice(Math.floor(minPrice)));
-  const maxPrice = data.reduce((max, {price}) => max < price ? price : max, 0);
+  const maxPrice = data.length > 0 ? data.reduce((max, {price}) => max < price ? price : max, 0) : 0;
   dispatch(setDefaultMaxPrice(Math.ceil(maxPrice)));
 };
 
