@@ -15,6 +15,8 @@ import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import {Link} from 'react-router-dom';
 import jwt from 'jsonwebtoken';
+import withWidth from '@material-ui/core/withWidth';
+import { compose } from 'redux';
 
 class Product extends Component {
   constructor(props) {
@@ -54,12 +56,12 @@ class Product extends Component {
     const {token} = this.props;
 
     axios
-    ({
-      method: 'delete',
-      url: `${url}/review`,
-      data,
-      ...config(token)
-    })
+      ({
+        method: 'delete',
+        url: `${url}/review`,
+        data,
+        ...config(token)
+      })
       .then(() => this.getReviews());
   };
 
@@ -120,7 +122,7 @@ class Product extends Component {
   };
 
   render() {
-    const {product, addToCart, token, classes} = this.props;
+    const {product, addToCart, token, classes, width} = this.props;
     const {reviews, rating, emptyError, starError, form} = this.state;
     const user = jwt.decode(token);
 
@@ -173,12 +175,12 @@ class Product extends Component {
       const showReview = ({User: {username}, id, user_id, text, rating, createdAt}) => (
         <Paper className={classes.review} key={id}>
           <Grid container>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <Typography variant="h6" gutterBottom>
                 {username}
               </Typography>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <Typography variant="body1" className={classes.date}>
                 {new Date(createdAt).toLocaleString()}
                 {user && (user.role === 1 || user.id === user_id) && (
@@ -204,6 +206,80 @@ class Product extends Component {
         </Paper>
       );
 
+      const displayCover = className => (
+        <img className={className} src={logo} alt="Product cover"/>
+      );
+
+      const displayInfo = (
+        <Fragment>
+          <Grid container>
+            <Grid item xs={totalCount === 0 ? 8 : 10} sm={totalCount === 0 ? 10 : 11}>
+              <Typography variant="h5" gutterBottom>
+                {title}
+              </Typography>
+            </Grid>
+            {user && user.role === 1 && (
+              <Grid item xs={totalCount === 0 ? 4 : 2} sm={totalCount === 0 ? 2 : 1}>
+                <Grid container>
+                  <Grid item xs={totalCount === 0 ? 6 : 12}>
+                    <Link to={`/product-upload/${id}`}>
+                      <IconButton>
+                        <EditIcon/>
+                      </IconButton>
+                    </Link>
+                  </Grid>
+                  <Grid item xs={6}>
+                    {totalCount === 0 && (
+                      <IconButton>
+                        <DeleteIcon onClick={() => this.handleReviewRemove(id)}/>
+                      </IconButton>
+                    )}
+                  </Grid>
+                </Grid>
+              </Grid>
+            )}
+          </Grid>
+          <StarRatings
+            rating={reviews.reduce((sum, {rating}) => sum + rating, 0)/reviews.length || 0}
+            starDimension="25px"
+            starSpacing="2px"
+            starRatedColor="yellow"
+          />
+          <Typography variant="body2" gutterBottom>
+            {reviews.length} atsiliepimai(-ų)
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            {description}
+          </Typography>
+          <Typography className={classes.price} variant="h4" gutterBottom>
+            {price}$
+          </Typography>
+          {count > 0 ? (
+            <Fragment>
+              <Typography className={classes.success} variant="body1" gutterBottom>
+                Prekės kiekis sandelyje: {count} vnt.
+              </Typography>
+              {token ? (
+                <div align="center">
+                  <Button className={classes.submit} onClick={() => addToCart(id)}>
+                    <ShoppingCartIcon spacing={8}/>
+                    Į krepšelį
+                  </Button>
+                </div>
+              ) : (
+                <div className={classes.error}>
+                  Norėdami pirkti turite prisijungti
+                </div>
+              )}
+            </Fragment>
+          ) : (
+            <Typography className={classes.error} variant="body1" gutterBottom>
+              Apgailestaujame, tačiau prekės šiuo metu sandelyje neturime
+            </Typography>
+          )}
+        </Fragment>
+      );
+
       return (
         <div className={`${classes.root} container`}>
           <h1 className="product-title">
@@ -211,80 +287,30 @@ class Product extends Component {
           </h1>
           <hr/>
           <Grid container spacing={24}>
-            <Grid item xs={6}>
-              <Paper className={classes.paper}>
-                <img width={400} className={classes.image} src={logo} alt="Product cover"/>
-              </Paper>
-            </Grid>
-            <Grid item xs={6}>
-              <Paper className={classes.paper}>
-                <Grid container>
-                  <Grid item xs={totalCount === 0 ? 10 : 11}>
-                    <Typography variant="h5" gutterBottom>
-                      {title}
-                    </Typography>
+            {width === 'lg' || width === 'xl' ? (
+                <Fragment>
+                  <Grid item lg={6}>
+                    <Paper className={classes.paper}>
+                      {displayCover(classes.image)}
+                    </Paper>
                   </Grid>
-                  {user && user.role === 1 && (
-                    <Grid item xs={totalCount === 0 ? 2 : 1}>
-                      <Grid container>
-                        <Grid item xs={totalCount === 0 ? 6 : 12}>
-                          <Link to={`/product-upload/${id}`}>
-                            <IconButton>
-                              <EditIcon/>
-                            </IconButton>
-                          </Link>
-                        </Grid>
-                        <Grid item xs={6}>
-                          {totalCount === 0 && (
-                            <IconButton>
-                              <DeleteIcon onClick={() => this.handleReviewRemove(id)}/>
-                            </IconButton>
-                          )}
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  )}
+                  <Grid item lg={6}>
+                    <Paper className={classes.paper}>
+                      {displayInfo}
+                    </Paper>
+                  </Grid>
+                </Fragment>
+              ) : (
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <div className={classes.imageSmallWrapper}>
+                      {displayCover(classes.imageSmall)}
+                    </div>
+                    {displayInfo}
+                  </Paper>
                 </Grid>
-                <StarRatings
-                  rating={reviews.reduce((sum, {rating}) => sum + rating, 0)/reviews.length || 0}
-                  starDimension="25px"
-                  starSpacing="2px"
-                  starRatedColor="yellow"
-                />
-                <Typography variant="body2" gutterBottom>
-                  {reviews.length} atsiliepimai(-ų)
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  {description}
-                </Typography>
-                <Typography className={classes.price} variant="h4" gutterBottom>
-                  {price}$
-                </Typography>
-                {count > 0 ? (
-                  <Fragment>
-                    <Typography className={classes.success} variant="body1" gutterBottom>
-                      Prekės kiekis sandelyje: {count} vnt.
-                    </Typography>
-                    {token ? (
-                      <div align="center">
-                        <Button className={classes.submit} onClick={() => addToCart(id)}>
-                          <ShoppingCartIcon spacing={8}/>
-                          Į krepšelį
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className={classes.error}>
-                        Norėdami pirkti turite prisijungti
-                      </div>
-                    )}
-                  </Fragment>
-                ) : (
-                  <Typography className={classes.error} variant="body1" gutterBottom>
-                    Apgailestaujame, tačiau prekės šiuo metu sandelyje neturime
-                  </Typography>
-                )}
-              </Paper>
-            </Grid>
+              )
+            }
           </Grid>
           {token && (
             <Fragment>
@@ -321,4 +347,4 @@ class Product extends Component {
   }
 }
 
-export default withStyles(styles)(Product);
+export default compose(withStyles(styles), withWidth())(Product);

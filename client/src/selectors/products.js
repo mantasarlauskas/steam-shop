@@ -9,12 +9,20 @@ const minPriceSelector = ({filter: {minPrice}}) => minPrice;
 const maxPriceSelector = ({filter: {maxPrice}}) => maxPrice;
 const sortSelector = ({filter: {sort}}) => sort;
 
+export const popularProductSelector = createSelector(
+  [productSelector],
+  (products) => {
+    let newProducts = [...products];
+    return newProducts.sort((a, b) => b.timesBought - a.timesBought).slice(0, 6);
+  }
+);
+
 export const productByPriceSelector = createSelector(
   [productSelector, minPriceSelector, maxPriceSelector],
   (products, minPrice, maxPrice) => products.filter(({price}) => price >= minPrice && price <= maxPrice)
 );
 
-const productSortSelector = createSelector(
+export const productSortSelector = createSelector(
   [productByPriceSelector, sortSelector],
   (products, sort) => {
     let newProducts = [...products];
@@ -31,12 +39,6 @@ const productSortSelector = createSelector(
           1 : ((b.title.toUpperCase() > a.title.toUpperCase()) ? -1 : 0));
     }
   }
-);
-
-export const productPaginationSelector = createSelector(
-  [productSortSelector, paginationSelector],
-  (products, {currentPage, itemsPerPage}) => products.filter((product, index) => index >= currentPage * itemsPerPage &&
-    index < currentPage * itemsPerPage + itemsPerPage)
 );
 
 export const productSearchSelector = createSelector(

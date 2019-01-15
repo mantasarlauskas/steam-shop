@@ -8,7 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {styles} from '../styles/orders';
+import {styles} from '../styles/tables';
 import ZoomIcon from '@material-ui/icons/ZoomIn';
 import Typography from '@material-ui/core/Typography';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -69,7 +69,7 @@ class Orders extends Component {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell>Sukūrimo data</TableCell>
+                  <TableCell className='xs-hide'>Sukūrimo data</TableCell>
                   <TableCell/>
                 </TableRow>
               </TableHead>
@@ -77,7 +77,7 @@ class Orders extends Component {
                 {paginatedOrders.map(({id, createdAt}) => (
                   <TableRow className={classes.row} key={id}>
                     <TableCell>{id}</TableCell>
-                    <TableCell>Sukurtas: {new Date(createdAt).toLocaleString()}</TableCell>
+                    <TableCell className='xs-hide'>Sukurtas: {new Date(createdAt).toLocaleString()}</TableCell>
                     <TableCell>
                       <Link to={`/order/${id}`}>
                         <Button className={classes.button} variant="outlined" color="primary">
@@ -91,6 +91,10 @@ class Orders extends Component {
               </TableBody>
             </Table>
             <TablePagination
+              classes={{
+                caption: classes.smallHide,
+                selectRoot: classes.smallHide,
+              }}
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
               count={orders.length}

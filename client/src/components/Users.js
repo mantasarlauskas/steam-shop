@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {styles} from '../styles/orders';
+import {styles} from '../styles/tables';
 import TablePagination from '@material-ui/core/TablePagination';
 import ErrorIcon from '@material-ui/icons/Error';
 
@@ -61,7 +61,7 @@ class Users extends Component {
           Vartotojai
         </h1>
         <hr/>
-        <Paper>
+        <Paper className={classes.tableWrapper}>
           <Table>
             <TableHead>
               <TableRow>
@@ -80,8 +80,7 @@ class Users extends Component {
                   <TableCell>{email}</TableCell>
                   <TableCell>{role === 1 ? 'Administratorius' : 'Klientas'}</TableCell>
                   <TableCell>
-                    {
-                      role === 0 && isBanned === false && (
+                    {role === 0 && isBanned === false && (
                         <Button className={classes.error} onClick={() => onUserBan({id})}>
                           <span className={classes.message}>
                             <ErrorIcon className={classes.icon}/>
@@ -90,8 +89,7 @@ class Users extends Component {
                         </Button>
                       )
                     }
-                    {
-                      role === 0 && isBanned === true && (
+                    {role === 0 && isBanned === true && (
                         <Button className={classes.error} onClick={() => onUserUnban({id})}>
                         <span className={classes.message}>
                           <ErrorIcon className={classes.icon}/>

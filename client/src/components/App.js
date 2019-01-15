@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import Main from './Main';
+import Main from '../containers/MainContainer';
 import Users from '../containers/UsersContainer';
 import Profile from '../containers/ProfileContainer';
 import {Route, Switch} from 'react-router-dom';
@@ -17,6 +17,7 @@ import Order from "../containers/OrderContainer";
 import Keys from '../containers/KeysContainer';
 import EditUser from '../containers/EditUserContainer';
 import ChangePassword from '../containers/ChangePasswordContainer';
+import Footer from './Footer';
 
 class App extends Component {
   constructor(props) {
@@ -82,9 +83,12 @@ class App extends Component {
 
     return (
       <Fragment>
-        <Header/>
-        <Navbar/>
-        {routes}
+        <div className="content">
+          <Header/>
+          <Navbar/>
+          {routes}
+        </div>
+        <Footer/>
       </Fragment>
     );
   }

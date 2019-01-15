@@ -5,7 +5,10 @@ export const styles = theme => ({
     marginTop: 30
   },
   body: {
-    padding: '20px 50px'
+    padding: '20px 50px',
+    [theme.breakpoints.down('sm')]: {
+      padding: 20
+    }
   },
   label: {
     margin: '20px 0',
@@ -37,7 +40,10 @@ export const styles = theme => ({
   },
   select: {
     marginBottom: 15,
-    width: 400
+    width: 400,
+    [theme.breakpoints.down('sm')]: {
+      maxWidth:250
+    }
   },
   success: {
     backgroundColor: green[600],

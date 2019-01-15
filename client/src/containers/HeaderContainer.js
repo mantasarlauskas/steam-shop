@@ -7,7 +7,7 @@ import { setSearchPhrase } from '../actions/search';
 import { productSearchSelector } from '../selectors/products';
 import { cartCountSelector } from '../selectors/cart';
 
-const mapStateToProps = ({ token, ...state }) => ({
+const mapStateToProps = ({ token, navbar, ...state }) => ({
   loggedIn: token,
   games: productSearchSelector(state),
   cartCount: cartCountSelector(state)

@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import KeyForm from '../components/KeyUpload';
+import KeyForm from '../components/KeyForm';
 import {addKey, editKey} from '../thunks/keys';
 
 const mapStateToProps = ({token, products}, {match: {params: {id}}}) => ({

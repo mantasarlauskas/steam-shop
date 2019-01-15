@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {styles} from '../styles/orders';
+import {styles} from '../styles/tables';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -21,26 +21,26 @@ class Profile extends Component {
         <hr />
         <Paper className={classes.paper}>
           <Grid container>
-            <Grid item xs={6}>
-                <Grid container>
-                  <Grid item xs={12} className={classes.text}>
-                    <b>Vardas:</b> {username}
-                  </Grid>
-                  <Grid item xs={12} className={classes.text}>
-                    <b>El. paštas:</b> {email}
-                  </Grid>
-                  <Grid item xs={12} className={classes.text}>
-                    <b>Rolė:</b> {role === 1 ? 'Administratorius' : 'Klientas'}
-                  </Grid>
-                  <Grid item xs={12} className={classes.text}>
-                    <b>Profilio sukūrimo data:</b> {new Date(createdAt).toLocaleString()}
-                  </Grid>
-                  <Grid item xs={12} className={classes.text}>
-                    <b>Paskutinė profilio redagavimo data:</b> {new Date(updatedAt).toLocaleString()}
-                  </Grid>
+            <Grid item xs={12} md={5}>
+              <Grid container>
+                <Grid item xs={12} className={classes.text}>
+                  <b>Vardas:</b> {username}
                 </Grid>
+                <Grid item xs={12} className={classes.text}>
+                  <b>El. paštas:</b> {email}
+                </Grid>
+                <Grid item xs={12} className={classes.text}>
+                  <b>Rolė:</b> {role === 1 ? 'Administratorius' : 'Klientas'}
+                </Grid>
+                <Grid item xs={12} className={classes.text}>
+                  <b>Profilio sukūrimo data:</b> {new Date(createdAt).toLocaleString()}
+                </Grid>
+                <Grid item xs={12} className={classes.text}>
+                  <b>Paskutinė profilio redagavimo data:</b> {new Date(updatedAt).toLocaleString()}
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} md={7}>
               <Link to="/change-password">
                 <Button variant="contained" color="primary" className={classes.button}>
                   <KeyIcon className={classes.icon} />

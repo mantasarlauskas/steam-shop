@@ -1,0 +1,19 @@
+.content {
+  min-height: calc(100vh - 100px);
+}
+
+.footer {
+  margin-top: 50px;
+  height: 50px;
+  background: #343a40;
+  position: relative;
+
+  .text {
+    text-align: center;
+    width: 100%;
+    color: #FFF;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

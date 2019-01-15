@@ -8,7 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {styles} from '../styles/orders';
+import {styles} from '../styles/tables';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
@@ -80,7 +80,7 @@ class Keys extends Component {
         </h1>
         <hr/>
         {paginatedKeys.length > 0 ? (
-          <Paper>
+          <Paper className={classes.tableWrapper}>
             <Table>
               <TableHead>
                 <TableRow>

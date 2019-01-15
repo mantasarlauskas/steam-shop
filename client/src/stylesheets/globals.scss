@@ -36,3 +36,13 @@
 .btn-link {
   cursor: pointer;
 }
+
+.xs-hide {
+  @media screen and (max-width: 599px) { display: none!important; }
+}
+.sm-hide {
+  @media screen and (max-width: 959px) { display: none!important; }
+}
+.md-hide {
+  @media screen and (max-width: 1279px) { display: none!important; }
+}

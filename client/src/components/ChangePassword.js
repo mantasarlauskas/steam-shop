@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
-import {styles} from '../styles/productForm';
+import {styles} from '../styles/form';
 import ErrorIcon from '@material-ui/icons/Error';
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 

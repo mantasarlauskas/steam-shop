@@ -1,14 +1,12 @@
 import { connect } from 'react-redux';
 import Games from '../components/Games';
-import {productByPriceSelector, productPaginationSelector} from "../selectors/products";
-import {setPage} from "../actions/pagination";
+import {productByPriceSelector, productSortSelector} from "../selectors/products";
 import {resetFilter} from "../actions/filter";
 import {changeMaxPrice, changeMinPrice, changeSort} from "../thunks/filter";
 
 const mapStateToProps = state => ({
-  products: productPaginationSelector(state),
-  pagination: state.pagination,
-  productLength: productByPriceSelector(state).length,
+  games: productSortSelector(state),
+  gamesLength: productByPriceSelector(state).length,
   defaultMinPrice: state.filter.defaultMinPrice,
   defaultMaxPrice: state.filter.defaultMaxPrice,
   minPrice: state.filter.minPrice,
@@ -19,7 +17,6 @@ const mapDispatchToProps = dispatch => ({
   onLoad: () => dispatch(resetFilter()),
   onMinPriceChange: price => dispatch(changeMinPrice(price)),
   onMaxPriceChange: price => dispatch(changeMaxPrice(price)),
-  onPageChange: page => dispatch(setPage(page)),
   onSortChange: sort => dispatch(changeSort(sort))
 });
 

@@ -77,6 +77,7 @@ class Header extends Component {
     const {anchorEl} = this.state;
     const {logout, classes} = this.props;
     const isMenuOpen = Boolean(anchorEl);
+
     return (
       <Menu
         anchorEl={anchorEl}
@@ -103,6 +104,7 @@ class Header extends Component {
 
   render() {
     const {toggleNavbar, loggedIn, showLogin, games, cartCount, classes} = this.props;
+
     return (
       <header>
         <Login/>

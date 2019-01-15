@@ -32,10 +32,22 @@ export const styles = theme => ({
     position: 'relative'
   },
   image: {
+    width: 400,
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translateY(-50%) translateX(-50%)'
+  },
+  imageSmallWrapper: {
+    position: 'relative',
+    height: 270
+  },
+  imageSmall: {
+    maxWidth: 250,
+    maxHeight: 250,
+    position: 'absolute',
+    left: '50%',
+    transform: 'translateX(-50%)'
   },
   review: {
     padding: 10,
@@ -48,7 +60,9 @@ export const styles = theme => ({
     fontSize: 15
   },
   date: {
-    float: 'right'
+    [theme.breakpoints.up('sm')]: {
+      float: 'right'
+    }
   },
   reviewForm: {
     padding: 15,
