@@ -1,21 +1,21 @@
 {
   "development": {
     "username": "manarl@steam-shop-server",
-    "password": "Arkliozmona123.",
+    "password": "Labadiena123",
     "database": "steam-shop",
     "host": "steam-shop-server.mysql.database.azure.com",
     "dialect": "mysql"
   },
   "test": {
     "username": "manarl@steam-shop-server",
-    "password": "Arkliozmona123.",
+    "password": "Labadiena123",
     "database": "steam-shop",
     "host": "steam-shop-server.mysql.database.azure.com",
     "dialect": "mysql"
   },
   "production": {
     "username": "mmanarl@steam-shop-server",
-    "password": "Arkliozmona123.",
+    "password": "Labadiena123",
     "database": "steam-shop",
     "host": "steam-shop-server.mysql.database.azure.com",
     "dialect": "mysql"
