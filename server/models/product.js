@@ -5,8 +5,6 @@ module.exports = (sequelize, DataTypes) => {
     price: DataTypes.DOUBLE,
     logo: DataTypes.STRING,
     description: DataTypes.TEXT,
-    likeCount: DataTypes.INTEGER,
-    dislikeCount: DataTypes.INTEGER,
     timesBought: {
       type: DataTypes.INTEGER,
       defaultValue: 0

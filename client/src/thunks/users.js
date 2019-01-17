@@ -9,6 +9,7 @@ import {
   resetErrorMessage,
   resetSuccessMessage
 } from '../actions/auth';
+import jwt from 'jsonwebtoken';
 
 export const banUser = userID => (dispatch, getState) => {
   axios
@@ -50,7 +51,7 @@ export const updateUser = fields => (dispatch, getState) => {
     .post(`${url}/users`, fields, config(getState().token))
     .then(({data}) => {
       dispatch(setSuccessMessage(data));
-      dispatch(getUsers());
+      jwt.decode(getState().token).role === 1 && dispatch(getUsers());
       dispatch(getUser(fields.id));
     });
 };

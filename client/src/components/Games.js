@@ -55,12 +55,18 @@ class Games extends Component {
 
     onMinPriceChange(prices[0]);
     onMaxPriceChange(prices[1]);
+    this.setState({
+      page: 0
+    });
   };
 
   handleSortChange = ({target: {value}}) => {
     const {onSortChange} = this.props;
 
     onSortChange(value);
+    this.setState({
+      page: 0
+    });
   };
 
   handlePageChange = ({selected}) => {
@@ -79,12 +85,13 @@ class Games extends Component {
       maxPrice
     } = this.props;
 
-    const {itemsPerPage, paginatedGames} = this.state;
+    const {itemsPerPage, paginatedGames, page} = this.state;
 
     const pagination = (
       <Grid container>
         <Grid item xs={12}>
           <Pagination
+            page={page}
             pageCount={Math.ceil(gamesLength / itemsPerPage)}
             changePage={this.handlePageChange}
           />

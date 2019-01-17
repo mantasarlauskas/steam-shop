@@ -20,12 +20,6 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
-      likeCount: {
-        type: Sequelize.INTEGER
-      },
-      dislikeCount: {
-        type: Sequelize.INTEGER
-      },
       timesBought: {
         type: Sequelize.INTEGER
       },

@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
 
-export default ({ pageCount, changePage }) => (
+export default ({pageCount, changePage, page}) => (
   <ReactPaginate
     onPageChange={changePage}
+    forcePage={page}
     pageCount={pageCount}
     marginPagesDisplayed={5}
     pageRangeDisplayed={5}

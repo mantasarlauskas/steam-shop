@@ -51,14 +51,19 @@ class Login extends Component {
         username: username.value,
         password: password.value
       });
-      this.setState(this.initialState);
     }
+  };
+
+  handleClose = () => {
+    const {closeModal} = this.props;
+
+    this.setState(this.initialState);
+    closeModal();
   };
 
   render() {
     const {
       isOpen,
-      closeModal,
       classes,
       errorMessage,
       successMessage,
@@ -81,14 +86,14 @@ class Login extends Component {
     };
 
     return (
-      <Modal open={isOpen} onClose={closeModal}>
+      <Modal open={isOpen} onClose={this.handleClose}>
         <div style={getModalStyle()} className={classes.paper}>
           <IconButton
             key="close"
             aria-label="Close"
             color="inherit"
             className={classes.icon}
-            onClick={closeModal}
+            onClick={this.handleClose}
           >
             <CloseIcon/>
           </IconButton>

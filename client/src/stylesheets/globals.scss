@@ -13,6 +13,13 @@
   cursor: pointer;
 }
 
+#root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .xs-hide {
   @media screen and (max-width: 599px) {
     display: none !important;

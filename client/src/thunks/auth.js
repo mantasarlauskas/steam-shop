@@ -26,5 +26,7 @@ export const closeLogin = () => dispatch => {
 
 export const redirectFromLoginToRegistration = () => dispatch => {
   dispatch(hideLoginForm());
+  dispatch(resetSuccessMessage());
+  dispatch(resetErrorMessage());
   dispatch(showRegistrationForm());
 };
