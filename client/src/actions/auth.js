@@ -1,4 +1,4 @@
-import C from '../constants';
+import C from "../constants";
 
 export const setErrorMessage = message => ({
   type: C.SET_ERROR_MESSAGE,

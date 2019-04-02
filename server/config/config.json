@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "root",
-    "password": "root",
-    "database": "steamshop",
-    "host": "localhost",
+    "username": "manarlas",
+    "password": "labadiena123",
+    "database": "zaidimuparduotuv",
+    "host": "db4free.net",
     "dialect": "mysql"
   },
   "test": {
-    "username": "manarl@steam-shop-server",
-    "password": "Labadiena123",
-    "database": "steam-shop",
-    "host": "steam-shop-server.mysql.database.azure.com",
+    "username": "manarlas",
+    "password": "labadiena123",
+    "database": "zaidimuparduotuv",
+    "host": "db4free.net",
     "dialect": "mysql"
   },
   "production": {
-    "username": "manarl@steam-shop-server",
-    "password": "Labadiena123",
-    "database": "steam-shop",
-    "host": "steam-shop-server.mysql.database.azure.com",
+    "username": "manarlas",
+    "password": "labadiena123",
+    "database": "zaidimuparduotuv",
+    "host": "db4free.net",
     "dialect": "mysql"
   }
 }

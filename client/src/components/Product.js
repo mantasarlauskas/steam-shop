@@ -21,7 +21,6 @@ import {compose} from 'redux';
 class Product extends Component {
   constructor(props) {
     super(props);
-
     this.initialState = {
       review: '',
       reviews: null,
