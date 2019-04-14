@@ -1,10 +1,17 @@
-import {connect} from 'react-redux';
-import KeyForm from '../components/KeyForm';
-import {addKey, editKey} from '../thunks/keys';
+import { connect } from "react-redux";
+import KeyForm from "../components/KeyForm";
+import { addKey, editKey } from "../thunks/keys";
 
-const mapStateToProps = ({token, products}, {match: {params: {id}}}) => ({
+const mapStateToProps = (
+  { token, products: { list } },
+  {
+    match: {
+      params: { id }
+    }
+  }
+) => ({
   token,
-  products,
+  products: list,
   id
 });
 
@@ -13,4 +20,7 @@ const mapDispatchToProps = dispatch => ({
   onEdit: fields => dispatch(editKey(fields))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(KeyForm);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(KeyForm);

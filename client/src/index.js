@@ -1,18 +1,18 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
-import './stylesheets/index.css';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './containers/AppContainer';
-import store from './store';
-import {Provider} from 'react-redux';
-import {BrowserRouter as Router} from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { BrowserRouter as Router } from "react-router-dom";
+import App from "./containers/app";
+import store from "./store";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
+import "./stylesheets/index.css";
 
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <App store={store}/>
+      <App store={store} />
     </Router>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById("root")
 );

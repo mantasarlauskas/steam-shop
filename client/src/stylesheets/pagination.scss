@@ -1,3 +1,17 @@
+$text-color: #000;
+
 .pagination {
-    float: right;
+  float: right;
+}
+
+.page-item {
+  cursor: pointer;
+}
+
+.page-link {
+  color: $text-color;
+
+  &:hover {
+    color: $text-color;
+  }
 }

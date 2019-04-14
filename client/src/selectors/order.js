@@ -1,7 +1,7 @@
-import {createSelector} from 'reselect';
+import { createSelector } from "reselect";
 
-const orderItemSelector = ({orders}) => orders;
-const productSelector = ({products}) => products;
+const orderItemSelector = ({ orders: { list } }) => list;
+const productSelector = ({ products: { list } }) => list;
 const idSelector = (state, id) => id;
 
 export const orderIDSelector = createSelector(
@@ -11,10 +11,11 @@ export const orderIDSelector = createSelector(
 
 export const orderSelector = createSelector(
   [orderIDSelector, orderItemSelector],
-  (orderIDs, orders) => orderIDs.map(id => ({
-    id,
-    createdAt: orders.find(order => order.order_id === id).Order.createdAt
-  }))
+  (orderIDs, orders) =>
+    orderIDs.map(id => ({
+      id,
+      createdAt: orders.find(order => order.order_id === id).Order.createdAt
+    }))
 );
 
 export const orderByIDSelector = createSelector(
@@ -24,8 +25,9 @@ export const orderByIDSelector = createSelector(
 
 export const orderProductSelector = createSelector(
   [productSelector, orderByIDSelector],
-  (products, orders) => orders.map(item => ({
-    ...products.find(product => product.id === item.game_id),
-    cartCount: item.count
-  }))
+  (products, orders) =>
+    orders.map(item => ({
+      ...products.find(product => product.id === item.game_id),
+      cartCount: item.count
+    }))
 );

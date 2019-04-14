@@ -1,6 +1,7 @@
-import {config, url} from "../server";
-import axios from 'axios';
-import {getProducts} from "./product";
+import { config, url } from "../server";
+import axios from "axios";
+import { getProducts } from "./products";
+import { addOrderKeys, fetchKeys, addKeys } from "../actions/keys";
 
 export const addKey = key => (dispatch, getState) => {
   axios
@@ -15,12 +16,27 @@ export const editKey = key => (dispatch, getState) => {
 };
 
 export const removeKey = id => (dispatch, getState) => {
-  axios
-  ({
-    method: 'delete',
+  axios({
+    method: "delete",
     url: `${url}/keys`,
-    data: {id},
+    data: { id },
     ...config(getState().token)
-  })
-    .then(() => dispatch(getProducts()));
+  }).then(() => {
+    dispatch(getProducts());
+    dispatch(getKeys());
+  });
+};
+
+export const getOrderKeys = id => async (dispatch, getState) => {
+  const { data } = await axios.get(
+    `${url}/order-keys/${id}`,
+    config(getState().token)
+  );
+  dispatch(addOrderKeys(data));
+};
+
+export const getKeys = id => async (dispatch, getState) => {
+  dispatch(fetchKeys());
+  const { data } = await axios.get(`${url}/keys`, config(getState().token));
+  dispatch(addKeys(data));
 };

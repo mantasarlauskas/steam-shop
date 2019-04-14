@@ -1,7 +1,10 @@
-import C from '../constants';
+import C from "../constants";
 
-export const addProductsToCart = products => ({
-  type: C.ADD_PRODUCTS_TO_CART,
-  payload: products
+export const addCart = cart => ({
+  type: C.ADD_CART,
+  payload: cart
 });
 
+export const fetchCart = () => ({
+  type: C.FETCH_CART
+});

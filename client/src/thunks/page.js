@@ -1,10 +1,8 @@
-import {resetNavbar} from "../actions/navbar";
-import {getProducts} from "./product";
-import {getCart} from "./cart";
-import {resetErrorMessage, resetSuccessMessage} from "../actions/auth";
+import { getProducts } from "./products";
+import { getCart } from "./cart";
+import { resetErrorMessage, resetSuccessMessage } from "../actions/auth";
 
-export const initPage = () => (dispatch, getState) => {
-  dispatch(resetNavbar());
+export const loadData = () => (dispatch, getState) => {
   dispatch(getProducts());
   getState().token && dispatch(getCart());
 };

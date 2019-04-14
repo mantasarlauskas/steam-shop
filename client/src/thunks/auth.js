@@ -1,6 +1,10 @@
-import {resetErrorMessage, resetSuccessMessage} from "../actions/auth";
-import {hideLoginForm, hideRegistrationForm, showRegistrationForm} from "../actions/forms";
-import {loginUser, registerUser} from "./users";
+import { resetErrorMessage, resetSuccessMessage } from "../actions/auth";
+import {
+  hideLoginForm,
+  hideRegistrationForm,
+  showRegistrationForm
+} from "../actions/forms";
+import { loginUser, registerUser } from "./users";
 
 export const submitRegistration = fields => dispatch => {
   dispatch(resetErrorMessage());

@@ -1,10 +1,23 @@
-import C from '../constants';
+import C from "../constants";
 
-export default (state = [], action) => {
-  switch(action.type) {
+const initialState = {
+  isLoading: false,
+  list: []
+};
+
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case C.FETCH_ORDERS:
+      return {
+        ...state,
+        isLoading: true
+      };
     case C.ADD_ORDERS:
-      return action.payload;
+      return {
+        isLoading: false,
+        list: action.payload
+      };
     default:
-      return state
+      return state;
   }
 };

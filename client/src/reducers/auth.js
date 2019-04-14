@@ -1,4 +1,4 @@
-import C from '../constants';
+import C from "../constants";
 
 const initialState = {
   users: [],
@@ -34,6 +34,6 @@ export default (state = initialState, action) => {
         successMessage: null
       };
     default:
-      return state
+      return state;
   }
 };

@@ -1,6 +1,6 @@
-import { createSelector } from 'reselect';
+import { createSelector } from "reselect";
 
-const cartSelector = ({ cart }) => cart;
+const cartSelector = ({ cart: { list } }) => list;
 
 export const cartCountSelector = createSelector(
   [cartSelector],

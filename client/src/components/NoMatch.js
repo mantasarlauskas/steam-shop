@@ -1,18 +1,18 @@
-import React, {Component} from 'react';
-import {withStyles} from "@material-ui/core";
-import {styles} from "../styles/cart";
-import Typography from '@material-ui/core/Typography';
+import React, { Component } from "react";
+import { withStyles } from "@material-ui/core";
+import styles from "./cart/styles";
+import Typography from "@material-ui/core/Typography";
 
 class NoMatch extends Component {
   render() {
-    const {location, classes} = this.props;
+    const { location, classes } = this.props;
 
     return (
       <div className={`${classes.paper} container`}>
         <Typography variant="h4">
           No match for <code>{location.pathname}</code>
         </Typography>
-        <hr/>
+        <hr />
       </div>
     );
   }

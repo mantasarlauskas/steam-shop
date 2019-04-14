@@ -1,6 +1,10 @@
-import {config, url} from '../server';
-import axios from 'axios';
-import {hideLoginForm, hideRegistrationForm, showLoginForm} from '../actions/forms';
+import { config, url } from "../server";
+import axios from "axios";
+import {
+  hideLoginForm,
+  hideRegistrationForm,
+  showLoginForm
+} from "../actions/forms";
 import {
   setErrorMessage,
   setSuccessMessage,
@@ -8,88 +12,86 @@ import {
   addUsers,
   resetErrorMessage,
   resetSuccessMessage
-} from '../actions/auth';
-import jwt from 'jsonwebtoken';
+} from "../actions/auth";
+import jwt from "jsonwebtoken";
 
-export const banUser = userID => (dispatch, getState) => {
-  axios
-  ({
-    method: 'delete',
+export const banUser = userID => async (dispatch, getState) => {
+  await axios({
+    method: "delete",
     url: `${url}/users`,
     data: userID,
     ...config(getState().token)
-  })
-    .then(() => dispatch(getUsers()));
+  });
+  dispatch(getUsers());
 };
 
-export const unbanUser = userID => (dispatch, getState) => {
-  axios
-  ({
-    method: 'put',
+export const unbanUser = userID => async (dispatch, getState) => {
+  await axios({
+    method: "put",
     url: `${url}/users`,
     data: userID,
     ...config(getState().token)
-  })
-    .then(() => dispatch(getUsers()));
+  });
+  dispatch(getUsers());
 };
 
-export const loginUser = fields => dispatch => {
-  axios
-    .post(`${url}/login`, fields)
-    .then(({data}) => {
-      dispatch(setToken(data));
-      dispatch(hideLoginForm());
-    })
-    .catch(({response: {data}}) => {
-      dispatch(setErrorMessage(data));
-    });
+export const loginUser = fields => async dispatch => {
+  try {
+    const { data } = await axios.post(`${url}/login`, fields);
+    dispatch(setToken(data));
+    dispatch(hideLoginForm());
+  } catch ({ response: { data } }) {
+    dispatch(setErrorMessage(data));
+  }
 };
 
-export const updateUser = fields => (dispatch, getState) => {
+export const updateUser = fields => async (dispatch, getState) => {
   dispatch(resetSuccessMessage());
-  axios
-    .post(`${url}/users`, fields, config(getState().token))
-    .then(({data}) => {
-      dispatch(setSuccessMessage(data));
-      jwt.decode(getState().token).role === 1 && dispatch(getUsers());
-      dispatch(getUser(fields.id));
-    });
+  const { data } = await axios.post(
+    `${url}/users`,
+    fields,
+    config(getState().token)
+  );
+  dispatch(setSuccessMessage(data));
+  jwt.decode(getState().token).role === 1 && dispatch(getUsers());
+  dispatch(getUser(fields.id));
 };
 
-export const changePassword = fields => (dispatch, getState) => {
+export const changePassword = fields => async (dispatch, getState) => {
   dispatch(resetSuccessMessage());
   dispatch(resetErrorMessage());
-  axios
-    .post(`${url}/password`, fields, config(getState().token))
-    .then(({data}) => {
-      dispatch(setSuccessMessage(data));
-    })
-    .catch(({response: {data}}) => {
-      dispatch(setErrorMessage(data));
-    });
+  try {
+    const { data } = await axios.post(
+      `${url}/password`,
+      fields,
+      config(getState().token)
+    );
+    dispatch(setSuccessMessage(data));
+  } catch ({ response: { data } }) {
+    dispatch(setErrorMessage(data));
+  }
 };
 
-export const registerUser = fields => dispatch => {
-  axios
-    .post(`${url}/register`, fields)
-    .then(({data}) => {
-      dispatch(setSuccessMessage(data));
-      dispatch(hideRegistrationForm());
-      dispatch(showLoginForm());
-    })
-    .catch(({response: {data}}) => {
-      dispatch(setErrorMessage(data));
-    });
+export const registerUser = fields => async dispatch => {
+  try {
+    const { data } = await axios.post(`${url}/register`, fields);
+    dispatch(setSuccessMessage(data));
+    dispatch(hideRegistrationForm());
+    dispatch(showLoginForm());
+  } catch ({ response: { data } }) {
+    dispatch(setErrorMessage(data));
+  }
 };
 
-export const getUsers = () => (dispatch, getState) => {
-  axios
-    .get(`${url}/users`, config(getState().token))
-    .then(({data}) => dispatch(addUsers(data)));
+export const getUsers = () => async (dispatch, getState) => {
+  const { data } = await axios.get(`${url}/users`, config(getState().token));
+  dispatch(addUsers(data));
 };
 
-export const getUser = id => (dispatch, getState) => {
-  axios
-    .get(`${url}/users/${id}`, config(getState().token))
-    .then(({data}) => dispatch(setToken(data)));
+export const getUser = id => async (dispatch, getState) => {
+  const { data } = await axios.get(
+    `${url}/users/${id}`,
+    config(getState().token)
+  );
+  dispatch(setToken(data));
 };

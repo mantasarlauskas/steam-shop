@@ -1,11 +1,11 @@
-import C from '../constants';
+import C from "../constants";
 
 const initialState = {
-  defaultMinPrice: null,
-  defaultMaxPrice: null,
-  minPrice: null,
-  maxPrice: null,
-  sort: 'NAME_ASC'
+  defaultMinPrice: 0,
+  defaultMaxPrice: 0,
+  minPrice: 0,
+  maxPrice: 0,
+  sort: "NAME_ASC"
 };
 
 export default (state = initialState, action) => {
@@ -45,6 +45,6 @@ export default (state = initialState, action) => {
         minPrice: state.defaultMinPrice
       };
     default:
-      return state
+      return state;
   }
 };

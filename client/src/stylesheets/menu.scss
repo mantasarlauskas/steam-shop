@@ -1,0 +1,48 @@
+.menu {
+  position: fixed;
+  top: 64px;
+  width: 250px;
+  height: calc(100vh - 64px);
+  z-index: 100;
+  left: 0;
+  animation: show 0.5s;
+
+  &.closing {
+    left: -250px;
+    animation: hide 0.5s;
+  }
+
+  .list-group-item {
+    @extend %align-icons;
+    border: none;
+    border-radius: 0;
+    color: #fff;
+    cursor: pointer;
+
+    svg {
+      margin-right: 25px;
+    }
+
+    &:hover {
+      color: #999;
+    }
+  }
+}
+
+@keyframes show {
+  from {
+    left: -250px;
+  }
+  to {
+    left: 0;
+  }
+}
+
+@keyframes hide {
+  from {
+    left: 0;
+  }
+  to {
+    left: -250px;
+  }
+}
