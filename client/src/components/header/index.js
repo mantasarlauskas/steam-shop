@@ -48,18 +48,18 @@ class Header extends Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}>
-          <SettingsIcon className={classes.linkIcon} />
-          <Link className={classes.linkDark} to="/profile">
-            Profilis
-          </Link>
-        </MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>
-          <LogoutIcon className={classes.linkIcon} />
-          <Link className={classes.linkDark} to="/" onClick={logout}>
-            Atsijungti
-          </Link>
-        </MenuItem>
+        <Link to="/profile">
+          <MenuItem onClick={this.handleMenuClose}>
+            <SettingsIcon className={classes.linkIcon} />
+            <span className={classes.linkDark}>Profilis</span>
+          </MenuItem>
+        </Link>
+        <Link to="/" onClick={logout}>
+          <MenuItem onClick={this.handleMenuClose}>
+            <LogoutIcon className={classes.linkIcon} />
+            <span className={classes.linkDark}>Atsijungti</span>
+          </MenuItem>
+        </Link>
       </Menu>
     );
   };
