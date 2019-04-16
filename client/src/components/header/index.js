@@ -67,7 +67,7 @@ class Header extends Component {
   render() {
     const {
       toggleMenu,
-      loggedIn,
+      token,
       showLogin,
       cartCount,
       classes,
@@ -90,7 +90,7 @@ class Header extends Component {
               </IconButton>
               <Search history={history} />
               <div className={classes.grow} />
-              {!loggedIn ? (
+              {!token ? (
                 <Button color="inherit" onClick={showLogin}>
                   <div className={classes.login}>Prisijungimas</div>
                 </Button>
@@ -124,7 +124,7 @@ Header.propTypes = {
   logout: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   toggleMenu: PropTypes.func.isRequired,
-  loggedIn: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
   showLogin: PropTypes.func.isRequired,
   cartCount: PropTypes.number.isRequired,
   history: PropTypes.object.isRequired

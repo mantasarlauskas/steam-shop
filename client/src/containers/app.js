@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { loadData } from "../thunks/page";
+import { getCart } from "../thunks/cart";
 import App from "../components/app";
 
 const mapStateToProps = ({ token, menu: { isOpen } }) => ({
@@ -9,7 +9,7 @@ const mapStateToProps = ({ token, menu: { isOpen } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onLoad: () => dispatch(loadData())
+  onLoad: () => dispatch(getCart())
 });
 
 export default withRouter(

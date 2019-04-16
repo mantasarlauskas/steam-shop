@@ -18,27 +18,10 @@ const uploadImage = logo => {
   });
 };
 
-const setPrices = data => dispatch => {
-  const minPrice =
-    data.length > 0
-      ? data.reduce(
-          (min, { price }) => (min > price ? price : min),
-          data[0].price
-        )
-      : 0;
-  dispatch(setDefaultMinPrice(Math.floor(minPrice)));
-  const maxPrice =
-    data.length > 0
-      ? data.reduce((max, { price }) => (max < price ? price : max), 0)
-      : 0;
-  dispatch(setDefaultMaxPrice(Math.ceil(maxPrice)));
-};
-
 export const getProducts = () => async dispatch => {
   dispatch(fetchProducts());
   const { data } = await axios.get(`${url}/products`);
   dispatch(addProducts(data));
-  dispatch(setPrices(data));
 };
 
 export const addProduct = fields => async (dispatch, getState) => {
@@ -50,7 +33,6 @@ export const addProduct = fields => async (dispatch, getState) => {
     { ...fields, logo: secure_url },
     config(getState().token)
   );
-  dispatch(getProducts());
 };
 
 export const removeProduct = id => async (dispatch, getState) => {
@@ -60,7 +42,6 @@ export const removeProduct = id => async (dispatch, getState) => {
     data: { id },
     ...config(getState().token)
   });
-  dispatch(getProducts());
 };
 
 export const editProduct = fields => async (dispatch, getState) => {
@@ -75,5 +56,4 @@ export const editProduct = fields => async (dispatch, getState) => {
     fields.logo = secure_url;
   }
   await axios.put(`${url}/products`, fields, config(getState().token));
-  dispatch(getProducts());
 };

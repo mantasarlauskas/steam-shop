@@ -1,12 +1,10 @@
 import axios from "axios";
 import { config, url } from "../server";
 import { addCart, fetchCart } from "../actions/cart";
-import { getProducts } from "./products";
 
 export const addProductToCart = id => async (dispatch, getState) => {
   await axios.post(`${url}/cart`, { game_id: id }, config(getState().token));
   dispatch(getCart());
-  dispatch(getProducts());
 };
 
 export const removeProductFromCart = id => async (dispatch, getState) => {
@@ -17,7 +15,6 @@ export const removeProductFromCart = id => async (dispatch, getState) => {
     ...config(getState().token)
   });
   dispatch(getCart());
-  dispatch(getProducts());
 };
 
 export const getCart = () => async (dispatch, getState) => {

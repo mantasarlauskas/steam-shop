@@ -13,7 +13,14 @@ import "rc-slider/assets/index.css";
 
 class Games extends Component {
   state = {
-    paginatedGames: []
+    selectedGames: [],
+    paginatedGames: [],
+    defaultMinPrice: 0,
+    defaultMaxPrice: 0,
+    minPrice: 0,
+    maxPrice: 0,
+    gamesLength: 0,
+    sort: "NAME_ASC"
   };
 
   componentDidMount() {
@@ -21,17 +28,55 @@ class Games extends Component {
     onLoad();
   }
 
+  componentDidUpdate({ games: prevGames }) {
+    const { games } = this.props;
+    prevGames !== games && games.length > 0 && this.initState();
+  }
+
+  initState = () => {
+    const { games } = this.props;
+    const minPrice = Math.floor(
+      games.reduce(
+        (min, { price }) => (min > price ? price : min),
+        games[0].price
+      )
+    );
+    const maxPrice = Math.ceil(
+      games.reduce((max, { price }) => (max < price ? price : max), 0)
+    );
+    this.setState(
+      {
+        defaultMinPrice: minPrice,
+        defaultMaxPrice: maxPrice,
+        gamesLength: games.length,
+        minPrice,
+        maxPrice
+      },
+      this.selectGames
+    );
+  };
+
   handlePriceChange = prices => {
-    const { onMinPriceChange, onMaxPriceChange } = this.props;
-    onMinPriceChange(prices[0]);
-    onMaxPriceChange(prices[1]);
-    this.pagination.resetPage();
+    const { games } = this.props;
+    this.setState(
+      {
+        minPrice: prices[0],
+        maxPrice: prices[1],
+        gamesLength: games.filter(
+          ({ price }) => price >= prices[0] && price <= prices[1]
+        ).length
+      },
+      this.selectGames
+    );
   };
 
   handleSortChange = ({ target: { value } }) => {
-    const { onSortChange } = this.props;
-    onSortChange(value);
-    this.pagination.resetPage();
+    this.setState(
+      {
+        sort: value
+      },
+      this.selectGames
+    );
   };
 
   handleGamesChange = paginatedGames => {
@@ -40,23 +85,64 @@ class Games extends Component {
     });
   };
 
+  selectGamesByPrice = () => {
+    const { games } = this.props;
+    const { minPrice, maxPrice } = this.state;
+    return games.filter(({ price }) => price >= minPrice && price <= maxPrice);
+  };
+
+  selectGamesBySort = () => {
+    const { sort } = this.state;
+    const games = this.selectGamesByPrice();
+    switch (sort) {
+      case "NAME_DESC":
+        return games.sort((a, b) =>
+          a.title.toUpperCase() < b.title.toUpperCase()
+            ? 1
+            : b.title.toUpperCase() < a.title.toUpperCase()
+            ? -1
+            : 0
+        );
+      case "PRICE_ASC":
+        return games.sort((a, b) => a.price - b.price);
+      case "PRICE_DESC":
+        return games.sort((a, b) => b.price - a.price);
+      default:
+        return games.sort((a, b) =>
+          a.title.toUpperCase() > b.title.toUpperCase()
+            ? 1
+            : b.title.toUpperCase() > a.title.toUpperCase()
+            ? -1
+            : 0
+        );
+    }
+  };
+
+  selectGames = () => {
+    this.setState(
+      {
+        selectedGames: this.selectGamesBySort()
+      },
+      () => this.pagination && this.pagination.resetPage()
+    );
+  };
+
   render() {
+    const { classes, isLoading } = this.props;
     const {
-      classes,
-      gamesLength,
+      paginatedGames,
       defaultMinPrice,
       defaultMaxPrice,
       minPrice,
       maxPrice,
-      isLoading,
-      games
-    } = this.props;
-    const { paginatedGames } = this.state;
+      gamesLength,
+      selectedGames
+    } = this.state;
     return (
       <div className={classes.games + " container"}>
         <h1 className="title">Žaidimai</h1>
         <hr />
-        {games.length > 0 ? (
+        {selectedGames.length > 0 ? (
           <Fragment>
             <Grid container className={classes.filters}>
               <Grid item xs={12} md={4}>
@@ -101,7 +187,7 @@ class Games extends Component {
                     ref={x => (this.pagination = x)}
                     itemLength={gamesLength}
                     itemsPerPage={9}
-                    data={games}
+                    data={selectedGames}
                     returnData={this.handleGamesChange}
                   />
                 </Grid>
@@ -121,15 +207,6 @@ class Games extends Component {
 Games.propTypes = {
   games: PropTypes.array.isRequired,
   onLoad: PropTypes.func.isRequired,
-  onMinPriceChange: PropTypes.func.isRequired,
-  onMaxPriceChange: PropTypes.func.isRequired,
-  onSortChange: PropTypes.func.isRequired,
-  classes: PropTypes.object.isRequired,
-  gamesLength: PropTypes.number.isRequired,
-  defaultMinPrice: PropTypes.number.isRequired,
-  defaultMaxPrice: PropTypes.number.isRequired,
-  minPrice: PropTypes.number.isRequired,
-  maxPrice: PropTypes.number.isRequired,
   isLoading: PropTypes.bool.isRequired
 };
 

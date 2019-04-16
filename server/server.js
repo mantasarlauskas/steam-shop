@@ -567,16 +567,19 @@ app.post("/order", ({ body, headers: { authorization } }, res) => {
               order_id: null
             }
           }).then(data => {
-            data.forEach(cart => {
-              cart.update({ order_id: parseResults(order).id }).then(() => {
-                Product.find({ where: { id: cart.game_id } }).then(
-                  product =>
-                    product &&
-                    product.update({
-                      timesBought: parseInt(product.timesBought) + 1
-                    })
-                );
-              });
+            data.forEach(async cart => {
+              cart &&
+                (await cart
+                  .update({ order_id: parseResults(order).id })
+                  .then(() => {
+                    Product.find({ where: { id: cart.game_id } }).then(
+                      product =>
+                        product &&
+                        product.update({
+                          timesBought: parseInt(product.timesBought) + 1
+                        })
+                    );
+                  }));
             });
             res.status(200).json("Užsakymas sėkmingai sukurtas");
           });

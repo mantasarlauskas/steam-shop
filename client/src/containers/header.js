@@ -6,7 +6,7 @@ import { cartCountSelector } from "../selectors/cart";
 import Header from "../components/header";
 
 const mapStateToProps = ({ token, navbar, ...state }) => ({
-  loggedIn: token,
+  token,
   cartCount: cartCountSelector(state)
 });
 

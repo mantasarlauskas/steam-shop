@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
 import ErrorIcon from "@material-ui/icons/Error";
 import Loading from "../loading";
+import TextField from "../textField";
 import { styles } from "../../styles/form";
 
 class ProductForm extends Component {
@@ -145,38 +145,30 @@ class ProductForm extends Component {
     }
   };
 
-  renderTextField = (field, additionalProps) => {
-    const { product } = this.props;
-    return (
-      <TextField
-        error={field.empty}
-        defaultValue={product && product[field.id]}
-        id={field.id}
-        label={field.label}
-        autoComplete="off"
-        margin="normal"
-        onChange={this.handleChange(field.id)}
-        variant="outlined"
-        fullWidth
-        {...additionalProps}
-      />
-    );
-  };
-
   renderForm = () => {
-    const { classes } = this.props;
+    const { classes, product } = this.props;
     const {
       textFields: { title, price, description },
       logo
     } = this.state;
     return (
       <form onSubmit={this.handleSubmit} noValidate>
-        {this.renderTextField(title)}
-        {this.renderTextField(price, {
-          type: "number",
-          inputProps: { min: "0", step: "1" }
-        })}
-        {this.renderTextField(description, { multiline: true })}
+        <TextField field={title} onChange={this.handleChange} item={product} />
+        <TextField
+          field={price}
+          onChange={this.handleChange}
+          additionalProps={{
+            type: "number",
+            inputProps: { min: "0", step: "1" }
+          }}
+          item={product}
+        />
+        <TextField
+          field={description}
+          onChange={this.handleChange}
+          additionalProps={{ multiline: true }}
+          item={product}
+        />
         <input
           type="file"
           alt="Product Logo"
