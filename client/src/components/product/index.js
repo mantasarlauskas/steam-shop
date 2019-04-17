@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import axios from "axios";
 import PropTypes from "prop-types";
 import StarRatings from "react-star-ratings";
 import Button from "@material-ui/core/Button";
@@ -16,6 +17,7 @@ import Loading from "../loading";
 import styles from "./styles";
 import Review from "../../containers/review";
 import ReviewForm from "../../containers/reviewForm";
+import { url, config } from "../../server";
 
 class Product extends Component {
   state = {
@@ -33,9 +35,14 @@ class Product extends Component {
     }));
   };
 
-  handleRemove = id => {
-    const { history, onRemove } = this.props;
-    onRemove(id);
+  handleRemove = async id => {
+    const { history, token } = this.props;
+    await axios({
+      method: "delete",
+      url: `${url}/products`,
+      data: { id },
+      ...config(token)
+    });
     history.push("/games");
   };
 
@@ -175,10 +182,10 @@ class Product extends Component {
       product,
       classes,
       isProductsLoading,
-      isReviewsLoading,
-      reviews,
       token,
-      id
+      id,
+      isReviewsLoading,
+      reviews
     } = this.props;
     return (
       <div className={`${classes.root} container`}>
@@ -240,15 +247,14 @@ class Product extends Component {
 
 Product.propTypes = {
   onLoad: PropTypes.func.isRequired,
-  reviews: PropTypes.array.isRequired,
   history: PropTypes.object.isRequired,
-  onRemove: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired,
   product: PropTypes.object.isRequired,
   addToCart: PropTypes.func.isRequired,
   isProductsLoading: PropTypes.bool.isRequired,
-  isReviewsLoading: PropTypes.bool.isRequired
+  isReviewsLoading: PropTypes.bool.isRequired,
+  reviews: PropTypes.bool.isRequired
 };
 
 export default withStyles(styles)(Product);

@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import { popularProductSelector } from "../selectors/products";
+import { getProducts } from "../thunks/products";
 import Main from "../components/main";
 
 const mapStateToProps = state => ({
@@ -7,4 +8,11 @@ const mapStateToProps = state => ({
   isLoading: state.products.isLoading
 });
 
-export default connect(mapStateToProps)(Main);
+const mapDispatchToProps = dispatch => ({
+  onLoad: () => dispatch(getProducts())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Main);

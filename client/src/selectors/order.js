@@ -23,6 +23,7 @@ export const orderByIDSelector = createSelector(
   (orders, id) => orders.filter(order => order.order_id === parseInt(id))
 );
 
+/* tinkamas */
 export const orderProductSelector = createSelector(
   [productSelector, orderByIDSelector],
   (products, orders) =>

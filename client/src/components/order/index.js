@@ -11,8 +11,8 @@ import Loading from "../loading";
 
 class Order extends Component {
   componentDidMount() {
-    const { products, onLoad } = this.props;
-    products.length === 0 && onLoad();
+    const { orders, onLoad, onOrdersFetch } = this.props;
+    onLoad() && orders.length === 0 && onOrdersFetch();
   }
 
   render() {
@@ -69,7 +69,9 @@ Order.propTypes = {
   classes: PropTypes.object.isRequired,
   id: PropTypes.number.isRequired,
   isProductsLoading: PropTypes.bool.isRequired,
-  isOrdersLoading: PropTypes.bool.isRequired
+  isOrdersLoading: PropTypes.bool.isRequired,
+  onOrdersFetch: PropTypes.func.isRequired,
+  orders: PropTypes.array.isRequired
 };
 
 export default withStyles(styles)(Order);

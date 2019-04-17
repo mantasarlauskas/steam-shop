@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
@@ -19,20 +20,38 @@ import Grid from "@material-ui/core/Grid";
 import Pagination from "../pagination";
 import Loading from "../loading";
 import { styles } from "../../styles/tables";
+import { config, url } from "../../server";
 
 class Keys extends Component {
   state = {
-    paginatedKeys: []
+    paginatedKeys: [],
+    keys: [],
+    isLoading: false
   };
 
   componentDidMount() {
-    const { onLoad } = this.props;
-    onLoad();
+    this.getKeys();
   }
 
-  handleRemove = id => {
-    const { onRemove } = this.props;
-    onRemove(id);
+  getKeys = async () => {
+    this.setState({ isLoading: true });
+    const { token } = this.props;
+    const { data } = await axios.get(`${url}/keys`, config(token));
+    this.setState({
+      keys: data,
+      isLoading: false
+    });
+  };
+
+  handleRemove = async id => {
+    const { token } = this.props;
+    await axios({
+      method: "delete",
+      url: `${url}/keys`,
+      data: { id },
+      ...config(token)
+    });
+    this.getKeys();
   };
 
   handleKeysChange = paginatedKeys => {
@@ -89,8 +108,8 @@ class Keys extends Component {
   };
 
   render() {
-    const { classes, keys, isLoading } = this.props;
-    const { paginatedKeys } = this.state;
+    const { classes } = this.props;
+    const { paginatedKeys, keys, isLoading } = this.state;
     return (
       <div className={`${classes.root} container`}>
         <h1 className="title">Raktai</h1>
@@ -129,11 +148,8 @@ class Keys extends Component {
 }
 
 Keys.propTypes = {
-  onLoad: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  keys: PropTypes.array.isRequired,
-  isLoading: PropTypes.bool.isRequired
+  token: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(Keys);

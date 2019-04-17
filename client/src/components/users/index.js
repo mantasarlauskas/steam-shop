@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -12,16 +13,45 @@ import ErrorIcon from "@material-ui/icons/Error";
 import Pagination from "../pagination";
 import Loading from "../loading";
 import { styles } from "../../styles/tables";
+import { config, url } from "../../server";
 
 class Users extends Component {
   state = {
-    paginatedUsers: []
+    paginatedUsers: [],
+    users: []
   };
 
   componentDidMount() {
-    const { onLoad } = this.props;
-    onLoad();
+    this.getUsers();
   }
+
+  getUsers = async () => {
+    const { token } = this.props;
+    const { data } = await axios.get(`${url}/users`, config(token));
+    this.setState({ users: data });
+  };
+
+  banUser = async id => {
+    const { token } = this.props;
+    await axios({
+      method: "delete",
+      url: `${url}/users`,
+      data: id,
+      ...config(token)
+    });
+    this.getUsers();
+  };
+
+  unbanUser = async id => {
+    const { token } = this.props;
+    await axios({
+      method: "put",
+      url: `${url}/users`,
+      data: id,
+      ...config(token)
+    });
+    this.getUsers();
+  };
 
   handleUsersChange = paginatedUsers => {
     this.setState({
@@ -29,8 +59,8 @@ class Users extends Component {
     });
   };
 
-  renderUser = ({ username, email, role, isBanned, id }, index) => {
-    const { classes, onUserUnban, onUserBan } = this.props;
+  renderUser = ({ username, email, role, isBanned, id }) => {
+    const { classes } = this.props;
     return (
       <TableRow key={id}>
         <TableCell>{username}</TableCell>
@@ -38,7 +68,10 @@ class Users extends Component {
         <TableCell>{role === 1 ? "Administratorius" : "Klientas"}</TableCell>
         <TableCell>
           {role === 0 && isBanned === false && (
-            <Button className={classes.error} onClick={() => onUserBan({ id })}>
+            <Button
+              className={classes.error}
+              onClick={() => this.banUser({ id })}
+            >
               <span className={classes.message}>
                 <ErrorIcon className={classes.icon} />
                 Užblokuoti
@@ -48,7 +81,7 @@ class Users extends Component {
           {role === 0 && isBanned === true && (
             <Button
               className={classes.error}
-              onClick={() => onUserUnban({ id })}
+              onClick={() => this.unbanUser({ id })}
             >
               <span className={classes.message}>
                 <ErrorIcon className={classes.icon} />
@@ -62,8 +95,8 @@ class Users extends Component {
   };
 
   render() {
-    const { classes, users } = this.props;
-    const { paginatedUsers } = this.state;
+    const { classes } = this.props;
+    const { paginatedUsers, users } = this.state;
     return (
       <div className={`${classes.root} container`}>
         <h1 className="title">Vartotojai</h1>
@@ -98,11 +131,8 @@ class Users extends Component {
 }
 
 Users.propTypes = {
-  onLoad: PropTypes.func.isRequired,
-  onUserUnban: PropTypes.func.isRequired,
-  onUserBan: PropTypes.func.isRequired,
-  classes: PropTypes.object.isRequired,
-  users: PropTypes.array.isRequired
+  token: PropTypes.string.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(Users);

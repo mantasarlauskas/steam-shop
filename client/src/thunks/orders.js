@@ -10,6 +10,7 @@ export const addOrder = () => async (dispatch, getState) => {
     ...config(getState().token)
   });
   dispatch(getCart());
+  dispatch(getOrders());
 };
 
 export const getOrders = () => async (dispatch, getState) => {

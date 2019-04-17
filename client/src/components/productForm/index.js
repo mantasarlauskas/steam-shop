@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -9,6 +10,7 @@ import ErrorIcon from "@material-ui/icons/Error";
 import Loading from "../loading";
 import TextField from "../textField";
 import { styles } from "../../styles/form";
+import { config, url, uploadImage } from "../../server";
 
 class ProductForm extends Component {
   state = {
@@ -40,7 +42,8 @@ class ProductForm extends Component {
   };
 
   componentDidMount() {
-    const { product } = this.props;
+    const { product, onLoad } = this.props;
+    onLoad();
     product && this.initState();
   }
 
@@ -67,6 +70,31 @@ class ProductForm extends Component {
         }
       }
     }));
+  };
+
+  addProduct = async fields => {
+    const { token } = this.props;
+    const {
+      data: { secure_url }
+    } = await uploadImage(fields.logo[0]);
+    await axios.post(
+      `${url}/products`,
+      { ...fields, logo: secure_url },
+      config(token)
+    );
+  };
+
+  editProduct = async fields => {
+    const { token, product } = this.props;
+    if (fields.logo === null) {
+      fields.logo = product.logo;
+    } else {
+      const {
+        data: { secure_url }
+      } = await uploadImage(fields.logo[0]);
+      fields.logo = secure_url;
+    }
+    await axios.put(`${url}/products`, fields, config(token));
   };
 
   handleChange = name => ({ target: { value } }) => {
@@ -119,12 +147,12 @@ class ProductForm extends Component {
     return count === 0;
   };
 
-  handleSubmit = event => {
+  handleSubmit = async event => {
     const {
       textFields: { title, price, description },
       logo
     } = this.state;
-    const { product, onEdit, onAdd, history } = this.props;
+    const { product, history } = this.props;
     event.preventDefault();
     if (this.validateForm()) {
       const values = {
@@ -134,12 +162,12 @@ class ProductForm extends Component {
         logo: logo.value
       };
       if (product) {
-        onEdit({
+        await this.editProduct({
           ...values,
           id: product.id
         });
       } else {
-        onAdd(values);
+        await this.addProduct(values);
       }
       history.push("/games");
     }
@@ -238,12 +266,12 @@ class ProductForm extends Component {
 
 ProductForm.propTypes = {
   product: PropTypes.object,
-  onEdit: PropTypes.func.isRequired,
-  onAdd: PropTypes.func.isRequired,
+  onLoad: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   id: PropTypes.number,
-  isLoading: PropTypes.bool.isRequired
+  isLoading: PropTypes.bool.isRequired,
+  token: PropTypes.string.isRequired
 };
 
 ProductForm.defaultValues = {

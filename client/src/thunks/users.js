@@ -15,26 +15,6 @@ import {
 } from "../actions/auth";
 import jwt from "jsonwebtoken";
 
-export const banUser = userID => async (dispatch, getState) => {
-  await axios({
-    method: "delete",
-    url: `${url}/users`,
-    data: userID,
-    ...config(getState().token)
-  });
-  dispatch(getUsers());
-};
-
-export const unbanUser = userID => async (dispatch, getState) => {
-  await axios({
-    method: "put",
-    url: `${url}/users`,
-    data: userID,
-    ...config(getState().token)
-  });
-  dispatch(getUsers());
-};
-
 export const loginUser = fields => async dispatch => {
   try {
     const { data } = await axios.post(`${url}/login`, fields);
@@ -53,7 +33,6 @@ export const updateUser = fields => async (dispatch, getState) => {
     config(getState().token)
   );
   dispatch(setSuccessMessage(data));
-  jwt.decode(getState().token).role === 1 && dispatch(getUsers());
   dispatch(getUser(fields.id));
 };
 
@@ -81,11 +60,6 @@ export const registerUser = fields => async dispatch => {
   } catch ({ response: { data } }) {
     dispatch(setErrorMessage(data));
   }
-};
-
-export const getUsers = () => async (dispatch, getState) => {
-  const { data } = await axios.get(`${url}/users`, config(getState().token));
-  dispatch(addUsers(data));
 };
 
 export const getUser = id => async (dispatch, getState) => {

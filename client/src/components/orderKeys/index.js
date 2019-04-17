@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import PropTypes from "prop-types";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -7,17 +8,34 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import Loading from "../loading";
 import styles from "./styles";
+import { url, config } from "../../server";
 
 class OrderKeys extends Component {
+  state = {
+    orderKeys: [],
+    isLoading: false
+  };
+
   componentDidMount() {
-    const { id, onLoad } = this.props;
-    onLoad(id);
+    this.getOrderKeys();
   }
 
+  getOrderKeys = async () => {
+    const { token, id } = this.props;
+    this.setState({ isLoading: true });
+    const { data } = await axios.get(`${url}/order-keys/${id}`, config(token));
+    this.setState({
+      orderKeys: data,
+      isLoading: false
+    });
+  };
+
   render() {
-    const { classes, orderKeys } = this.props;
+    const { classes } = this.props;
+    const { orderKeys, isLoading } = this.state;
     return orderKeys.length > 0 ? (
       <Paper className={classes.key}>
         <Table>
@@ -39,6 +57,8 @@ class OrderKeys extends Component {
           </TableBody>
         </Table>
       </Paper>
+    ) : !isLoading ? (
+      <Typography variant="h6">Raktų nėra</Typography>
     ) : (
       <Loading size={100} />
     );
@@ -47,9 +67,8 @@ class OrderKeys extends Component {
 
 OrderKeys.propTypes = {
   classes: PropTypes.object.isRequired,
-  orderKeys: PropTypes.array.isRequired,
-  id: PropTypes.number.isRequired,
-  onLoad: PropTypes.func.isRequired
+  token: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired
 };
 
 export default withStyles(styles)(OrderKeys);

@@ -27,3 +27,12 @@ export const cartProductSelector = createSelector(
       cartCount: item.count
     }))
 );
+
+/*export const cartProductCountSelector = createSelector(
+  [cartProductSelector, propsSelector],
+  (cart, id) =>
+    cart.reduce(
+      (sum, product) => (product.id === parseInt(id) ? sum + 1 : sum),
+      0
+    )
+);*/
