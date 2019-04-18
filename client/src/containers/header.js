@@ -10,11 +10,11 @@ const mapStateToProps = ({ token, navbar, ...state }) => ({
   cartCount: cartCountSelector(state)
 });
 
-const mapDispatchToProps = dispatch => ({
-  toggleMenu: () => dispatch(toggleMenu()),
-  showLogin: () => dispatch(showLoginForm()),
-  logout: () => dispatch(resetToken())
-});
+const mapDispatchToProps = {
+  toggleMenu,
+  showLoginForm,
+  resetToken
+};
 
 export default connect(
   mapStateToProps,

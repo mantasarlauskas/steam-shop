@@ -4,42 +4,25 @@ import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Loading from "../loading";
-import CartItem from "../cartItem";
+import CartItems from "../../containers/cartItems";
 import styles from "./styles";
 
 class Cart extends Component {
   componentDidMount() {
-    const { onLoad } = this.props;
-    onLoad();
+    const { getProducts } = this.props;
+    getProducts();
   }
 
   render() {
-    const { products, addOrder, classes, isLoading } = this.props;
+    const { addOrder, classes, productCount } = this.props;
     return (
       <div className={`${classes.paper} container`}>
         <h1 className="title">Mano krepšelis</h1>
         <hr />
-        {products.length > 0 ? (
-          <Paper className={`${classes.paper} ${classes.product}`}>
-            <CartItem products={products} isChangeable={true} />
+        <Paper className={`${classes.paper} ${classes.product}`}>
+          <CartItems isChangeable={true} />
+          {productCount > 0 && (
             <Grid container>
-              <Grid item xs={12}>
-                <Typography
-                  className={classes.totalPrice}
-                  variant="h6"
-                  gutterBottom
-                >
-                  Iš viso:{" "}
-                  {products.reduce(
-                    (sum, { cartCount, price }) =>
-                      parseFloat((sum + cartCount * price).toFixed(2)),
-                    0
-                  )}
-                  $
-                </Typography>
-              </Grid>
               <Grid item xs={12}>
                 <Button
                   onClick={addOrder}
@@ -51,23 +34,18 @@ class Cart extends Component {
                 </Button>
               </Grid>
             </Grid>
-          </Paper>
-        ) : !isLoading ? (
-          <Typography variant="h6">Prekių krepšelyje kol kas nėra</Typography>
-        ) : (
-          <Loading size={100} />
-        )}
+          )}
+        </Paper>
       </div>
     );
   }
 }
 
 Cart.propTypes = {
-  products: PropTypes.array.isRequired,
   addOrder: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  onLoad: PropTypes.func.isRequired
+  getProducts: PropTypes.func.isRequired,
+  productCount: PropTypes.number.isRequired
 };
 
 export default withStyles(styles)(Cart);

@@ -7,9 +7,9 @@ import Users from "../../containers/users";
 import Profile from "../../containers/profile";
 import Header from "../../containers/header";
 import Menu from "../../containers/menu";
-import NoMatch from "../noMatch";
 import ProductForm from "../../containers/productForm";
-import KeyForm from "../../containers/keyForm";
+import EditKeyForm from "../../containers/editKeyForm";
+import AddKeyForm from "../../containers/addKeyForm";
 import Product from "../../containers/product";
 import Cart from "../../containers/cart";
 import Games from "../../containers/games";
@@ -18,13 +18,14 @@ import Order from "../../containers/order";
 import Keys from "../../containers/keys";
 import EditUser from "../../containers/EditUserContainer";
 import ChangePassword from "../../containers/ChangePasswordContainer";
+import NoMatch from "../noMatch";
 import Footer from "../footer";
 import ScrollToTop from "../scrollToTop";
 
 class App extends Component {
   componentDidMount() {
-    const { onLoad, token } = this.props;
-    token && onLoad();
+    const { getCart, token } = this.props;
+    token && getCart();
   }
 
   renderRoutes = () => {
@@ -38,7 +39,8 @@ class App extends Component {
         <Route path="/orders" component={Orders} />
         <Route path="/order/:id" component={Order} />
         <Route path="/product-upload/:id?" component={ProductForm} />
-        <Route path="/key-upload/:id?" component={KeyForm} />
+        <Route exact path="/key-upload" component={AddKeyForm} />
+        <Route path="/key-upload/:id" component={EditKeyForm} />
         <Route path="/edit-profile" component={EditUser} />
         <Route path="/change-password" component={ChangePassword} />
         <Route exact path="/" component={Main} />
@@ -85,7 +87,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  onLoad: PropTypes.func.isRequired,
+  getCart: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   history: PropTypes.object.isRequired

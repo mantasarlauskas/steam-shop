@@ -5,7 +5,7 @@ import { withStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import styles from "../cart/styles";
-import CartItem from "../cartItem";
+import CartItems from "../cartItems";
 import OrderKeys from "../../containers/orderKeys";
 import Loading from "../loading";
 
@@ -30,7 +30,7 @@ class Order extends Component {
             <h1 className="title">Užsakymas nr.{id}</h1>
             <hr />
             <Paper className={`${classes.paper} ${classes.product}`}>
-              <CartItem products={products} isChangeable={false} />
+              <CartItems />
               <Grid container>
                 <Grid item xs={12}>
                   <Typography

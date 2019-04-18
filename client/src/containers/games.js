@@ -1,15 +1,16 @@
 import { connect } from "react-redux";
-import { getProducts } from "../thunks/products";
+import { productBySortSelector } from "../selectors/products";
+import { onProductsLoad } from "../thunks/products";
 import Games from "../components/games";
 
-const mapStateToProps = ({ products: { list, isLoading } }) => ({
-  games: list,
-  isLoading
+const mapStateToProps = state => ({
+  games: productBySortSelector(state),
+  isLoading: state.products.isLoading
 });
 
-const mapDispatchToProps = dispatch => ({
-  onLoad: () => dispatch(getProducts())
-});
+const mapDispatchToProps = {
+  onProductsLoad
+};
 
 export default connect(
   mapStateToProps,

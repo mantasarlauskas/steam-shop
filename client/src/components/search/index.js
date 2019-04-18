@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import InputBase from "@material-ui/core/InputBase";
@@ -53,33 +54,27 @@ class Search extends Component {
   };
 
   handleCardClick = (e, id) => {
-    const { history } = this.props;
     e.stopPropagation();
-    this.setState(
-      {
-        show: false
-      },
-      () => history.push(`/product/${id}`)
-    );
+    this.setState({
+      show: false
+    });
   };
 
   renderCard = ({ id, logo, title }) => {
     const { classes } = this.props;
     return (
-      <Card
-        key={id}
-        className={classes.card}
-        onClick={e => this.handleCardClick(e, id)}
-      >
-        <CardActionArea>
-          <CardMedia className={classes.media} image={logo} title={title} />
-          <CardContent>
-            <Typography gutterBottom component="h4">
-              {title}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
+      <Link to={`/product/${id}`} onClick={e => this.handleCardClick(e, id)}>
+        <Card key={id} className={classes.card}>
+          <CardActionArea>
+            <CardMedia className={classes.media} image={logo} title={title} />
+            <CardContent>
+              <Typography gutterBottom component="h4">
+                {title}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Link>
     );
   };
 
@@ -136,7 +131,6 @@ class Search extends Component {
 
 Search.propTypes = {
   games: PropTypes.array.isRequired,
-  history: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired
 };

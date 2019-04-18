@@ -1,6 +1,9 @@
 import { createSelector } from "reselect";
 const productSelector = ({ products: { list } }) => list;
 const cartSelector = ({ cart: { list } }) => list;
+const minPriceSelector = ({ filter: { minPrice } }) => minPrice;
+const maxPriceSelector = ({ filter: { maxPrice } }) => maxPrice;
+const sortSelector = ({ filter: { sort } }) => sort;
 const propsSelector = (state, props) => props;
 
 export const popularProductSelector = createSelector(
@@ -18,6 +21,41 @@ export const findProductSelector = createSelector(
   (products, id) => products.find(product => product.id === parseInt(id))
 );
 
+export const productByPriceSelector = createSelector(
+  [productSelector, minPriceSelector, maxPriceSelector],
+  (products, minPrice, maxPrice) =>
+    products.filter(({ price }) => price >= minPrice && price <= maxPrice)
+);
+
+export const productBySortSelector = createSelector(
+  [productByPriceSelector, sortSelector],
+  (products, sort) => {
+    const newProducts = [...products];
+    switch (sort) {
+      case "NAME_DESC":
+        return newProducts.sort((a, b) =>
+          a.title.toUpperCase() < b.title.toUpperCase()
+            ? 1
+            : b.title.toUpperCase() < a.title.toUpperCase()
+            ? -1
+            : 0
+        );
+      case "PRICE_ASC":
+        return newProducts.sort((a, b) => a.price - b.price);
+      case "PRICE_DESC":
+        return newProducts.sort((a, b) => b.price - a.price);
+      default:
+        return newProducts.sort((a, b) =>
+          a.title.toUpperCase() > b.title.toUpperCase()
+            ? 1
+            : b.title.toUpperCase() > a.title.toUpperCase()
+            ? -1
+            : 0
+        );
+    }
+  }
+);
+
 /* Tinkamas */
 export const cartProductSelector = createSelector(
   [productSelector, cartSelector],
@@ -26,6 +64,16 @@ export const cartProductSelector = createSelector(
       ...products.find(product => product.id === item.game_id),
       cartCount: item.count
     }))
+);
+/*Tinkamas*/
+export const cartTotalPriceSelector = createSelector(
+  [cartProductSelector],
+  products =>
+    products.reduce(
+      (sum, { cartCount, price }) =>
+        parseFloat((sum + cartCount * price).toFixed(2)),
+      0
+    )
 );
 
 /*export const cartProductCountSelector = createSelector(

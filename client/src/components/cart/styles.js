@@ -7,10 +7,5 @@ export default theme => ({
     border: "1px #bdbdbd solid",
     padding: 15,
     margin: "15px 0"
-  },
-  totalPrice: {
-    color: theme.palette.error.dark,
-    margin: "15px 0",
-    float: "right"
   }
 });

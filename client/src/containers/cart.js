@@ -1,18 +1,17 @@
 import { connect } from "react-redux";
 import { getProducts } from "../thunks/products";
-import { cartProductSelector } from "../selectors/products";
 import { addOrder } from "../thunks/orders";
+import { cartProductSelector } from "../selectors/products";
 import Cart from "../components/cart";
 
 const mapStateToProps = state => ({
-  products: cartProductSelector(state),
-  isLoading: state.cart.isLoading
+  productCount: cartProductSelector(state).length
 });
 
-const mapDispatchToProps = dispatch => ({
-  onLoad: () => dispatch(getProducts()),
-  addOrder: () => dispatch(addOrder())
-});
+const mapDispatchToProps = {
+  getProducts,
+  addOrder
+};
 
 export default connect(
   mapStateToProps,

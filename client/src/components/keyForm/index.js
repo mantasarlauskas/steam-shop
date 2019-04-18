@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
@@ -9,18 +9,17 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "../textField";
 import Loading from "../loading";
 import { styles } from "../../styles/form";
-import { config, url } from "../../server";
 
 class KeyForm extends Component {
   state = {
     game_id: {
       value: "",
-      empty: false
+      empty: false,
+      id: "game_id"
     },
     steam_key: {
       value: "",
@@ -28,49 +27,36 @@ class KeyForm extends Component {
       label: "Raktas",
       empty: false
     },
-    key: null,
-    error: false,
-    success: false,
-    isLoading: false
+    error: false
   };
 
   componentDidMount() {
-    const { id } = this.props;
-    id &&
-      this.setState(
-        {
-          isLoading: true
-        },
-        this.getKey
-      );
+    const { onKeyLoad, id } = this.props;
+    id ? onKeyLoad(id) : onKeyLoad();
   }
 
-  addKey = async key => {
-    const { token } = this.props;
-    await axios.post(`${url}/keys`, key, config(token));
-  };
+  componentWillUnmount() {
+    const { resetKey, id } = this.props;
+    id && resetKey();
+  }
 
-  editKey = async key => {
-    const { token } = this.props;
-    await axios.put(`${url}/keys`, key, config(token));
-  };
+  componentDidUpdate({ productKey: prevKey }) {
+    const { productKey, id } = this.props;
+    id && productKey && prevKey !== productKey && this.initState();
+  }
 
-  getKey = async () => {
-    const { token, id } = this.props;
-    const { data } = await axios.get(`${url}/keys/${id}`, config(token));
-    data &&
-      this.setState(prevState => ({
-        key: data,
-        game_id: {
-          ...prevState.game_id,
-          value: data.game_id
-        },
-        steam_key: {
-          ...prevState.steam_key,
-          value: data.steam_key
-        },
-        isLoading: false
-      }));
+  initState = () => {
+    const { productKey } = this.props;
+    this.setState(prevState => ({
+      game_id: {
+        ...prevState.game_id,
+        value: productKey.game_id
+      },
+      steam_key: {
+        ...prevState.steam_key,
+        value: productKey.steam_key
+      }
+    }));
   };
 
   handleChange = name => ({ target: { value } }) => {
@@ -101,117 +87,136 @@ class KeyForm extends Component {
     let count = 0;
     !this.validateField(game_id) && count++;
     !this.validateField(steam_key) && count++;
-    count > 0 &&
-      this.setState({
-        error: true,
-        success: false
-      });
+    count > 0 && this.setState({ error: true });
     return count === 0;
   };
 
-  handleSubmit = event => {
-    const { game_id, steam_key, key } = this.state;
+  handleSubmit = async event => {
+    const { game_id, steam_key } = this.state;
+    const { submitKey, productKey, history } = this.props;
     event.preventDefault();
     if (this.validateForm()) {
       const values = {
         game_id: game_id.value,
         steam_key: steam_key.value
       };
-      key
-        ? this.editKey({
-            ...values,
-            id: key.id
-          })
-        : this.addKey(values);
-      this.setState({
-        error: false,
-        success: true
-      });
+      if (productKey) {
+        await submitKey({
+          ...values,
+          id: productKey.id
+        });
+      } else {
+        await submitKey(values);
+      }
+      history.push("/keys");
     }
   };
 
-  renderMessage = (className, message, Icon) => {
+  renderError = () => {
     const { classes } = this.props;
     return (
       <SnackbarContent
-        className={className}
+        className={classes.error}
         message={
           <span>
-            <Icon className={classes.errorIcon} />
-            {message}
+            <ErrorIcon className={classes.errorIcon} />
+            Formoje negali būti tuščių laukų
           </span>
         }
       />
     );
   };
 
+  renderForm = () => {
+    const { classes, products, productKey } = this.props;
+    const { steam_key, game_id } = this.state;
+    return (
+      <form onSubmit={this.handleSubmit} noValidate>
+        <FormControl>
+          <InputLabel htmlFor="game">Pasirinkite žaidimą</InputLabel>
+          <Select
+            className={classes.select}
+            value={game_id.value}
+            displayEmpty
+            onChange={this.handleChange(game_id.id)}
+            inputProps={{
+              id: "game"
+            }}
+          >
+            {products.map(({ id, title }) => (
+              <MenuItem key={id} value={id}>
+                {title}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <TextField
+          field={steam_key}
+          onChange={this.handleChange}
+          item={productKey}
+        />
+        <div className={classes.submitWrapper}>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            size="large"
+            className={classes.submit}
+            align="center"
+          >
+            Patvirtinti
+          </Button>
+        </div>
+      </form>
+    );
+  };
+
   render() {
-    const { classes, id, products, isProductsLoading } = this.props;
-    const { steam_key, game_id, error, key, success, isLoading } = this.state;
+    const {
+      classes,
+      id,
+      isProductsLoading,
+      isLoading,
+      productKey
+    } = this.props;
+    const { error } = this.state;
     return (
       <div className={`${classes.root} container`}>
         <h1 className="title">Rakto forma</h1>
         <hr />
         {isProductsLoading || (id && isLoading) ? (
           <Loading size={100} />
-        ) : id && !isLoading && !key ? (
+        ) : id && !isLoading && !productKey ? (
           <Typography variant="h6">Tokio rakto nėra</Typography>
         ) : (
           <Paper className={classes.body}>
-            {error &&
-              this.renderMessage(
-                classes.error,
-                "Formoje negali būti tuščių laukų",
-                ErrorIcon
-              )}
-            {success &&
-              this.renderMessage(
-                classes.success,
-                "Raktas sėkmingai pridėtas",
-                CheckCircleIcon
-              )}
-            <form onSubmit={this.handleSubmit} noValidate>
-              <FormControl>
-                <InputLabel htmlFor="game">Pasirinkite žaidimą</InputLabel>
-                <Select
-                  className={classes.select}
-                  value={game_id.value}
-                  displayEmpty
-                  onChange={this.handleChange("game_id")}
-                  inputProps={{
-                    id: "game"
-                  }}
-                >
-                  {products.map(({ id, title }) => (
-                    <MenuItem key={id} value={id}>
-                      {title}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <TextField
-                field={steam_key}
-                onChange={this.handleChange}
-                item={key}
-              />
-              <div className={classes.submitWrapper}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  size="large"
-                  className={classes.submit}
-                  align="center"
-                >
-                  Patvirtinti
-                </Button>
-              </div>
-            </form>
+            {error && this.renderError()}
+            {this.renderForm()}
           </Paper>
         )}
       </div>
     );
   }
 }
+
+KeyForm.propTypes = {
+  onKeyLoad: PropTypes.func.isRequired,
+  id: PropTypes.number,
+  resetKey: PropTypes.func,
+  productKey: PropTypes.object,
+  submitKey: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
+  products: PropTypes.array.isRequired,
+  isProductsLoading: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool
+};
+
+KeyForm.defaultValues = {
+  id: null,
+  resetKey: null,
+  productKey: null,
+  isLoading: false
+};
 
 export default withStyles(styles)(KeyForm);

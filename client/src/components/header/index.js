@@ -38,7 +38,7 @@ class Header extends Component {
 
   renderMenu = () => {
     const { anchorEl } = this.state;
-    const { logout, classes } = this.props;
+    const { resetToken, classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     return (
       <Menu
@@ -54,7 +54,7 @@ class Header extends Component {
             <span className={classes.linkDark}>Profilis</span>
           </MenuItem>
         </Link>
-        <Link to="/" onClick={logout}>
+        <Link to="/" onClick={resetToken}>
           <MenuItem onClick={this.handleMenuClose}>
             <LogoutIcon className={classes.linkIcon} />
             <span className={classes.linkDark}>Atsijungti</span>
@@ -65,14 +65,7 @@ class Header extends Component {
   };
 
   render() {
-    const {
-      toggleMenu,
-      token,
-      showLogin,
-      cartCount,
-      classes,
-      history
-    } = this.props;
+    const { toggleMenu, token, showLoginForm, cartCount, classes } = this.props;
     return (
       <header position="static">
         <Login />
@@ -88,10 +81,10 @@ class Header extends Component {
               >
                 <MenuIcon />
               </IconButton>
-              <Search history={history} />
+              <Search />
               <div className={classes.grow} />
               {!token ? (
-                <Button color="inherit" onClick={showLogin}>
+                <Button color="inherit" onClick={showLoginForm}>
                   <div className={classes.login}>Prisijungimas</div>
                 </Button>
               ) : (
@@ -109,11 +102,11 @@ class Header extends Component {
                   >
                     <AccountCircle fontSize="large" />
                   </IconButton>
+                  {this.renderMenu()}
                 </Fragment>
               )}
             </Toolbar>
           </AppBar>
-          {this.renderMenu()}
         </div>
       </header>
     );
@@ -121,13 +114,12 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  logout: PropTypes.func.isRequired,
+  resetToken: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   toggleMenu: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
-  showLogin: PropTypes.func.isRequired,
-  cartCount: PropTypes.number.isRequired,
-  history: PropTypes.object.isRequired
+  showLoginForm: PropTypes.func.isRequired,
+  cartCount: PropTypes.number.isRequired
 };
 
 export default withStyles(styles)(Header);

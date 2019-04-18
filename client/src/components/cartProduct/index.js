@@ -16,8 +16,8 @@ const CartProduct = ({
   cartCount,
   totalCount,
   usedCount,
-  addToCart,
-  removeFromCart,
+  addProductToCart,
+  removeProductFromCart,
   classes,
   isChangeable
 }) => (
@@ -34,7 +34,10 @@ const CartProduct = ({
       </Grid>
       <Grid item xs={12} md={2}>
         {isChangeable && totalCount - usedCount > 0 && (
-          <IconButton className={classes.icon} onClick={() => addToCart(id)}>
+          <IconButton
+            className={classes.icon}
+            onClick={() => addProductToCart(id)}
+          >
             <AddIcon />
           </IconButton>
         )}
@@ -42,7 +45,7 @@ const CartProduct = ({
         {isChangeable && (
           <IconButton
             className={classes.icon}
-            onClick={() => removeFromCart(id)}
+            onClick={() => removeProductFromCart(id)}
           >
             <RemoveIcon />
           </IconButton>
@@ -63,8 +66,8 @@ CartProduct.propTypes = {
   cartCount: PropTypes.number.isRequired,
   totalCount: PropTypes.number.isRequired,
   usedCount: PropTypes.number.isRequired,
-  addToCart: PropTypes.func.isRequired,
-  removeFromCart: PropTypes.func.isRequired,
+  addProductToCart: PropTypes.func.isRequired,
+  removeProductFromCart: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   isChangeable: PropTypes.bool.isRequired
 };

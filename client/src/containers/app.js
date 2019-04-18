@@ -8,9 +8,9 @@ const mapStateToProps = ({ token, menu: { isOpen } }) => ({
   isOpen
 });
 
-const mapDispatchToProps = dispatch => ({
-  onLoad: () => dispatch(getCart())
-});
+const mapDispatchToProps = {
+  getCart
+};
 
 export default withRouter(
   connect(

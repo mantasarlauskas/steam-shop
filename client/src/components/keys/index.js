@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
@@ -20,39 +19,16 @@ import Grid from "@material-ui/core/Grid";
 import Pagination from "../pagination";
 import Loading from "../loading";
 import { styles } from "../../styles/tables";
-import { config, url } from "../../server";
 
 class Keys extends Component {
   state = {
-    paginatedKeys: [],
-    keys: [],
-    isLoading: false
+    paginatedKeys: []
   };
 
   componentDidMount() {
-    this.getKeys();
+    const { getKeys } = this.props;
+    getKeys();
   }
-
-  getKeys = async () => {
-    this.setState({ isLoading: true });
-    const { token } = this.props;
-    const { data } = await axios.get(`${url}/keys`, config(token));
-    this.setState({
-      keys: data,
-      isLoading: false
-    });
-  };
-
-  handleRemove = async id => {
-    const { token } = this.props;
-    await axios({
-      method: "delete",
-      url: `${url}/keys`,
-      data: { id },
-      ...config(token)
-    });
-    this.getKeys();
-  };
 
   handleKeysChange = paginatedKeys => {
     this.setState({
@@ -61,7 +37,7 @@ class Keys extends Component {
   };
 
   renderKey = ({ id, createdAt, steam_key, Product: { title }, isUsed }) => {
-    const { classes } = this.props;
+    const { classes, removeKey } = this.props;
     return (
       <TableRow className={classes.row} key={id}>
         <TableCell>{id}</TableCell>
@@ -96,7 +72,7 @@ class Keys extends Component {
                 </Link>
               </Grid>
               <Grid item xs={6}>
-                <IconButton onClick={() => this.handleRemove(id)}>
+                <IconButton onClick={() => removeKey(id)}>
                   <DeleteIcon />
                 </IconButton>
               </Grid>
@@ -108,13 +84,15 @@ class Keys extends Component {
   };
 
   render() {
-    const { classes } = this.props;
-    const { paginatedKeys, keys, isLoading } = this.state;
+    const { classes, keys, isLoading } = this.props;
+    const { paginatedKeys } = this.state;
     return (
       <div className={`${classes.root} container`}>
         <h1 className="title">Raktai</h1>
         <hr />
-        {keys.length > 0 ? (
+        {isLoading ? (
+          <Loading size={100} />
+        ) : keys.length > 0 ? (
           <Paper className={classes.tableWrapper}>
             <Table>
               <TableHead>
@@ -137,10 +115,8 @@ class Keys extends Component {
               returnData={this.handleKeysChange}
             />
           </Paper>
-        ) : !isLoading ? (
-          <Typography variant="h6">Raktų kol kas dar nėra</Typography>
         ) : (
-          <Loading size={100} />
+          <Typography variant="h6">Raktų kol kas dar nėra</Typography>
         )}
       </div>
     );
@@ -149,7 +125,10 @@ class Keys extends Component {
 
 Keys.propTypes = {
   classes: PropTypes.object.isRequired,
-  token: PropTypes.string.isRequired
+  getKeys: PropTypes.func.isRequired,
+  removeKey: PropTypes.func.isRequired,
+  keys: PropTypes.array.isRequired,
+  isLoading: PropTypes.bool.isRequired
 };
 
 export default withStyles(styles)(Keys);

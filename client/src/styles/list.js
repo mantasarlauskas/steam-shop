@@ -21,10 +21,6 @@ export const styles = theme => ({
   filters: {
     marginBottom: 15
   },
-  range: {
-    top: "50%",
-    transform: "translateY(-50%)"
-  },
   main: {
     padding: 25
   },

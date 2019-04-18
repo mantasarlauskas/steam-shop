@@ -1,8 +1,18 @@
 import { connect } from "react-redux";
+import { getKeys, removeKey } from "../thunks/keys";
 import Keys from "../components/keys";
 
-const mapStateToProps = ({ token }) => ({
-  token
+const mapStateToProps = ({ keys: { list, isLoading } }) => ({
+  keys: list,
+  isLoading
 });
 
-export default connect(mapStateToProps)(Keys);
+const mapDispatchToProps = {
+  getKeys,
+  removeKey
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Keys);
