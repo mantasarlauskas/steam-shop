@@ -3,7 +3,9 @@ import {
   addKey as setKey,
   fetchKey,
   fetchKeys,
-  addKeys
+  addKeys,
+  fetchOrderKeys,
+  addOrderKeys
 } from "../actions/keys";
 import { getProducts } from "./products";
 import { config, url } from "../server";
@@ -44,4 +46,13 @@ export const getKeys = () => async (dispatch, getState) => {
   dispatch(fetchKeys());
   const { data } = await axios.get(`${url}/keys`, config(getState().token));
   dispatch(addKeys(data));
+};
+
+export const getOrderKeys = id => async (dispatch, getState) => {
+  dispatch(fetchOrderKeys());
+  const { data } = await axios.get(
+    `${url}/order-keys/${id}`,
+    config(getState().token)
+  );
+  dispatch(addOrderKeys(data));
 };

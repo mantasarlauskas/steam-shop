@@ -10,7 +10,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import { styles } from "../../styles/list";
 
-const PaginatedGames = ({ id, logo, title, price, classes }) => (
+const Game = ({ id, logo, title, price, classes }) => (
   <Grid key={id} item lg={4} sm={6} xs={12}>
     <Link to={`/product/${id}`}>
       <Card className={classes.card}>
@@ -30,7 +30,7 @@ const PaginatedGames = ({ id, logo, title, price, classes }) => (
   </Grid>
 );
 
-PaginatedGames.propTypes = {
+Game.propTypes = {
   id: PropTypes.number.isRequired,
   logo: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
@@ -38,4 +38,4 @@ PaginatedGames.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(PaginatedGames);
+export default withStyles(styles)(Game);

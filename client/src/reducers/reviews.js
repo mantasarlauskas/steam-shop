@@ -7,7 +7,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case C.GET_REVIEWS:
+    case C.FETCH_REVIEWS:
       return {
         ...state,
         isLoading: true

@@ -9,16 +9,12 @@ import Button from "@material-ui/core/Button";
 import styles from "./styles";
 
 class ReviewForm extends Component {
-  constructor() {
-    super();
-    this.initialState = {
-      rating: 0,
-      review: "",
-      emptyError: false,
-      starError: false
-    };
-    this.state = this.initialState;
-  }
+  state = {
+    rating: 0,
+    review: "",
+    emptyError: false,
+    starError: false
+  };
 
   handleTextChange = ({ target: { value } }) => {
     this.setState({
@@ -32,18 +28,10 @@ class ReviewForm extends Component {
     });
   };
 
-  handleReviewSubmit = e => {
+  validateForm = () => {
     const { review, rating } = this.state;
-    const { id, onAdd, onSubmit } = this.props;
-    e.preventDefault();
     if (review.length > 0 && rating > 0) {
-      onAdd({
-        text: review,
-        game_id: id,
-        rating
-      });
-      this.setState(this.initialState);
-      onSubmit();
+      return true;
     } else if (review.length === 0 && rating === 0) {
       this.setState({
         emptyError: true,
@@ -59,6 +47,21 @@ class ReviewForm extends Component {
         emptyError: false,
         starError: true
       });
+    }
+    return false;
+  };
+
+  handleReviewSubmit = e => {
+    const { review, rating } = this.state;
+    const { id, addReview, closeForm } = this.props;
+    e.preventDefault();
+    if (this.validateForm()) {
+      addReview({
+        text: review,
+        game_id: id,
+        rating
+      });
+      closeForm();
     }
   };
 
@@ -116,9 +119,9 @@ class ReviewForm extends Component {
 
 ReviewForm.propTypes = {
   classes: PropTypes.object.isRequired,
-  onAdd: PropTypes.func.isRequired,
+  addReview: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  closeForm: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(ReviewForm);

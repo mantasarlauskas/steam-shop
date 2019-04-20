@@ -1,9 +1,16 @@
-import {connect} from 'react-redux';
-import Form from '../components/Login';
-import {closeLogin, redirectFromLoginToRegistration, submitLogin} from "../thunks/auth";
-import {setErrorMessage} from "../actions/auth";
+import { connect } from "react-redux";
+import Form from "../components/Login";
+import {
+  closeLogin,
+  redirectFromLoginToRegistration,
+  submitLogin
+} from "../thunks/auth";
+import { setErrorMessage } from "../actions/messages";
 
-const mapStateToProps = ({auth: {errorMessage, successMessage}, forms: {loginForm}}) => ({
+const mapStateToProps = ({
+  messages: { errorMessage, successMessage },
+  forms: { loginForm }
+}) => ({
   errorMessage,
   successMessage,
   isOpen: loginForm
@@ -16,4 +23,7 @@ const mapDispatchToProps = dispatch => ({
   targetData: () => dispatch(redirectFromLoginToRegistration())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Form);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Form);

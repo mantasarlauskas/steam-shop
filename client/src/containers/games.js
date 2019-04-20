@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  onProductsLoad
+  getItems: onProductsLoad
 };
 
 export default connect(

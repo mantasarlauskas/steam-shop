@@ -1,11 +1,12 @@
 import { createSelector } from "reselect";
+
 const productSelector = ({ products: { list } }) => list;
-const cartSelector = ({ cart: { list } }) => list;
 const minPriceSelector = ({ filter: { minPrice } }) => minPrice;
 const maxPriceSelector = ({ filter: { maxPrice } }) => maxPrice;
 const sortSelector = ({ filter: { sort } }) => sort;
 const propsSelector = (state, props) => props;
 
+/* tinkami */
 export const popularProductSelector = createSelector(
   [productSelector],
   products => {
@@ -55,32 +56,3 @@ export const productBySortSelector = createSelector(
     }
   }
 );
-
-/* Tinkamas */
-export const cartProductSelector = createSelector(
-  [productSelector, cartSelector],
-  (products, cart) =>
-    cart.map(item => ({
-      ...products.find(product => product.id === item.game_id),
-      cartCount: item.count
-    }))
-);
-/*Tinkamas*/
-export const cartTotalPriceSelector = createSelector(
-  [cartProductSelector],
-  products =>
-    products.reduce(
-      (sum, { cartCount, price }) =>
-        parseFloat((sum + cartCount * price).toFixed(2)),
-      0
-    )
-);
-
-/*export const cartProductCountSelector = createSelector(
-  [cartProductSelector, propsSelector],
-  (cart, id) =>
-    cart.reduce(
-      (sum, product) => (product.id === parseInt(id) ? sum + 1 : sum),
-      0
-    )
-);*/

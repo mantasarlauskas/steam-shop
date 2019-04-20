@@ -2,9 +2,9 @@ import { connect } from "react-redux";
 import { addReview } from "../thunks/reviews";
 import ReviewForm from "../components/reviewForm";
 
-const mapDispatchToProps = dispatch => ({
-  onAdd: data => dispatch(addReview(data))
-});
+const mapDispatchToProps = {
+  addReview
+};
 
 export default connect(
   null,

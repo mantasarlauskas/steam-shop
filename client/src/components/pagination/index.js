@@ -21,8 +21,17 @@ class Pagination extends Component {
 
   componentDidUpdate({ data: prevData }) {
     const { data } = this.props;
-    prevData !== data && data && this.paginateData();
+    prevData !== data && data && this.paginateNewData();
   }
+
+  paginateNewData = () => {
+    this.setState(
+      {
+        page: 0
+      },
+      this.paginateData
+    );
+  };
 
   paginateData = () => {
     const { data, returnData } = this.props;
@@ -58,12 +67,6 @@ class Pagination extends Component {
       },
       this.paginateData
     );
-  };
-
-  resetPage = () => {
-    this.setState({
-      page: 0
-    });
   };
 
   render() {

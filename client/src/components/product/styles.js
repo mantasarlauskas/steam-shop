@@ -4,6 +4,10 @@ export default theme => ({
   root: {
     marginTop: 30
   },
+  description: {
+    marginTop: 10,
+    marginBottom: "0.35em"
+  },
   error: {
     color: theme.palette.error.dark,
     margin: "25px 0"

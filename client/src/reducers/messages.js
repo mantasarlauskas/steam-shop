@@ -1,18 +1,12 @@
 import C from "../constants";
 
 const initialState = {
-  users: [],
-  errorMessage: null,
-  successMessage: null
+  errorMessage: "",
+  successMessage: ""
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case C.ADD_USERS:
-      return {
-        ...state,
-        users: action.payload
-      };
     case C.SET_ERROR_MESSAGE:
       return {
         ...state,
@@ -26,12 +20,12 @@ export default (state = initialState, action) => {
     case C.RESET_ERROR_MESSAGE:
       return {
         ...state,
-        errorMessage: null
+        errorMessage: ""
       };
     case C.RESET_SUCCESS_MESSAGE:
       return {
         ...state,
-        successMessage: null
+        successMessage: ""
       };
     default:
       return state;

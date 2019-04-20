@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
-import Order from "../components/order";
-import { orderProductSelector } from "../selectors/order";
 import { getProducts } from "../thunks/products";
+import { orderByIDSelector } from "../selectors/order";
 import { getOrders } from "../thunks/orders";
+import Order from "../components/order";
 
 const mapStateToProps = (
   state,
@@ -12,18 +12,16 @@ const mapStateToProps = (
     }
   }
 ) => ({
-  products: orderProductSelector(state, id),
-  token: state.token,
   id: parseInt(id),
-  isProductsLoading: state.products.isLoading,
-  isOrdersLoading: state.orders.isLoading,
-  orders: state.orders.list
+  orders: state.orders.list,
+  isLoading: state.orders.isLoading,
+  productCount: orderByIDSelector(state, id).length
 });
 
-const mapDispatchToProps = dispatch => ({
-  onLoad: () => dispatch(getProducts()),
-  onOrdersFetch: () => dispatch(getOrders())
-});
+const mapDispatchToProps = {
+  getOrders,
+  getProducts
+};
 
 export default connect(
   mapStateToProps,

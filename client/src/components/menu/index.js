@@ -69,20 +69,20 @@ class Menu extends Component {
   }
 
   handleClickOutside = event => {
-    const { onClose } = this.props;
+    const { toggleMenu } = this.props;
     if (this.navbarRef && !this.navbarRef.contains(event.target)) {
-      onClose();
+      toggleMenu();
     }
   };
 
   renderLink = ({ link, Icon, title }) => {
-    const { onClose } = this.props;
+    const { toggleMenu } = this.props;
     return (
       <Link
         key={link}
         className="list-group-item bg-dark"
         to={`/${link}`}
-        onClick={onClose}
+        onClick={toggleMenu}
       >
         <Icon /> {title}
       </Link>
@@ -108,7 +108,7 @@ class Menu extends Component {
 }
 
 Menu.propTypes = {
-  onClose: PropTypes.func.isRequired,
+  toggleMenu: PropTypes.func.isRequired,
   role: PropTypes.number.isRequired,
   isClosing: PropTypes.bool.isRequired
 };

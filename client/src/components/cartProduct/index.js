@@ -69,7 +69,11 @@ CartProduct.propTypes = {
   addProductToCart: PropTypes.func.isRequired,
   removeProductFromCart: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  isChangeable: PropTypes.bool.isRequired
+  isChangeable: PropTypes.bool
+};
+
+CartProduct.defaultValues = {
+  isChangeable: false
 };
 
 export default withStyles(styles)(CartProduct);

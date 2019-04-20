@@ -7,7 +7,8 @@ import Users from "../../containers/users";
 import Profile from "../../containers/profile";
 import Header from "../../containers/header";
 import Menu from "../../containers/menu";
-import ProductForm from "../../containers/productForm";
+import EditProductForm from "../../containers/editProductForm";
+import AddProductForm from "../../containers/addProductForm";
 import EditKeyForm from "../../containers/editKeyForm";
 import AddKeyForm from "../../containers/addKeyForm";
 import Product from "../../containers/product";
@@ -17,7 +18,7 @@ import Orders from "../../containers/orders";
 import Order from "../../containers/order";
 import Keys from "../../containers/keys";
 import EditUser from "../../containers/EditUserContainer";
-import ChangePassword from "../../containers/ChangePasswordContainer";
+import ChangePassword from "../../containers/changePassword";
 import NoMatch from "../noMatch";
 import Footer from "../footer";
 import ScrollToTop from "../scrollToTop";
@@ -38,7 +39,8 @@ class App extends Component {
         <Route path="/cart" component={Cart} />
         <Route path="/orders" component={Orders} />
         <Route path="/order/:id" component={Order} />
-        <Route path="/product-upload/:id?" component={ProductForm} />
+        <Route exact path="/product-upload" component={AddProductForm} />
+        <Route path="/product-upload/:id" component={EditProductForm} />
         <Route exact path="/key-upload" component={AddKeyForm} />
         <Route path="/key-upload/:id" component={EditKeyForm} />
         <Route path="/edit-profile" component={EditUser} />

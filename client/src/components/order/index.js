@@ -1,51 +1,34 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import Paper from "@material-ui/core/Paper";
-import { withStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
+import { withStyles } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import styles from "../cart/styles";
-import CartItems from "../cartItems";
+import OrderItems from "../../containers/orderItems";
 import OrderKeys from "../../containers/orderKeys";
 import Loading from "../loading";
 
 class Order extends Component {
   componentDidMount() {
-    const { orders, onLoad, onOrdersFetch } = this.props;
-    onLoad() && orders.length === 0 && onOrdersFetch();
+    const { orders, getProducts, getOrders } = this.props;
+    getProducts() && orders.length === 0 && getOrders();
   }
 
   render() {
-    const {
-      products,
-      classes,
-      id,
-      isProductsLoading,
-      isOrdersLoading
-    } = this.props;
+    const { classes, id, productCount, isLoading } = this.props;
     return (
       <div className={`${classes.paper} container`}>
-        {products && products.length > 0 ? (
+        <h1 className="title">Užsakymas nr.{id}</h1>
+        <hr />
+        {isLoading ? (
+          <Loading size={100} />
+        ) : productCount > 0 ? (
           <Fragment>
-            <h1 className="title">Užsakymas nr.{id}</h1>
-            <hr />
             <Paper className={`${classes.paper} ${classes.product}`}>
-              <CartItems />
               <Grid container>
                 <Grid item xs={12}>
-                  <Typography
-                    className={classes.totalPrice}
-                    variant="h6"
-                    gutterBottom
-                  >
-                    Iš viso:{" "}
-                    {products.reduce(
-                      (sum, { cartCount, price }) =>
-                        parseFloat((sum + cartCount * price).toFixed(2)),
-                      0
-                    )}
-                    $
-                  </Typography>
+                  <OrderItems id={id} />
                 </Grid>
               </Grid>
             </Paper>
@@ -53,10 +36,10 @@ class Order extends Component {
             <hr />
             <OrderKeys id={id} />
           </Fragment>
-        ) : !isOrdersLoading && !isProductsLoading ? (
-          <Typography variant="h4">Toks užsakymas neegzistuoja</Typography>
         ) : (
-          <Loading size={100} />
+          <Typography variant="h6" gutterBottom>
+            Tokio užsakymo nėra
+          </Typography>
         )}
       </div>
     );
@@ -64,14 +47,13 @@ class Order extends Component {
 }
 
 Order.propTypes = {
-  onLoad: PropTypes.func.isRequired,
-  products: PropTypes.array.isRequired,
+  getProducts: PropTypes.func.isRequired,
+  getOrders: PropTypes.func.isRequired,
+  orders: PropTypes.array.isRequired,
   classes: PropTypes.object.isRequired,
   id: PropTypes.number.isRequired,
-  isProductsLoading: PropTypes.bool.isRequired,
-  isOrdersLoading: PropTypes.bool.isRequired,
-  onOrdersFetch: PropTypes.func.isRequired,
-  orders: PropTypes.array.isRequired
+  productCount: PropTypes.number.isRequired,
+  isLoading: PropTypes.bool.isRequired
 };
 
 export default withStyles(styles)(Order);

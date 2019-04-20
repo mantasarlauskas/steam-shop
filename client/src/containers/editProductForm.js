@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import ProductForm from "../components/productForm";
-import { getProducts } from "../thunks/products";
+import { getProducts, editProduct } from "../thunks/products";
 import { findProductSelector } from "../selectors/products";
 
 const mapStateToProps = (
@@ -12,14 +12,14 @@ const mapStateToProps = (
   }
 ) => ({
   product: findProductSelector(state, id),
-  id: id && parseInt(id),
-  isLoading: state.products.isLoading,
-  token: state.token
+  id: parseInt(id),
+  isLoading: state.products.isLoading
 });
 
-const mapDispatchToProps = dispatch => ({
-  onLoad: () => dispatch(getProducts())
-});
+const mapDispatchToProps = {
+  getProducts,
+  submitProduct: editProduct
+};
 
 export default connect(
   mapStateToProps,

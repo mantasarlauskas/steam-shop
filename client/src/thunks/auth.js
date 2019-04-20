@@ -1,4 +1,4 @@
-import { resetErrorMessage, resetSuccessMessage } from "../actions/auth";
+import { resetErrorMessage, resetSuccessMessage } from "../actions/messages";
 import {
   hideLoginForm,
   hideRegistrationForm,

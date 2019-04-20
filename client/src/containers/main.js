@@ -8,9 +8,9 @@ const mapStateToProps = state => ({
   isLoading: state.products.isLoading
 });
 
-const mapDispatchToProps = dispatch => ({
-  onLoad: () => dispatch(getProducts())
-});
+const mapDispatchToProps = {
+  getProducts
+};
 
 export default connect(
   mapStateToProps,

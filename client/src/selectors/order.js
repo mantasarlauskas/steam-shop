@@ -3,7 +3,7 @@ import { createSelector } from "reselect";
 const orderItemSelector = ({ orders: { list } }) => list;
 const productSelector = ({ products: { list } }) => list;
 const idSelector = (state, id) => id;
-
+/* tinkami visi */
 export const orderIDSelector = createSelector(
   [orderItemSelector],
   orders => [...new Set(orders.map(order => order.order_id))]
@@ -18,6 +18,7 @@ export const orderSelector = createSelector(
     }))
 );
 
+/* TInkasmas */
 export const orderByIDSelector = createSelector(
   [orderItemSelector, idSelector],
   (orders, id) => orders.filter(order => order.order_id === parseInt(id))
@@ -31,4 +32,14 @@ export const orderProductSelector = createSelector(
       ...products.find(product => product.id === item.game_id),
       cartCount: item.count
     }))
+);
+/*tinkmas*/
+export const orderTotalPriceSelector = createSelector(
+  [orderProductSelector],
+  products =>
+    products.reduce(
+      (sum, { cartCount, price }) =>
+        parseFloat((sum + cartCount * price).toFixed(2)),
+      0
+    )
 );

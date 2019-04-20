@@ -18,7 +18,7 @@ const Review = ({
   text,
   rating,
   createdAt,
-  onDelete,
+  deleteReview,
   game_id
 }) => (
   <Paper className={classes.review} key={id}>
@@ -32,7 +32,7 @@ const Review = ({
         <Typography variant="body1" className={classes.date}>
           {new Date(createdAt).toLocaleString()}
           {user && (user.role === 1 || user.id === user_id) && (
-            <IconButton onClick={() => onDelete({ user_id, id, game_id })}>
+            <IconButton onClick={() => deleteReview({ user_id, id, game_id })}>
               <DeleteIcon />
             </IconButton>
           )}
@@ -63,7 +63,7 @@ Review.propTypes = {
   text: PropTypes.string.isRequired,
   rating: PropTypes.number.isRequired,
   createdAt: PropTypes.string.isRequired,
-  onDelete: PropTypes.func.isRequired,
+  deleteReview: PropTypes.func.isRequired,
   game_id: PropTypes.number.isRequired
 };
 

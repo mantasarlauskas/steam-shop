@@ -45,6 +45,7 @@ const CartItems = ({
           </Typography>
         </Grid>
       </Grid>
+      {console.log(products)}
       {products.map(data => (
         <CartProduct key={data.id} isChangeable={isChangeable} {...data} />
       ))}

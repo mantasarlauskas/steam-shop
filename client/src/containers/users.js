@@ -1,7 +1,17 @@
 import { connect } from "react-redux";
+import { getUsers } from "../thunks/users";
 import Users from "../components/users";
 
-const mapStateToProps = ({ token }) => ({
-  token
+const mapStateToProps = ({ users: { list, isLoading } }) => ({
+  users: list,
+  isLoading
 });
-export default connect(mapStateToProps)(Users);
+
+const mapDispatchToProps = {
+  getItems: getUsers
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Users);

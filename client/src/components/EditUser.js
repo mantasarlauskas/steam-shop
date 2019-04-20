@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import {withStyles} from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-import {styles} from '../styles/form';
-import ErrorIcon from '@material-ui/icons/Error';
+import React, { Component } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
+import SnackbarContent from "@material-ui/core/SnackbarContent";
+import { styles } from "../styles/form";
+import ErrorIcon from "@material-ui/icons/Error";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 class EditUser extends Component {
@@ -14,24 +14,24 @@ class EditUser extends Component {
 
     this.initialState = {
       email: {
-        value: '',
+        value: "",
         empty: false
       },
-      error: '',
-      success: ''
+      error: "",
+      success: ""
     };
 
     this.state = this.initialState;
   }
 
   componentDidMount() {
-    const {user} = this.props;
+    const { user } = this.props;
 
     user && this.initState(user);
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const {user, successMessage} = this.props;
+  componentDidUpdate(prevProps) {
+    const { user, successMessage } = this.props;
 
     if (prevProps.user !== user && user) {
       this.initState(user);
@@ -40,9 +40,9 @@ class EditUser extends Component {
     if (prevProps.successMessage !== successMessage && successMessage) {
       this.setState({
         success: successMessage
-      })
+      });
     }
-  };
+  }
 
   initState = user => {
     this.setState({
@@ -50,10 +50,10 @@ class EditUser extends Component {
         value: user.email,
         empty: false
       }
-    })
+    });
   };
 
-  handleChange = ({target: {value}}) => {
+  handleChange = ({ target: { value } }) => {
     this.setState({
       email: {
         value,
@@ -64,14 +64,14 @@ class EditUser extends Component {
 
   setError = () => {
     this.setState({
-      error: 'Formoje negali būti tuščių laukų'
-    })
+      error: "Formoje negali būti tuščių laukų"
+    });
   };
 
   checkIfEmpty = () => {
-    const {email} = this.state;
+    const { email } = this.state;
 
-    if (email.value === '') {
+    if (email.value === "") {
       this.setError();
       return false;
     } else {
@@ -80,14 +80,14 @@ class EditUser extends Component {
   };
 
   handleSubmit = event => {
-    const {email} = this.state;
-    const {onEdit, user} = this.props;
+    const { email } = this.state;
+    const { onEdit, user } = this.props;
 
     event.preventDefault();
 
     this.setState({
-      error: '',
-      success: ''
+      error: "",
+      success: ""
     });
 
     if (this.checkIfEmpty()) {
@@ -100,8 +100,8 @@ class EditUser extends Component {
   };
 
   render() {
-    const {classes, user} = this.props;
-    const {email, error, success} = this.state;
+    const { classes, user } = this.props;
+    const { email, error, success } = this.state;
 
     const displayMessage = (className, message, Icon) => {
       return (
@@ -109,23 +109,22 @@ class EditUser extends Component {
           className={className}
           message={
             <span>
-              <Icon className={classes.errorIcon}/>
+              <Icon className={classes.errorIcon} />
               {message}
             </span>
           }
         />
-      )
+      );
     };
 
     return (
       <div className={`${classes.root} container`}>
-        <h1 className="title">
-          Profilio forma
-        </h1>
-        <hr/>
+        <h1 className="title">Profilio forma</h1>
+        <hr />
         <Paper className={classes.body}>
           {error.length > 0 && displayMessage(classes.error, error, ErrorIcon)}
-          {success.length > 0 && displayMessage(classes.success, success, CheckCircleIcon)}
+          {success.length > 0 &&
+            displayMessage(classes.success, success, CheckCircleIcon)}
           <form onSubmit={this.handleSubmit} noValidate>
             <TextField
               error={email.empty}
@@ -154,7 +153,7 @@ class EditUser extends Component {
           </form>
         </Paper>
       </div>
-    )
+    );
   }
 }
 

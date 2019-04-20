@@ -2,6 +2,7 @@ import C from "../constants";
 
 const initialState = {
   orderKeys: [],
+  isOrderKeysLoading: false,
   key: null,
   isKeyLoading: false,
   list: [],
@@ -37,9 +38,15 @@ export default (state = initialState, action) => {
         isLoading: false,
         list: action.payload
       };
+    case C.FETCH_ORDER_KEYS:
+      return {
+        ...state,
+        isOrderKeysLoading: true
+      };
     case C.ADD_ORDER_KEYS:
       return {
         ...state,
+        isOrderKeysLoading: false,
         orderKeys: action.payload
       };
     default:

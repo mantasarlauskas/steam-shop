@@ -3,8 +3,11 @@ import PropTypes from "prop-types";
 import Field from "@material-ui/core/TextField";
 
 const TextField = ({
-  field: { empty, id, label },
+  empty,
+  id,
+  label,
   item,
+  type,
   additionalProps,
   onChange
 }) => (
@@ -13,6 +16,7 @@ const TextField = ({
     defaultValue={item && item[id]}
     id={id}
     label={label}
+    type={type}
     autoComplete="off"
     margin="normal"
     onChange={onChange(id)}
@@ -23,15 +27,19 @@ const TextField = ({
 );
 
 TextField.propTypes = {
-  field: PropTypes.object.isRequired,
+  empty: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
   item: PropTypes.object,
   additionalProps: PropTypes.object,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  type: PropTypes.string
 };
 
 TextField.defaultValues = {
   item: null,
-  additionalProps: null
+  additionalProps: null,
+  type: "text"
 };
 
 export default TextField;

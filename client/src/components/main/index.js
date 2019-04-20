@@ -14,8 +14,8 @@ import { styles } from "../../styles/list";
 
 class Main extends Component {
   componentDidMount() {
-    const { onLoad } = this.props;
-    onLoad();
+    const { getProducts } = this.props;
+    getProducts();
   }
 
   render() {
@@ -26,7 +26,9 @@ class Main extends Component {
         <div className={classes.main}>
           <h1 className="title">Populiariausi žaidimai</h1>
           <hr />
-          {games.length > 0 ? (
+          {isLoading ? (
+            <Loading size={100} />
+          ) : games.length > 0 ? (
             <Grid container spacing={24}>
               {games.map(({ id, logo, title, price }) => (
                 <Grid key={id} item lg={4} sm={6} xs={12}>
@@ -52,10 +54,8 @@ class Main extends Component {
                 </Grid>
               ))}
             </Grid>
-          ) : !isLoading ? (
-            <Typography variant="h6">Žaidimų kol kas dar nėra</Typography>
           ) : (
-            <Loading size={100} />
+            <Typography variant="h6">Žaidimų kol kas dar nėra</Typography>
           )}
         </div>
       </div>
@@ -67,7 +67,7 @@ Main.propTypes = {
   games: PropTypes.array.isRequired,
   classes: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  onLoad: PropTypes.func.isRequired
+  getProducts: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(Main);

@@ -75,7 +75,8 @@ class KeyForm extends Component {
         [field.id]: {
           ...prevState[field.id],
           empty: true
-        }
+        },
+        error: true
       }));
       return false;
     }
@@ -84,11 +85,7 @@ class KeyForm extends Component {
 
   validateForm = () => {
     const { game_id, steam_key } = this.state;
-    let count = 0;
-    !this.validateField(game_id) && count++;
-    !this.validateField(steam_key) && count++;
-    count > 0 && this.setState({ error: true });
-    return count === 0;
+    return this.validateField(steam_key) && this.validateField(game_id);
   };
 
   handleSubmit = async event => {
@@ -151,7 +148,7 @@ class KeyForm extends Component {
           </Select>
         </FormControl>
         <TextField
-          field={steam_key}
+          {...steam_key}
           onChange={this.handleChange}
           item={productKey}
         />

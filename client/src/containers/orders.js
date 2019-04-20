@@ -4,13 +4,13 @@ import { orderSelector } from "../selectors/order";
 import Orders from "../components/orders";
 
 const mapStateToProps = state => ({
-  orders: orderSelector(state),
+  items: orderSelector(state),
   isLoading: state.orders.isLoading
 });
 
-const mapDispatchToProps = dispatch => ({
-  onLoad: () => dispatch(getOrders())
-});
+const mapDispatchToProps = {
+  getItems: getOrders
+};
 
 export default connect(
   mapStateToProps,

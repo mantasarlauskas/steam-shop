@@ -22,6 +22,10 @@ export const fetchKeys = () => ({
   type: C.FETCH_KEYS
 });
 
+export const fetchOrderKeys = () => ({
+  type: C.FETCH_ORDER_KEYS
+});
+
 export const addOrderKeys = keys => ({
   type: C.ADD_ORDER_KEYS,
   payload: keys

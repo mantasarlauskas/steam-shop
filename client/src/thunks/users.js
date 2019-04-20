@@ -1,5 +1,7 @@
 import { config, url } from "../server";
 import axios from "axios";
+import { setToken } from "../actions/token";
+import { fetchUsers, addUsers } from "../actions/users";
 import {
   hideLoginForm,
   hideRegistrationForm,
@@ -8,13 +10,51 @@ import {
 import {
   setErrorMessage,
   setSuccessMessage,
-  setToken,
-  addUsers,
-  resetErrorMessage,
   resetSuccessMessage
-} from "../actions/auth";
-import jwt from "jsonwebtoken";
+} from "../actions/messages";
+import { resetMessages } from "./messages";
 
+export const getUsers = () => async (dispatch, getState) => {
+  dispatch(fetchUsers());
+  const { data } = await axios.get(`${url}/users`, config(getState().token));
+  dispatch(addUsers(data));
+};
+
+export const banUser = id => async (dispatch, getState) => {
+  await axios({
+    method: "delete",
+    url: `${url}/users`,
+    data: id,
+    ...config(getState().token)
+  });
+  dispatch(getUsers());
+};
+
+export const unbanUser = id => async (dispatch, getState) => {
+  await axios({
+    method: "put",
+    url: `${url}/users`,
+    data: id,
+    ...config(getState().token)
+  });
+  dispatch(getUsers());
+};
+
+export const changePassword = fields => async (dispatch, getState) => {
+  dispatch(resetMessages());
+  try {
+    const { data } = await axios.post(
+      `${url}/password`,
+      fields,
+      config(getState().token)
+    );
+    dispatch(setSuccessMessage(data));
+  } catch ({ response: { data } }) {
+    dispatch(setErrorMessage(data));
+  }
+};
+
+/* visi zemiau bbz kam skirti :DD */
 export const loginUser = fields => async dispatch => {
   try {
     const { data } = await axios.post(`${url}/login`, fields);
@@ -34,21 +74,6 @@ export const updateUser = fields => async (dispatch, getState) => {
   );
   dispatch(setSuccessMessage(data));
   dispatch(getUser(fields.id));
-};
-
-export const changePassword = fields => async (dispatch, getState) => {
-  dispatch(resetSuccessMessage());
-  dispatch(resetErrorMessage());
-  try {
-    const { data } = await axios.post(
-      `${url}/password`,
-      fields,
-      config(getState().token)
-    );
-    dispatch(setSuccessMessage(data));
-  } catch ({ response: { data } }) {
-    dispatch(setErrorMessage(data));
-  }
 };
 
 export const registerUser = fields => async dispatch => {

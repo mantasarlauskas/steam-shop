@@ -1,4 +1,4 @@
-import { resetErrorMessage, resetSuccessMessage } from "../actions/auth";
+import { resetErrorMessage, resetSuccessMessage } from "../actions/messages";
 
 export const resetMessages = () => dispatch => {
   dispatch(resetSuccessMessage());

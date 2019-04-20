@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
 import StarRatings from "react-star-ratings";
 import Button from "@material-ui/core/Button";
@@ -15,9 +14,8 @@ import { Link } from "react-router-dom";
 import jwt from "jsonwebtoken";
 import Loading from "../loading";
 import styles from "./styles";
-import Review from "../../containers/review";
+import Reviews from "../../containers/reviews";
 import ReviewForm from "../../containers/reviewForm";
-import { url, config } from "../../server";
 
 class Product extends Component {
   state = {
@@ -25,8 +23,8 @@ class Product extends Component {
   };
 
   componentDidMount() {
-    const { onLoad, id } = this.props;
-    onLoad(id);
+    const { onProductLoad, id } = this.props;
+    onProductLoad(id);
   }
 
   toggleReviewForm = () => {
@@ -36,13 +34,8 @@ class Product extends Component {
   };
 
   handleRemove = async id => {
-    const { history, token } = this.props;
-    await axios({
-      method: "delete",
-      url: `${url}/products`,
-      data: { id },
-      ...config(token)
-    });
+    const { history, removeProduct } = this.props;
+    await removeProduct(id);
     history.push("/games");
   };
 
@@ -66,7 +59,7 @@ class Product extends Component {
             {isFormOpen ? "Uždaryti atsiliepimo formą" : "Rašyti atsiliepimą"}
           </Button>
           {isFormOpen && (
-            <ReviewForm id={id} onSubmit={this.toggleReviewForm} />
+            <ReviewForm id={id} closeForm={this.toggleReviewForm} />
           )}
         </Fragment>
       )
@@ -108,8 +101,8 @@ class Product extends Component {
       product: { title, id, totalCount, usedCount, description, price },
       classes,
       token,
-      addToCart,
-      reviews
+      addProductToCart,
+      rating
     } = this.props;
     const count = totalCount - (usedCount || 0);
     return (
@@ -127,18 +120,12 @@ class Product extends Component {
           {this.renderActions()}
         </Grid>
         <StarRatings
-          rating={
-            reviews.reduce((sum, { rating }) => sum + rating, 0) /
-              reviews.length || 0
-          }
+          rating={rating}
           starDimension="25px"
           starSpacing="2px"
           starRatedColor="yellow"
         />
-        <Typography variant="body2" gutterBottom>
-          {reviews.length} atsiliepimai(-ų)
-        </Typography>
-        <Typography variant="body1" gutterBottom>
+        <Typography className={classes.description} variant="body1">
           {description}
         </Typography>
         <Typography className={classes.price} variant="h4" gutterBottom>
@@ -157,7 +144,7 @@ class Product extends Component {
               <div align="center">
                 <Button
                   className={classes.submit}
-                  onClick={() => addToCart(id)}
+                  onClick={() => addProductToCart(id)}
                 >
                   <ShoppingCartIcon spacing={8} />Į krepšelį
                 </Button>
@@ -178,18 +165,12 @@ class Product extends Component {
   };
 
   render() {
-    const {
-      product,
-      classes,
-      isProductsLoading,
-      token,
-      id,
-      isReviewsLoading,
-      reviews
-    } = this.props;
+    const { product, classes, isLoading, id } = this.props;
     return (
       <div className={`${classes.root} container`}>
-        {product ? (
+        {isLoading ? (
+          <Loading size={100} />
+        ) : product ? (
           <Fragment>
             <h1 className="product-title">{product.title}</h1>
             <hr />
@@ -215,30 +196,10 @@ class Product extends Component {
               Atsiliepimai
             </Typography>
             <hr />
-            {reviews.length > 0 ? (
-              reviews
-                .slice(0)
-                .reverse()
-                .map(review => (
-                  <Review
-                    key={review.id}
-                    game_id={id}
-                    user={jwt.decode(token)}
-                    {...review}
-                  />
-                ))
-            ) : !isReviewsLoading ? (
-              <Typography variant="body1" gutterBottom>
-                Atsiliepimų kol kas dar nėra
-              </Typography>
-            ) : (
-              <Loading size={100} />
-            )}
+            <Reviews id={id} />
           </Fragment>
-        ) : !isProductsLoading ? (
-          <Typography variant="h6">Tokios prekės nėra</Typography>
         ) : (
-          <Loading size={100} />
+          <Typography variant="h6">Tokios prekės nėra</Typography>
         )}
       </div>
     );
@@ -246,15 +207,20 @@ class Product extends Component {
 }
 
 Product.propTypes = {
-  onLoad: PropTypes.func.isRequired,
+  onProductLoad: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
+  removeProduct: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   token: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired,
-  product: PropTypes.object.isRequired,
-  addToCart: PropTypes.func.isRequired,
-  isProductsLoading: PropTypes.bool.isRequired,
-  isReviewsLoading: PropTypes.bool.isRequired,
-  reviews: PropTypes.bool.isRequired
+  product: PropTypes.object,
+  addProductToCart: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  rating: PropTypes.number.isRequired
+};
+
+Product.defaultValues = {
+  product: null
 };
 
 export default withStyles(styles)(Product);

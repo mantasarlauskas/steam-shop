@@ -8,9 +8,9 @@ const mapStateToProps = ({ token, menu: { isClosing } }) => ({
   isClosing
 });
 
-const mapDispatchToProps = dispatch => ({
-  onClose: () => dispatch(toggleMenu())
-});
+const mapDispatchToProps = {
+  toggleMenu
+};
 
 export default connect(
   mapStateToProps,

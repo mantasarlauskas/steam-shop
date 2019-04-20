@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -10,7 +9,6 @@ import ErrorIcon from "@material-ui/icons/Error";
 import Loading from "../loading";
 import TextField from "../textField";
 import { styles } from "../../styles/form";
-import { config, url, uploadImage } from "../../server";
 
 class ProductForm extends Component {
   state = {
@@ -42,18 +40,16 @@ class ProductForm extends Component {
   };
 
   componentDidMount() {
-    const { product, onLoad } = this.props;
-    onLoad();
-    product && this.initState();
+    const { id, getProducts } = this.props;
+    id && getProducts();
   }
 
   componentDidUpdate({ product: prevProduct }) {
     const { product } = this.props;
-    prevProduct !== product && product && this.initState();
+    prevProduct !== product && product && this.initState(product);
   }
 
-  initState = () => {
-    const { product } = this.props;
+  initState = product => {
     this.setState(prevState => ({
       textFields: {
         title: {
@@ -70,31 +66,6 @@ class ProductForm extends Component {
         }
       }
     }));
-  };
-
-  addProduct = async fields => {
-    const { token } = this.props;
-    const {
-      data: { secure_url }
-    } = await uploadImage(fields.logo[0]);
-    await axios.post(
-      `${url}/products`,
-      { ...fields, logo: secure_url },
-      config(token)
-    );
-  };
-
-  editProduct = async fields => {
-    const { token, product } = this.props;
-    if (fields.logo === null) {
-      fields.logo = product.logo;
-    } else {
-      const {
-        data: { secure_url }
-      } = await uploadImage(fields.logo[0]);
-      fields.logo = secure_url;
-    }
-    await axios.put(`${url}/products`, fields, config(token));
   };
 
   handleChange = name => ({ target: { value } }) => {
@@ -128,7 +99,8 @@ class ProductForm extends Component {
             ...prevState.textFields[field.id],
             empty: true
           }
-        }
+        },
+        error: true
       }));
       return false;
     }
@@ -138,13 +110,15 @@ class ProductForm extends Component {
   validateForm = () => {
     const { textFields, logo } = this.state;
     const { product } = this.props;
-    let count = 0;
+    let errCount = 0;
     Object.keys(textFields).forEach(
-      key => !this.validateField(textFields[key]) && count++
+      key => !this.validateField(textFields[key]) && errCount++
     );
-    logo.value === null && !product && count++;
-    count > 0 && this.setState({ error: true });
-    return count === 0;
+    logo.value === null &&
+      !product &&
+      errCount++ &&
+      this.setState({ error: true });
+    return errCount === 0;
   };
 
   handleSubmit = async event => {
@@ -152,7 +126,7 @@ class ProductForm extends Component {
       textFields: { title, price, description },
       logo
     } = this.state;
-    const { product, history } = this.props;
+    const { product, history, submitProduct } = this.props;
     event.preventDefault();
     if (this.validateForm()) {
       const values = {
@@ -162,12 +136,12 @@ class ProductForm extends Component {
         logo: logo.value
       };
       if (product) {
-        await this.editProduct({
+        await submitProduct({
           ...values,
           id: product.id
         });
       } else {
-        await this.addProduct(values);
+        await submitProduct(values);
       }
       history.push("/games");
     }
@@ -181,9 +155,9 @@ class ProductForm extends Component {
     } = this.state;
     return (
       <form onSubmit={this.handleSubmit} noValidate>
-        <TextField field={title} onChange={this.handleChange} item={product} />
+        <TextField {...title} onChange={this.handleChange} item={product} />
         <TextField
-          field={price}
+          {...price}
           onChange={this.handleChange}
           additionalProps={{
             type: "number",
@@ -192,7 +166,7 @@ class ProductForm extends Component {
           item={product}
         />
         <TextField
-          field={description}
+          {...description}
           onChange={this.handleChange}
           additionalProps={{ multiline: true }}
           item={product}
@@ -266,17 +240,19 @@ class ProductForm extends Component {
 
 ProductForm.propTypes = {
   product: PropTypes.object,
-  onLoad: PropTypes.func.isRequired,
+  getProducts: PropTypes.func,
   history: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   id: PropTypes.number,
-  isLoading: PropTypes.bool.isRequired,
-  token: PropTypes.string.isRequired
+  isLoading: PropTypes.bool,
+  submitProduct: PropTypes.func.isRequired
 };
 
 ProductForm.defaultValues = {
   product: null,
-  id: null
+  id: null,
+  getProducts: null,
+  isLoading: false
 };
 
 export default withStyles(styles)(ProductForm);

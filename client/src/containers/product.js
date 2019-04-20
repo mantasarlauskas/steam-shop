@@ -1,7 +1,8 @@
 import { connect } from "react-redux";
 import { addProductToCart } from "../thunks/cart";
 import { findProductSelector } from "../selectors/products";
-import { onProductLoad } from "../thunks/products";
+import { productRatingSelector } from "../selectors/reviews";
+import { onProductLoad, removeProduct } from "../thunks/products";
 import Product from "../components/product";
 
 const mapStateToProps = (
@@ -15,15 +16,15 @@ const mapStateToProps = (
   product: findProductSelector(state, id),
   id: parseInt(id),
   token: state.token,
-  reviews: state.reviews.list,
-  isProductsLoading: state.products.isLoading,
-  isReviewsLoading: state.reviews.isLoading
+  rating: productRatingSelector(state),
+  isLoading: state.products.isLoading
 });
 
-const mapDispatchToProps = dispatch => ({
-  addToCart: id => dispatch(addProductToCart(id)),
-  onLoad: id => dispatch(onProductLoad(id))
-});
+const mapDispatchToProps = {
+  addProductToCart,
+  onProductLoad,
+  removeProduct
+};
 
 export default connect(
   mapStateToProps,
