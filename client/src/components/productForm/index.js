@@ -4,39 +4,38 @@ import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import SnackbarContent from "@material-ui/core/SnackbarContent";
-import ErrorIcon from "@material-ui/icons/Error";
 import Loading from "../loading";
 import TextField from "../textField";
+import withForm from "../withForm";
 import { styles } from "../../styles/form";
+
+const textFields = [
+  {
+    value: "",
+    empty: false,
+    id: "title",
+    label: "Pavadinimas"
+  },
+  {
+    value: "",
+    empty: false,
+    id: "price",
+    label: "Kaina"
+  },
+  {
+    value: "",
+    empty: false,
+    id: "description",
+    label: "Aprašymas"
+  }
+];
 
 class ProductForm extends Component {
   state = {
-    textFields: {
-      title: {
-        value: "",
-        empty: false,
-        id: "title",
-        label: "Pavadinimas"
-      },
-      price: {
-        value: "",
-        empty: false,
-        id: "price",
-        label: "Kaina"
-      },
-      description: {
-        value: "",
-        empty: false,
-        id: "description",
-        label: "Aprašymas"
-      }
-    },
     logo: {
       value: null,
       empty: false
-    },
-    error: false
+    }
   };
 
   componentDidMount() {
@@ -45,41 +44,9 @@ class ProductForm extends Component {
   }
 
   componentDidUpdate({ product: prevProduct }) {
-    const { product } = this.props;
-    prevProduct !== product && product && this.initState(product);
+    const { product, initState, id } = this.props;
+    id && prevProduct !== product && product && initState(product);
   }
-
-  initState = product => {
-    this.setState(prevState => ({
-      textFields: {
-        title: {
-          ...prevState.textFields.title,
-          value: product.title
-        },
-        price: {
-          ...prevState.textFields.price,
-          value: product.price
-        },
-        description: {
-          ...prevState.textFields.description,
-          value: product.description
-        }
-      }
-    }));
-  };
-
-  handleChange = name => ({ target: { value } }) => {
-    this.setState(prevState => ({
-      textFields: {
-        ...prevState.textFields,
-        [name]: {
-          ...prevState.textFields[name],
-          value,
-          empty: value.length === 0
-        }
-      }
-    }));
-  };
 
   handleFileChange = ({ target: { files } }) => {
     this.setState({
@@ -90,51 +57,27 @@ class ProductForm extends Component {
     });
   };
 
-  validateField = field => {
-    if (field.value === "") {
-      this.setState(prevState => ({
-        textFields: {
-          ...prevState.textFields,
-          [field.id]: {
-            ...prevState.textFields[field.id],
-            empty: true
-          }
-        },
-        error: true
-      }));
-      return false;
-    }
-    return true;
-  };
-
   validateForm = () => {
-    const { textFields, logo } = this.state;
-    const { product } = this.props;
+    const { validateForm, setError, product } = this.props;
+    const { logo } = this.state;
     let errCount = 0;
-    Object.keys(textFields).forEach(
-      key => !this.validateField(textFields[key]) && errCount++
-    );
-    logo.value === null &&
-      !product &&
-      errCount++ &&
-      this.setState({ error: true });
+    errCount += !validateForm();
+    logo.value === null && !product && errCount++ && setError();
     return errCount === 0;
   };
 
   handleSubmit = async event => {
+    const { logo } = this.state;
     const {
-      textFields: { title, price, description },
-      logo
-    } = this.state;
-    const { product, history, submitProduct } = this.props;
+      product,
+      history,
+      submitProduct,
+      translateValuesToObject
+    } = this.props;
     event.preventDefault();
     if (this.validateForm()) {
-      const values = {
-        title: title.value,
-        price: price.value,
-        description: description.value,
-        logo: logo.value
-      };
+      const values = translateValuesToObject();
+      values.logo = logo.value;
       if (product) {
         await submitProduct({
           ...values,
@@ -148,17 +91,14 @@ class ProductForm extends Component {
   };
 
   renderForm = () => {
-    const { classes, product } = this.props;
-    const {
-      textFields: { title, price, description },
-      logo
-    } = this.state;
+    const { classes, product, textFields, handleChange } = this.props;
+    const { logo } = this.state;
     return (
       <form onSubmit={this.handleSubmit} noValidate>
-        <TextField {...title} onChange={this.handleChange} item={product} />
+        <TextField {...textFields[0]} onChange={handleChange} item={product} />
         <TextField
-          {...price}
-          onChange={this.handleChange}
+          {...textFields[1]}
+          onChange={handleChange}
           additionalProps={{
             type: "number",
             inputProps: { min: "0", step: "1" }
@@ -166,8 +106,8 @@ class ProductForm extends Component {
           item={product}
         />
         <TextField
-          {...description}
-          onChange={this.handleChange}
+          {...textFields[2]}
+          onChange={handleChange}
           additionalProps={{ multiline: true }}
           item={product}
         />
@@ -206,8 +146,7 @@ class ProductForm extends Component {
   };
 
   render() {
-    const { classes, id, product, isLoading } = this.props;
-    const { error } = this.state;
+    const { classes, id, product, isLoading, error, renderError } = this.props;
     return (
       <div className={`${classes.root} container`}>
         <h1 className="title">Žaidimo forma</h1>
@@ -218,18 +157,10 @@ class ProductForm extends Component {
           <Typography variant="h6">Tokio žaidimo nėra</Typography>
         ) : (
           <Paper className={classes.body}>
-            {error && (
-              <SnackbarContent
-                className={classes.error}
-                message={
-                  <span>
-                    <ErrorIcon className={classes.errorIcon} />
-                    Formoje negali būti tuščių laukų ir nepasirinkto
-                    paveikslėlio
-                  </span>
-                }
-              />
-            )}
+            {error &&
+              renderError(
+                "Formoje negali būti tuščių laukų ir nepasirinkto paveikslėlio"
+              )}
             {this.renderForm()}
           </Paper>
         )}
@@ -240,12 +171,20 @@ class ProductForm extends Component {
 
 ProductForm.propTypes = {
   product: PropTypes.object,
+  id: PropTypes.number,
   getProducts: PropTypes.func,
+  initState: PropTypes.func.isRequired,
+  validateForm: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
-  id: PropTypes.number,
+  translateValuesToObject: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
-  submitProduct: PropTypes.func.isRequired
+  submitProduct: PropTypes.func.isRequired,
+  textFields: PropTypes.array.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  error: PropTypes.bool.isRequired,
+  renderError: PropTypes.func.isRequired
 };
 
 ProductForm.defaultValues = {
@@ -255,4 +194,4 @@ ProductForm.defaultValues = {
   isLoading: false
 };
 
-export default withStyles(styles)(ProductForm);
+export default withStyles(styles)(withForm(ProductForm, textFields));
