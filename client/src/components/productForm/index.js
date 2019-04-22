@@ -62,7 +62,10 @@ class ProductForm extends Component {
     const { logo } = this.state;
     let errCount = 0;
     errCount += !validateForm();
-    logo.value === null && !product && errCount++ && setError();
+    logo.value === null &&
+      !product &&
+      errCount++ &&
+      setError("Formoje negali būti tuščių laukų");
     return errCount === 0;
   };
 
@@ -157,10 +160,7 @@ class ProductForm extends Component {
           <Typography variant="h6">Tokio žaidimo nėra</Typography>
         ) : (
           <Paper className={classes.body}>
-            {error &&
-              renderError(
-                "Formoje negali būti tuščių laukų ir nepasirinkto paveikslėlio"
-              )}
+            {error && renderError()}
             {this.renderForm()}
           </Paper>
         )}
@@ -183,7 +183,7 @@ ProductForm.propTypes = {
   submitProduct: PropTypes.func.isRequired,
   textFields: PropTypes.array.isRequired,
   handleChange: PropTypes.func.isRequired,
-  error: PropTypes.bool.isRequired,
+  error: PropTypes.string.isRequired,
   renderError: PropTypes.func.isRequired
 };
 

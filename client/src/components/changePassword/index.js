@@ -3,141 +3,70 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
-import SnackbarContent from "@material-ui/core/SnackbarContent";
-import ErrorIcon from "@material-ui/icons/Error";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import TextField from "../textField";
+import withForm from "../withForm";
 import { styles } from "../../styles/form";
 
-class ChangePassword extends Component {
-  state = {
-    currentPassword: {
-      value: "",
-      id: "currentPassword",
-      label: "Dabartinis slaptažodis",
-      empty: false
-    },
-    password1: {
-      value: "",
-      id: "password1",
-      label: "Naujas slaptažodis",
-      empty: false
-    },
-    password2: {
-      value: "",
-      id: "password2",
-      label: "Naujo slaptažodžio pakartojimas",
-      empty: false
-    },
-    error: "",
-    success: ""
-  };
-
-  componentDidUpdate({
-    successMessage: prevSuccessMessage,
-    errorMessage: prevErrorMessage
-  }) {
-    const { successMessage, errorMessage } = this.props;
-    if (successMessage && prevSuccessMessage !== successMessage) {
-      this.setState({ success: successMessage, error: "" });
-    }
-    if (errorMessage && prevErrorMessage !== errorMessage) {
-      this.setState({ error: errorMessage, success: "" });
-    }
+const textFields = [
+  {
+    value: "",
+    id: "currentPassword",
+    label: "Dabartinis slaptažodis",
+    empty: false
+  },
+  {
+    value: "",
+    id: "password1",
+    label: "Naujas slaptažodis",
+    empty: false
+  },
+  {
+    value: "",
+    id: "password2",
+    label: "Naujo slaptažodžio pakartojimas",
+    empty: false
   }
+];
 
+class ChangePassword extends Component {
   componentWillUnmount() {
     const { resetMessages } = this.props;
     resetMessages();
   }
 
-  handleChange = name => ({ target: { value } }) => {
-    this.setState(prevState => ({
-      [name]: {
-        ...prevState[name],
-        value,
-        empty: value.length === 0
-      }
-    }));
-  };
-
-  validateField = field => {
-    if (field.value === "") {
-      this.setState(prevState => ({
-        [field.id]: {
-          ...prevState[field.id],
-          empty: true
-        }
-      }));
-      return false;
-    }
-    return true;
-  };
-
   validateForm = () => {
-    const { currentPassword, password1, password2 } = this.state;
-    const errCount =
-      !this.validateField(currentPassword) +
-      !this.validateField(password1) +
-      !this.validateField(password2);
-    const matchError = password1.value !== password2.value;
-    if (errCount > 0) {
-      this.setState({ error: "Formoje negali būti tuščių laukų", success: "" });
-    } else if (matchError) {
-      this.setState({ error: "Slaptažodžiai privalo sutapti", success: "" });
-    }
-    return errCount === 0 && !matchError;
+    const { textFields, validateForm, setError } = this.props;
+    const matchError = textFields[1].value !== textFields[2].value;
+    const fieldError = !validateForm();
+    matchError && setError("Slaptažodžiai privalo sutapti");
+    return !fieldError && !matchError;
   };
 
   handleSubmit = event => {
-    const { currentPassword, password1 } = this.state;
-    const { changePassword } = this.props;
+    const { changePassword, translateValuesToObject } = this.props;
     event.preventDefault();
-    if (this.validateForm()) {
-      changePassword({
-        currentPassword: currentPassword.value,
-        newPassword: password1.value
-      });
-      this.setState({
-        error: "",
-        success: ""
-      });
-    }
+    this.validateForm() && changePassword(translateValuesToObject());
   };
 
-  renderMessage = (className, message, Icon) => {
-    const { classes } = this.props;
+  renderField = ({ id, label, empty }) => {
+    const { handleChange } = this.props;
     return (
-      <SnackbarContent
-        className={className}
-        message={
-          <span>
-            <Icon className={classes.errorIcon} />
-            {message}
-          </span>
-        }
+      <TextField
+        key={id}
+        id={id}
+        label={label}
+        empty={empty}
+        onChange={handleChange}
+        type={"password"}
       />
     );
   };
 
-  renderField = ({ id, label, empty }) => (
-    <TextField
-      id={id}
-      label={label}
-      empty={empty}
-      onChange={this.handleChange}
-      type={"password"}
-    />
-  );
-
   renderForm = () => {
-    const { classes } = this.props;
-    const { currentPassword, password1, password2 } = this.state;
+    const { classes, textFields } = this.props;
     return (
       <form onSubmit={this.handleSubmit} noValidate>
-        {this.renderField(currentPassword)}
-        {this.renderField(password1)}
-        {this.renderField(password2)}
+        {textFields.map(this.renderField)}
         <div className={classes.submitWrapper}>
           <Button
             variant="contained"
@@ -155,16 +84,14 @@ class ChangePassword extends Component {
   };
 
   render() {
-    const { classes } = this.props;
-    const { error, success } = this.state;
+    const { classes, error, success, renderError, renderSuccess } = this.props;
     return (
       <div className={`${classes.root} container`}>
         <h1 className="title">Slaptažodžio keitimo forma</h1>
         <hr />
         <Paper className={classes.body}>
-          {error && this.renderMessage(classes.error, error, ErrorIcon)}
-          {success &&
-            this.renderMessage(classes.success, success, CheckCircleIcon)}
+          {error && renderError()}
+          {success && renderSuccess()}
           {this.renderForm()}
         </Paper>
       </div>
@@ -173,11 +100,18 @@ class ChangePassword extends Component {
 }
 
 ChangePassword.propTypes = {
-  successMessage: PropTypes.string.isRequired,
-  errorMessage: PropTypes.string.isRequired,
+  error: PropTypes.string.isRequired,
+  success: PropTypes.string.isRequired,
+  setError: PropTypes.func.isRequired,
+  renderError: PropTypes.func.isRequired,
+  renderSuccess: PropTypes.func.isRequired,
   changePassword: PropTypes.func.isRequired,
   resetMessages: PropTypes.func.isRequired,
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  validateForm: PropTypes.func.isRequired,
+  textFields: PropTypes.array.isRequired,
+  translateValuesToObject: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired
 };
 
-export default withStyles(styles)(ChangePassword);
+export default withStyles(styles)(withForm(ChangePassword, textFields));

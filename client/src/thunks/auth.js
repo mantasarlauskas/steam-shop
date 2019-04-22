@@ -1,4 +1,5 @@
-import { resetErrorMessage, resetSuccessMessage } from "../actions/messages";
+import { resetErrorMessage } from "../actions/messages";
+import { resetMessages } from "./messages";
 import {
   hideLoginForm,
   hideRegistrationForm,
@@ -17,20 +18,17 @@ export const closeRegistration = () => dispatch => {
 };
 
 export const submitLogin = fields => dispatch => {
-  dispatch(resetErrorMessage());
-  dispatch(resetSuccessMessage());
+  dispatch(resetMessages());
   dispatch(loginUser(fields));
 };
 
 export const closeLogin = () => dispatch => {
-  dispatch(resetSuccessMessage());
-  dispatch(resetErrorMessage());
+  dispatch(resetMessages());
   dispatch(hideLoginForm());
 };
 
 export const redirectFromLoginToRegistration = () => dispatch => {
   dispatch(hideLoginForm());
-  dispatch(resetSuccessMessage());
-  dispatch(resetErrorMessage());
+  dispatch(resetMessages());
   dispatch(showRegistrationForm());
 };

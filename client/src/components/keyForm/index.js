@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import SnackbarContent from "@material-ui/core/SnackbarContent";
-import ErrorIcon from "@material-ui/icons/Error";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -12,24 +10,24 @@ import Select from "@material-ui/core/Select";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "../textField";
 import Loading from "../loading";
+import withForm from "../withForm";
 import { styles } from "../../styles/form";
 
-class KeyForm extends Component {
-  state = {
-    game_id: {
-      value: "",
-      empty: false,
-      id: "game_id"
-    },
-    steam_key: {
-      value: "",
-      id: "steam_key",
-      label: "Raktas",
-      empty: false
-    },
-    error: false
-  };
+const textFields = [
+  {
+    value: "",
+    empty: false,
+    id: "game_id"
+  },
+  {
+    value: "",
+    id: "steam_key",
+    label: "Raktas",
+    empty: false
+  }
+];
 
+class KeyForm extends Component {
   componentDidMount() {
     const { onKeyLoad, id } = this.props;
     id ? onKeyLoad(id) : onKeyLoad();
@@ -41,62 +39,21 @@ class KeyForm extends Component {
   }
 
   componentDidUpdate({ productKey: prevKey }) {
-    const { productKey, id } = this.props;
-    id && productKey && prevKey !== productKey && this.initState();
+    const { productKey, id, initState } = this.props;
+    id && productKey && prevKey !== productKey && initState(productKey);
   }
 
-  initState = () => {
-    const { productKey } = this.props;
-    this.setState(prevState => ({
-      game_id: {
-        ...prevState.game_id,
-        value: productKey.game_id
-      },
-      steam_key: {
-        ...prevState.steam_key,
-        value: productKey.steam_key
-      }
-    }));
-  };
-
-  handleChange = name => ({ target: { value } }) => {
-    this.setState(prevState => ({
-      [name]: {
-        ...prevState[name],
-        value,
-        empty: value.length === 0
-      }
-    }));
-  };
-
-  validateField = field => {
-    if (field.value === "") {
-      this.setState(prevState => ({
-        [field.id]: {
-          ...prevState[field.id],
-          empty: true
-        },
-        error: true
-      }));
-      return false;
-    }
-    return true;
-  };
-
-  validateForm = () => {
-    const { game_id, steam_key } = this.state;
-    return this.validateField(steam_key) && this.validateField(game_id);
-  };
-
   handleSubmit = async event => {
-    const { game_id, steam_key } = this.state;
-    const { submitKey, productKey, history } = this.props;
+    const {
+      submitKey,
+      productKey,
+      history,
+      validateForm,
+      translateValuesToObject
+    } = this.props;
     event.preventDefault();
-    if (this.validateForm()) {
-      const values = {
-        game_id: game_id.value,
-        steam_key: steam_key.value
-      };
+    if (validateForm()) {
+      const values = translateValuesToObject();
       if (productKey) {
         await submitKey({
           ...values,
@@ -109,33 +66,23 @@ class KeyForm extends Component {
     }
   };
 
-  renderError = () => {
-    const { classes } = this.props;
-    return (
-      <SnackbarContent
-        className={classes.error}
-        message={
-          <span>
-            <ErrorIcon className={classes.errorIcon} />
-            Formoje negali būti tuščių laukų
-          </span>
-        }
-      />
-    );
-  };
-
   renderForm = () => {
-    const { classes, products, productKey } = this.props;
-    const { steam_key, game_id } = this.state;
+    const {
+      classes,
+      products,
+      productKey,
+      textFields,
+      handleChange
+    } = this.props;
     return (
       <form onSubmit={this.handleSubmit} noValidate>
         <FormControl>
           <InputLabel htmlFor="game">Pasirinkite žaidimą</InputLabel>
           <Select
             className={classes.select}
-            value={game_id.value}
+            value={textFields[0].value}
             displayEmpty
-            onChange={this.handleChange(game_id.id)}
+            onChange={handleChange(textFields[0].id)}
             inputProps={{
               id: "game"
             }}
@@ -148,8 +95,8 @@ class KeyForm extends Component {
           </Select>
         </FormControl>
         <TextField
-          {...steam_key}
-          onChange={this.handleChange}
+          {...textFields[1]}
+          onChange={handleChange}
           item={productKey}
         />
         <div className={classes.submitWrapper}>
@@ -174,9 +121,10 @@ class KeyForm extends Component {
       id,
       isProductsLoading,
       isLoading,
-      productKey
+      productKey,
+      renderError,
+      error
     } = this.props;
-    const { error } = this.state;
     return (
       <div className={`${classes.root} container`}>
         <h1 className="title">Rakto forma</h1>
@@ -187,7 +135,7 @@ class KeyForm extends Component {
           <Typography variant="h6">Tokio rakto nėra</Typography>
         ) : (
           <Paper className={classes.body}>
-            {error && this.renderError()}
+            {error && renderError()}
             {this.renderForm()}
           </Paper>
         )}
@@ -200,13 +148,20 @@ KeyForm.propTypes = {
   onKeyLoad: PropTypes.func.isRequired,
   id: PropTypes.number,
   resetKey: PropTypes.func,
+  initState: PropTypes.func.isRequired,
   productKey: PropTypes.object,
   submitKey: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   products: PropTypes.array.isRequired,
   isProductsLoading: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  validateForm: PropTypes.func.isRequired,
+  translateValuesToObject: PropTypes.func.isRequired,
+  textFields: PropTypes.array.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  renderError: PropTypes.func.isRequired,
+  error: PropTypes.string.isRequired
 };
 
 KeyForm.defaultValues = {
@@ -216,4 +171,4 @@ KeyForm.defaultValues = {
   isLoading: false
 };
 
-export default withStyles(styles)(KeyForm);
+export default withStyles(styles)(withForm(KeyForm, textFields));

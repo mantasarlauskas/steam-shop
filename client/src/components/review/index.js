@@ -55,7 +55,7 @@ const Review = ({
 );
 
 Review.propTypes = {
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   classes: PropTypes.object.isRequired,
   User: PropTypes.object.isRequired,
   id: PropTypes.number.isRequired,
@@ -65,6 +65,10 @@ Review.propTypes = {
   createdAt: PropTypes.string.isRequired,
   deleteReview: PropTypes.func.isRequired,
   game_id: PropTypes.number.isRequired
+};
+
+Review.defaultValues = {
+  user: null
 };
 
 export default withStyles(styles)(Review);

@@ -5,9 +5,16 @@ import { resetToken } from "../actions/token";
 import { cartCountSelector } from "../selectors/cart";
 import Header from "../components/header";
 
-const mapStateToProps = ({ token, navbar, ...state }) => ({
+const mapStateToProps = ({
   token,
-  cartCount: cartCountSelector(state)
+  navbar,
+  forms: { loginForm, registrationForm },
+  ...state
+}) => ({
+  token,
+  cartCount: cartCountSelector(state),
+  registrationForm,
+  loginForm
 });
 
 const mapDispatchToProps = {

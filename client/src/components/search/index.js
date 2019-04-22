@@ -63,8 +63,12 @@ class Search extends Component {
   renderCard = ({ id, logo, title }) => {
     const { classes } = this.props;
     return (
-      <Link to={`/product/${id}`} onClick={e => this.handleCardClick(e, id)}>
-        <Card key={id} className={classes.card}>
+      <Link
+        key={id}
+        to={`/product/${id}`}
+        onClick={e => this.handleCardClick(e, id)}
+      >
+        <Card className={classes.card}>
           <CardActionArea>
             <CardMedia className={classes.media} image={logo} title={title} />
             <CardContent>

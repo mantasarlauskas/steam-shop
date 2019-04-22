@@ -14,8 +14,8 @@ import Badge from "@material-ui/core/Badge";
 import SettingsIcon from "@material-ui/icons/Settings";
 import LogoutIcon from "@material-ui/icons/ExitToApp";
 import CartIcon from "@material-ui/icons/ShoppingCart";
-import Login from "../../containers/LoginForm";
-import Registration from "../../containers/RegistrationForm";
+import Login from "../../containers/login";
+import Registration from "../../containers/registration";
 import Search from "../../containers/search";
 import styles from "./styles";
 
@@ -65,11 +65,19 @@ class Header extends Component {
   };
 
   render() {
-    const { toggleMenu, token, showLoginForm, cartCount, classes } = this.props;
+    const {
+      toggleMenu,
+      token,
+      showLoginForm,
+      cartCount,
+      classes,
+      registrationForm,
+      loginForm
+    } = this.props;
     return (
       <header position="static">
-        <Login />
-        <Registration />
+        {loginForm && <Login />}
+        {registrationForm && <Registration />}
         <div className={classes.root}>
           <AppBar className={classes.bar}>
             <Toolbar>
@@ -119,7 +127,9 @@ Header.propTypes = {
   toggleMenu: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
   showLoginForm: PropTypes.func.isRequired,
-  cartCount: PropTypes.number.isRequired
+  cartCount: PropTypes.number.isRequired,
+  registrationForm: PropTypes.bool.isRequired,
+  loginForm: PropTypes.bool.isRequired
 };
 
 export default withStyles(styles)(Header);

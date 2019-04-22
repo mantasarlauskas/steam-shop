@@ -17,7 +17,7 @@ import Games from "../../containers/games";
 import Orders from "../../containers/orders";
 import Order from "../../containers/order";
 import Keys from "../../containers/keys";
-import EditUser from "../../containers/EditUserContainer";
+import EditUser from "../../containers/editUser";
 import ChangePassword from "../../containers/changePassword";
 import NoMatch from "../noMatch";
 import Footer from "../footer";

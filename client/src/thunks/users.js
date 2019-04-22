@@ -54,15 +54,12 @@ export const changePassword = fields => async (dispatch, getState) => {
   }
 };
 
-/* visi zemiau bbz kam skirti :DD */
-export const loginUser = fields => async dispatch => {
-  try {
-    const { data } = await axios.post(`${url}/login`, fields);
-    dispatch(setToken(data));
-    dispatch(hideLoginForm());
-  } catch ({ response: { data } }) {
-    dispatch(setErrorMessage(data));
-  }
+export const getUser = id => async (dispatch, getState) => {
+  const { data } = await axios.get(
+    `${url}/users/${id}`,
+    config(getState().token)
+  );
+  dispatch(setToken(data));
 };
 
 export const updateUser = fields => async (dispatch, getState) => {
@@ -76,6 +73,16 @@ export const updateUser = fields => async (dispatch, getState) => {
   dispatch(getUser(fields.id));
 };
 
+export const loginUser = fields => async dispatch => {
+  try {
+    const { data } = await axios.post(`${url}/login`, fields);
+    dispatch(setToken(data));
+    dispatch(hideLoginForm());
+  } catch ({ response: { data } }) {
+    dispatch(setErrorMessage(data));
+  }
+};
+
 export const registerUser = fields => async dispatch => {
   try {
     const { data } = await axios.post(`${url}/register`, fields);
@@ -85,12 +92,4 @@ export const registerUser = fields => async dispatch => {
   } catch ({ response: { data } }) {
     dispatch(setErrorMessage(data));
   }
-};
-
-export const getUser = id => async (dispatch, getState) => {
-  const { data } = await axios.get(
-    `${url}/users/${id}`,
-    config(getState().token)
-  );
-  dispatch(setToken(data));
 };

@@ -4,7 +4,7 @@ import { toggleMenu } from "../thunks/menu";
 import Menu from "../components/menu";
 
 const mapStateToProps = ({ token, menu: { isClosing } }) => ({
-  role: token && jwt.decode(token).role,
+  role: token ? jwt.decode(token).role : -1,
   isClosing
 });
 

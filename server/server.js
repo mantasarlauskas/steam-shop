@@ -81,7 +81,7 @@ app.post("/password", ({ body, headers: { authorization } }, res) => {
         User.find({ where: { id: user.id } }).then(data => {
           if (bcrypt.compareSync(body.currentPassword, data.password)) {
             data
-              .update({ password: bcrypt.hashSync(body.newPassword, 10) })
+              .update({ password: bcrypt.hashSync(body.password1, 10) })
               .then(() => res.status(200).json("Slaptažodis pakeistas"));
           } else {
             res.status(400).json("Neteisingas vartotojo slaptažodis");
@@ -101,6 +101,7 @@ app.post("/users", ({ body, headers: { authorization } }, res) => {
   const token = getToken(authorization);
   if (token) {
     jwt.verify(token, "key", (err, user) => {
+      console.log(user.id, body.id);
       if (err) {
         res.status(400).json("Neteisingas tokenas");
       } else if (user.id === body.id) {
