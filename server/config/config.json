@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "manarlas",
-    "password": "labadiena123",
-    "database": "zaidimuparduotuv",
-    "host": "db4free.net",
+    "username": "gPKxoejqLK",
+    "password": "zazulpukx7",
+    "database": "gPKxoejqLK",
+    "host": "remotemysql.com",
     "dialect": "mysql"
   },
   "test": {

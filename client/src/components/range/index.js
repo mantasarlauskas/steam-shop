@@ -5,7 +5,6 @@ import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core";
 import { Range as Slider } from "rc-slider";
 import styles from "./styles";
-import "rc-slider/assets/index.css";
 
 class Range extends Component {
   handlePriceChange = ([newMinPrice, newMaxPrice]) => {

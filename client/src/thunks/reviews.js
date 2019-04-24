@@ -5,21 +5,21 @@ import { addReviews, fetchReviews } from "../actions/reviews";
 export const getReviews = id => async (dispatch, getState) => {
   dispatch(fetchReviews());
   const { data } = await axios.get(
-    `${url}/review/${id}`,
+    `${url}/reviews/${id}`,
     config(getState().token)
   );
   dispatch(addReviews(data));
 };
 
 export const addReview = data => async (dispatch, getState) => {
-  await axios.post(`${url}/review`, data, config(getState().token));
+  await axios.post(`${url}/reviews`, data, config(getState().token));
   dispatch(getReviews(data.game_id));
 };
 
 export const deleteReview = data => async (dispatch, getState) => {
   await axios({
     method: "delete",
-    url: `${url}/review`,
+    url: `${url}/reviews`,
     data,
     ...config(getState().token)
   });

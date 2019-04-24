@@ -26,10 +26,21 @@ const textFields = [
 ];
 
 class Login extends Component {
+  componentWillUnmount() {
+    const { resetMessages } = this.props;
+    resetMessages();
+  }
+
+  handleRedirect = () => {
+    const { showRegistrationForm, hideLoginForm } = this.props;
+    hideLoginForm();
+    showRegistrationForm();
+  };
+
   handleSubmit = event => {
-    const { validateForm, translateValuesToObject, submitLogin } = this.props;
+    const { validateForm, translateValuesToObject, loginUser } = this.props;
     event.preventDefault();
-    validateForm() && submitLogin(translateValuesToObject());
+    validateForm() && loginUser(translateValuesToObject());
   };
 
   renderField = ({ id, label, empty }) => {
@@ -48,25 +59,23 @@ class Login extends Component {
 
   render() {
     const {
-      isOpen,
       classes,
       error,
       renderError,
       success,
       renderSuccess,
       textFields,
-      redirectFromLoginToRegistration,
-      closeLogin
+      hideLoginForm
     } = this.props;
     return (
-      <Modal open={isOpen} onClose={closeLogin}>
+      <Modal open={true} onClose={hideLoginForm}>
         <div style={getModalStyle()} className={classes.paper}>
           <IconButton
             key="close"
             aria-label="Close"
             color="inherit"
             className={classes.icon}
-            onClick={closeLogin}
+            onClick={hideLoginForm}
           >
             <CloseIcon />
           </IconButton>
@@ -82,7 +91,7 @@ class Login extends Component {
           {success && renderSuccess()}
           <form onSubmit={this.handleSubmit} noValidate>
             {textFields.map(this.renderField)}
-            <Button color="primary" onClick={redirectFromLoginToRegistration}>
+            <Button color="primary" onClick={this.handleRedirect}>
               Registracija
             </Button>
             <div className={classes.submitWrapper}>
@@ -104,19 +113,19 @@ class Login extends Component {
 }
 
 Login.propTypes = {
+  resetMessages: PropTypes.func.isRequired,
+  showRegistrationForm: PropTypes.func.isRequired,
+  hideLoginForm: PropTypes.func.isRequired,
   translateValuesToObject: PropTypes.func.isRequired,
   validateForm: PropTypes.func.isRequired,
-  submitLogin: PropTypes.func.isRequired,
+  loginUser: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
   error: PropTypes.string.isRequired,
   renderError: PropTypes.func.isRequired,
   success: PropTypes.string.isRequired,
   renderSuccess: PropTypes.func.isRequired,
-  textFields: PropTypes.array.isRequired,
-  redirectFromLoginToRegistration: PropTypes.func.isRequired,
-  closeLogin: PropTypes.func.isRequired
+  textFields: PropTypes.array.isRequired
 };
 
 export default withStyles(styles)(withForm(Login, textFields));

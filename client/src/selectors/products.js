@@ -6,7 +6,6 @@ const maxPriceSelector = ({ filter: { maxPrice } }) => maxPrice;
 const sortSelector = ({ filter: { sort } }) => sort;
 const propsSelector = (state, props) => props;
 
-/* tinkami */
 export const popularProductSelector = createSelector(
   [productSelector],
   products => {

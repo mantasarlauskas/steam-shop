@@ -3,7 +3,7 @@ import { createSelector } from "reselect";
 const orderItemSelector = ({ orders: { list } }) => list;
 const productSelector = ({ products: { list } }) => list;
 const idSelector = (state, id) => id;
-/* tinkami visi */
+
 export const orderIDSelector = createSelector(
   [orderItemSelector],
   orders => [...new Set(orders.map(order => order.order_id))]
@@ -18,13 +18,11 @@ export const orderSelector = createSelector(
     }))
 );
 
-/* TInkasmas */
 export const orderByIDSelector = createSelector(
   [orderItemSelector, idSelector],
   (orders, id) => orders.filter(order => order.order_id === parseInt(id))
 );
 
-/* tinkamas */
 export const orderProductSelector = createSelector(
   [productSelector, orderByIDSelector],
   (products, orders) =>
@@ -33,7 +31,7 @@ export const orderProductSelector = createSelector(
       cartCount: item.count
     }))
 );
-/*tinkmas*/
+
 export const orderTotalPriceSelector = createSelector(
   [orderProductSelector],
   products =>

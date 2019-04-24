@@ -6,7 +6,7 @@ import { addOrders, fetchOrders } from "../actions/orders";
 export const addOrder = () => async (dispatch, getState) => {
   await axios({
     method: "post",
-    url: `${url}/order`,
+    url: `${url}/orders`,
     ...config(getState().token)
   });
   dispatch(getCart());

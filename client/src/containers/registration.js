@@ -1,18 +1,17 @@
 import { connect } from "react-redux";
-import { closeRegistration, submitRegistration } from "../thunks/auth";
+import { resetErrorMessage } from "../actions/messages";
+import { hideRegistrationForm } from "../actions/forms";
+import { registerUser } from "../thunks/users";
 import Registration from "../components/registration";
 
-const mapStateToProps = ({
-  messages: { errorMessage },
-  forms: { registrationForm }
-}) => ({
-  errorMessage,
-  isOpen: registrationForm
+const mapStateToProps = ({ messages: { errorMessage } }) => ({
+  errorMessage
 });
 
 const mapDispatchToProps = {
-  submitRegistration,
-  closeRegistration
+  registerUser,
+  hideRegistrationForm,
+  resetErrorMessage
 };
 
 export default connect(

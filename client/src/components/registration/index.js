@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Modal from "@material-ui/core/Modal";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -41,6 +42,11 @@ const textFields = [
 ];
 
 class Registration extends Component {
+  componentWillUnmount() {
+    const { resetErrorMessage } = this.props;
+    resetErrorMessage();
+  }
+
   validateForm = () => {
     const { textFields, validateForm, setError } = this.props;
     let errCount = 0;
@@ -61,9 +67,9 @@ class Registration extends Component {
   };
 
   handleSubmit = event => {
-    const { submitRegistration, translateValuesToObject } = this.props;
+    const { registerUser, translateValuesToObject } = this.props;
     event.preventDefault();
-    this.validateForm() && submitRegistration(translateValuesToObject());
+    this.validateForm() && registerUser(translateValuesToObject());
   };
 
   renderField = ({ id, label, empty, type }) => {
@@ -82,22 +88,21 @@ class Registration extends Component {
 
   render() {
     const {
-      isOpen,
-      closeRegistration,
+      hideRegistrationForm,
       classes,
       renderError,
       error,
       textFields
     } = this.props;
     return (
-      <Modal open={isOpen} onClose={closeRegistration}>
+      <Modal open={true} onClose={hideRegistrationForm}>
         <div style={getModalStyle()} className={classes.paper}>
           <IconButton
             key="close"
             aria-label="Close"
             color="inherit"
             className={classes.icon}
-            onClick={closeRegistration}
+            onClick={hideRegistrationForm}
           >
             <CloseIcon />
           </IconButton>
@@ -129,5 +134,19 @@ class Registration extends Component {
     );
   }
 }
+
+Registration.propTypes = {
+  resetErrorMessage: PropTypes.func.isRequired,
+  textFields: PropTypes.array.isRequired,
+  validateForm: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
+  registerUser: PropTypes.func.isRequired,
+  translateValuesToObject: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  hideRegistrationForm: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+  renderError: PropTypes.func.isRequired,
+  error: PropTypes.string.isRequired
+};
 
 export default withStyles(styles)(withForm(Registration, textFields));
