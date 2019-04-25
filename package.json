@@ -9,7 +9,7 @@
     "server": "npm start --prefix server",
     "dev": "concurrently \"npm run server\" \"npm run client\" --kill-others",
     "start": "NODE_ENV=production npm start --prefix server",
-    "heroku-postbuild": "npm install --prefix client && npm run client-build && npm install --prefix --server"
+    "heroku-postbuild": "npm install --prefix client && npm run client-build && npm install --prefix server"
   },
   "repository": {
     "type": "git",
