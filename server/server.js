@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const path = require("path");
 const app = express();
 const http = require("http").Server(app);
 const auth = require("./routes/auth");
@@ -10,6 +11,7 @@ const cart = require("./routes/cart");
 const orders = require("./routes/orders");
 const reviews = require("./routes/reviews");
 const orderKeys = require("./routes/orderKeys");
+const port = process.env.PORT || 8080;
 
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
@@ -25,15 +27,28 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/", auth);
-app.use("/keys", keys);
-app.use("/users", users);
-app.use("/products", products);
-app.use("/cart", cart);
-app.use("/orders", orders);
-app.use("/reviews", reviews);
-app.use("/order-keys", orderKeys);
+app.use("/api/", auth);
+app.use("/api/keys", keys);
+app.use("/api/users", users);
+app.use("/api/products", products);
+app.use("/api/cart", cart);
+app.use("/api/orders", orders);
+app.use("/api/reviews", reviews);
+app.use("/api/order-keys", orderKeys);
 
-const server = http.listen(5000, () => {
+app.use(express.static(path.join(__dirname, "../client/build")));
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/build")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname + "/../client/build/index.html"));
+  });
+}
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/../client/public/index.html"));
+});
+
+const server = http.listen(port, () => {
   console.log("server is listening on port", server.address().port);
 });
