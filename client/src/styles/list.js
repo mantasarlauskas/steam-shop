@@ -16,7 +16,10 @@ export const styles = theme => ({
     height: 150
   },
   games: {
-    padding: "50px 10px 0 10px"
+    padding: "50px 10px 0 10px",
+    [theme.breakpoints.down("sm")]: {
+      paddingTop: 20
+    }
   },
   filters: {
     marginBottom: 15

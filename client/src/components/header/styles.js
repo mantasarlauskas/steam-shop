@@ -1,4 +1,4 @@
-export default {
+export default theme => ({
   root: {
     flexGrow: 1
   },
@@ -28,6 +28,9 @@ export default {
     marginRight: 20
   },
   login: {
-    margin: "0 20px"
+    margin: "0 20px",
+    [theme.breakpoints.down("xs")]: {
+      marginRight: 0
+    }
   }
-};
+});

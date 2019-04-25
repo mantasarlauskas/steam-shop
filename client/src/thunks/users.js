@@ -13,6 +13,7 @@ import {
   resetSuccessMessage
 } from "../actions/messages";
 import { resetMessages } from "./messages";
+import { getCart } from "./cart";
 
 export const getUsers = () => async (dispatch, getState) => {
   dispatch(fetchUsers());
@@ -77,6 +78,7 @@ export const loginUser = fields => async dispatch => {
   try {
     const { data } = await axios.post(`${url}/login`, fields);
     dispatch(setToken(data));
+    dispatch(getCart());
     dispatch(hideLoginForm());
   } catch ({ response: { data } }) {
     dispatch(setErrorMessage(data));

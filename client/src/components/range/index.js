@@ -28,10 +28,10 @@ class Range extends Component {
           Kaina:
         </Typography>
         <Grid container spacing={16}>
-          <Grid item xs={2} align={"center"}>
+          <Grid item xs={3} sm={2} align={"center"}>
             {minPrice}$
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={6} sm={8}>
             <Slider
               className={classes.range}
               defaultValue={[defaultMinPrice, defaultMaxPrice]}
@@ -42,7 +42,7 @@ class Range extends Component {
               onChange={this.handlePriceChange}
             />
           </Grid>
-          <Grid item xs={2} align={"center"}>
+          <Grid item xs={3} sm={2} align={"center"}>
             {maxPrice}$
           </Grid>
         </Grid>

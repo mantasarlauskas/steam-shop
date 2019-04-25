@@ -38,12 +38,15 @@ class ChangePassword extends Component {
     const { textFields, validateForm, setError } = this.props;
     let errCount = 0;
     errCount += !validateForm();
-    if (textFields[1].value.length < 6) {
-      setError("Slaptažodis turi būti sudarytas bent iš 6 simbolių");
-      errCount++;
-    } else if (textFields[1].value !== textFields[2].value) {
-      setError("Slaptažodžiai privalo sutapti");
-      errCount++;
+    if (errCount === 0) {
+      errCount = 1;
+      if (textFields[1].value.length < 6) {
+        setError("Slaptažodis turi būti sudarytas bent iš 6 simbolių");
+      } else if (textFields[1].value !== textFields[2].value) {
+        setError("Slaptažodžiai privalo sutapti");
+      } else {
+        errCount = 0;
+      }
     }
     return errCount === 0;
   };
