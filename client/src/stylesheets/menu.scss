@@ -7,6 +7,10 @@
   left: 0;
   animation: show 0.5s;
 
+  @media screen and (max-width: 600px) {
+    top: 56px;
+  }
+
   &.closing {
     left: -250px;
     animation: hide 0.5s;

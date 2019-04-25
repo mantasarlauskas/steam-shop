@@ -36,10 +36,16 @@ class ChangePassword extends Component {
 
   validateForm = () => {
     const { textFields, validateForm, setError } = this.props;
-    const matchError = textFields[1].value !== textFields[2].value;
-    const fieldError = !validateForm();
-    matchError && setError("Slaptažodžiai privalo sutapti");
-    return !fieldError && !matchError;
+    let errCount = 0;
+    errCount += !validateForm();
+    if (textFields[1].value.length < 6) {
+      setError("Slaptažodis turi būti sudarytas bent iš 6 simbolių");
+      errCount++;
+    } else if (textFields[1].value !== textFields[2].value) {
+      setError("Slaptažodžiai privalo sutapti");
+      errCount++;
+    }
+    return errCount === 0;
   };
 
   handleSubmit = event => {

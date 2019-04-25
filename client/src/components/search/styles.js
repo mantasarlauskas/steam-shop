@@ -23,6 +23,9 @@ export default theme => ({
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing.unit * 3,
       width: "auto"
+    },
+    [theme.breakpoints.down("xs")]: {
+      display: "none"
     }
   },
   searchIcon: {

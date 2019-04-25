@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/mantasarlauskas/steam-shop#readme",
   "dependencies": {
-    "concurrently": "^4.1.0",
-    "nodemon": "^1.18.11"
+    "concurrently": "^4.1.0"
   }
 }
