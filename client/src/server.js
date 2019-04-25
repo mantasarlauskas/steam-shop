@@ -4,7 +4,7 @@ const CLOUDINARY_UPLOAD_PRESET = "steam-shop";
 const CLOUDINARY_UPLOAD_URL =
   "https://api.cloudinary.com/v1_1/mantasarlauskas/image/upload";
 
-export const url = `http://${window.location.hostname}:8080/api`;
+export const url = "/api";
 export const config = token => ({
   headers: {
     Authorization: `Bearer ${token}`
