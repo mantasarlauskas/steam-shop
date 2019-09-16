@@ -35,12 +35,9 @@ class Login extends Component {
 	}
 
 	componentWillUnmount() {
-		window.removeEventListener('resize', this.updateWindowDimensions);
-	}
-
-	componentWillUnmount() {
 		const {resetMessages} = this.props;
 		resetMessages();
+		window.removeEventListener('resize', this.updateWindowDimensions);
 	}
 
 	updateWindowDimensions = () => {

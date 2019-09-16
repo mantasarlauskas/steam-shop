@@ -51,12 +51,9 @@ class Registration extends Component {
 	}
 
 	componentWillUnmount() {
-		window.removeEventListener('resize', this.updateWindowDimensions);
-	}
-
-	componentWillUnmount() {
 		const {resetErrorMessage} = this.props;
 		resetErrorMessage();
+		window.removeEventListener('resize', this.updateWindowDimensions);
 	}
 
 	updateWindowDimensions = () => {
