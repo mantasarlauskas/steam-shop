@@ -1,13 +1,13 @@
-import { connect } from "react-redux";
-import { addProductToCart, removeProductFromCart } from "../thunks/cart";
-import CartProduct from "../components/cartProduct";
+import {connect} from 'react-redux';
+import {addProductToCart, removeProductFromCart} from '../thunks/cart';
+import CartProduct from '../components/cartProduct';
 
 const mapDispatchToProps = {
-  addProductToCart,
-  removeProductFromCart
+	addProductToCart,
+	removeProductFromCart
 };
 
 export default connect(
-  null,
-  mapDispatchToProps
+	null,
+	mapDispatchToProps
 )(CartProduct);

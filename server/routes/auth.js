@@ -1,62 +1,67 @@
-const { Router } = require("express");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const { User } = require("../models/index");
-const { getToken, verifyUser, parseResults } = require("../helpers");
+const {Router} = require('express');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const {User} = require('../models/index');
+const {getToken, verifyUser, parseResults} = require('../helpers');
 
 const router = Router();
 
-/**
- * Route, skirtas prisijungimo autentifikavimui
- */
-router.post("/login", async ({ body: { username, password } }, res) => {
-  const results = await User.find({ where: { username: username } });
-  const data = parseResults(results);
-  if (!data) {
-    res.status(400).json("Toks vartotojas neegzistuoja");
-  } else if (data.isBanned === true) {
-    res.status(400).json("Vartotojas yra užblokuotas");
-  } else {
-    if (bcrypt.compareSync(password, data.password)) {
-      res.json(jwt.sign(data, "key"));
-    } else {
-      res.status(400).json("Neteisingas vartotojo slaptažodis");
-    }
-  }
+router.post('/login', async ({body: {username, password}}, res) => {
+	if (username && password) {
+		const results = await User.find({where: {username}});
+		const data = parseResults(results);
+		if (!data) {
+			res.status(400).json({error: 'User does not exist'});
+		} else if (data.isBanned === true) {
+			res.status(400).json({error: 'User is banned'});
+		} else {
+			if (bcrypt.compareSync(password, data.password)) {
+				res.json({token: jwt.sign(data, 'key')});
+			} else {
+				res.status(400).json({error: 'Wrong password'});
+			}
+		}
+		return;
+	}
+	res.status(400).json({error: 'username and password fields are required'});
 });
 
-/**
- * Route, skirtas naujo vartotojo reigstracijai
- */
-router.post("/register", ({ body: { username, email, password } }, res) => {
-  User.findOrCreate({
-    where: { username: username },
-    defaults: {
-      email: email,
-      password: bcrypt.hashSync(password, 10)
-    }
-  }).spread((user, created) =>
-    created
-      ? res.status(200).json("Registracija sėkminga")
-      : res.status(400).json("Toks vartotojas jau egzistuoja")
-  );
+router.post('/register', ({body: {username, email, password}}, res) => {
+	if (username && email && password) {
+		User.findOrCreate({
+			where: {username},
+			defaults: {
+				email,
+				password: bcrypt.hashSync(password, 10)
+			}
+		}).spread((user, created) => {
+			if (created) {
+				res.status(201).json({success: 'Successful registration'});
+			} else {
+				res.status(400).json({error: 'User already exists'});
+			}
+		});
+		return;
+	}
+	res.status(400).json({error: 'username, email and password fields are required'});
 });
 
-/**
- * Route, skirtas slaptažodžio keitimui
- */
-router.post("/password", async ({ body, headers: { authorization } }, res) => {
-  const token = getToken(authorization);
-  const user = verifyUser(token, res);
-  if (user) {
-    const data = await User.find({ where: { id: user.id } });
-    if (bcrypt.compareSync(body.currentPassword, data.password)) {
-      await data.update({ password: bcrypt.hashSync(body.password1, 10) });
-      res.status(200).json("Slaptažodis pakeistas");
-    } else {
-      res.status(400).json("Neteisingas vartotojo slaptažodis");
-    }
-  }
+router.post('/password', async ({body: {password, currentPassword}, headers: {authorization}}, res) => {
+	const token = getToken(authorization);
+	const user = verifyUser(token, res);
+	if (user) {
+		if (password && currentPassword) {
+			const data = await User.find({where: {id: user.id}});
+			if (bcrypt.compareSync(currentPassword, data.password)) {
+				await data.update({password: bcrypt.hashSync(password, 10)});
+				res.status(200).json({success: 'Password changed'});
+			} else {
+				res.status(400).json({error: 'Wrong password'});
+			}
+		} else {
+			res.status(400).json({error: 'password and currentPassword fields are required'});
+		}
+	}
 });
 
 module.exports = router;

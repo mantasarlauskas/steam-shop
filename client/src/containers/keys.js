@@ -1,17 +1,17 @@
-import { connect } from "react-redux";
-import { getKeys } from "../thunks/keys";
-import Keys from "../components/keys";
+import {connect} from 'react-redux';
+import {getKeys} from '../thunks/keys';
+import Keys from '../components/keys';
 
-const mapStateToProps = ({ keys: { list, isLoading } }) => ({
-  keys: list,
-  isLoading
+const mapStateToProps = ({keys: {list, isLoading}}) => ({
+	keys: list,
+	isLoading
 });
 
 const mapDispatchToProps = {
-  getItems: getKeys
+	getItems: getKeys
 };
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+	mapStateToProps,
+	mapDispatchToProps
 )(Keys);

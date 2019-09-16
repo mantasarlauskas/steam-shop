@@ -1,22 +1,22 @@
-import { connect } from "react-redux";
-import { resetMessages } from "../thunks/messages";
-import { loginUser } from "../thunks/users";
-import { hideLoginForm, showRegistrationForm } from "../actions/forms";
-import Login from "../components/login";
+import {connect} from 'react-redux';
+import {resetMessages} from '../thunks/messages';
+import {loginUser} from '../thunks/users';
+import {hideLoginForm, showRegistrationForm} from '../actions/forms';
+import Login from '../components/login';
 
-const mapStateToProps = ({ messages: { errorMessage, successMessage } }) => ({
-  errorMessage,
-  successMessage
+const mapStateToProps = ({messages: {errorMessage, successMessage}}) => ({
+	errorMessage,
+	successMessage
 });
 
 const mapDispatchToProps = {
-  loginUser,
-  hideLoginForm,
-  showRegistrationForm,
-  resetMessages
+	loginUser,
+	hideLoginForm,
+	showRegistrationForm,
+	resetMessages
 };
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+	mapStateToProps,
+	mapDispatchToProps
 )(Login);

@@ -1,17 +1,17 @@
-import { connect } from "react-redux";
-import { getOrderKeys } from "../thunks/keys";
-import OrderKeys from "../components/orderKeys";
+import {connect} from 'react-redux';
+import {getOrderKeys} from '../thunks/keys';
+import OrderKeys from '../components/orderKeys';
 
-const mapStateToProps = ({ keys: { orderKeys, isOrderKeysLoading } }) => ({
-  keys: orderKeys,
-  isLoading: isOrderKeysLoading
+const mapStateToProps = ({keys: {orderKeys, isOrderKeysLoading}}) => ({
+	keys: orderKeys,
+	isLoading: isOrderKeysLoading
 });
 
 const mapDispatchToProps = {
-  getOrderKeys
+	getOrderKeys
 };
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+	mapStateToProps,
+	mapDispatchToProps
 )(OrderKeys);

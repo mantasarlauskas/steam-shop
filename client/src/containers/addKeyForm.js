@@ -1,18 +1,18 @@
-import { connect } from "react-redux";
-import { onKeyLoad, addKey } from "../thunks/keys";
-import KeyForm from "../components/keyForm";
+import {connect} from 'react-redux';
+import {onKeyLoad, addKey} from '../thunks/keys';
+import KeyForm from '../components/keyForm';
 
-const mapStateToProps = ({ products: { list, isLoading } }) => ({
-  products: list,
-  isProductsLoading: isLoading
+const mapStateToProps = ({products: {list, isLoading}}) => ({
+	products: list,
+	isProductsLoading: isLoading
 });
 
 const mapDispatchToProps = {
-  submitKey: addKey,
-  onKeyLoad
+	submitKey: addKey,
+	onKeyLoad
 };
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+	mapStateToProps,
+	mapDispatchToProps
 )(KeyForm);

@@ -12,7 +12,7 @@ import Pagination from "../pagination";
 import Loading from "../loading";
 import OrderRow from "../orderRow";
 import withPagination from "../withPagination";
-import { styles } from "../../styles/tables";
+import {styles} from '../../styles/tables';
 
 const Orders = ({
   items,
@@ -22,7 +22,7 @@ const Orders = ({
   paginatedItems
 }) => (
   <div className={`${classes.root} container`}>
-    <h1 className="title">Užsakymai</h1>
+    <h1 className="title">Orders</h1>
     <hr />
     {isLoading ? (
       <Loading size={100} />
@@ -32,7 +32,7 @@ const Orders = ({
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell className="xs-hide">Sukūrimo data</TableCell>
+              <TableCell className="xs-hide">Created at</TableCell>
               <TableCell />
             </TableRow>
           </TableHead>
@@ -51,7 +51,7 @@ const Orders = ({
         />
       </Paper>
     ) : (
-      <Typography variant="h6">Užsakymų kol kas dar nėra</Typography>
+      <Typography variant="h6">No orders were found</Typography>
     )}
   </div>
 );

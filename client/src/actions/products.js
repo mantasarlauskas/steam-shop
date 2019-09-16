@@ -1,10 +1,10 @@
-import C from "../constants";
+import C from '../constants';
 
 export const addProducts = products => ({
-  type: C.ADD_PRODUCTS,
-  payload: products
+	type: C.ADD_PRODUCTS,
+	payload: products
 });
 
 export const fetchProducts = () => ({
-  type: C.FETCH_PRODUCTS
+	type: C.FETCH_PRODUCTS
 });

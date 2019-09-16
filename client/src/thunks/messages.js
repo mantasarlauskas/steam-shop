@@ -1,6 +1,6 @@
-import { resetErrorMessage, resetSuccessMessage } from "../actions/messages";
+import {resetErrorMessage, resetSuccessMessage} from '../actions/messages';
 
 export const resetMessages = () => dispatch => {
-  dispatch(resetSuccessMessage());
-  dispatch(resetErrorMessage());
+	dispatch(resetSuccessMessage());
+	dispatch(resetErrorMessage());
 };

@@ -1,12 +1,12 @@
-import { connect } from "react-redux";
-import { setSort } from "../actions/filter";
-import Sort from "../components/sort";
+import {connect} from 'react-redux';
+import {setSort} from '../actions/filter';
+import Sort from '../components/sort';
 
 const mapDispatchToProps = {
-  setSort
+	setSort
 };
 
 export default connect(
-  null,
-  mapDispatchToProps
+	null,
+	mapDispatchToProps
 )(Sort);

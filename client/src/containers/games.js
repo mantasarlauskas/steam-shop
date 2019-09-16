@@ -1,18 +1,18 @@
-import { connect } from "react-redux";
-import { productBySortSelector } from "../selectors/products";
-import { onProductsLoad } from "../thunks/products";
-import Games from "../components/games";
+import {connect} from 'react-redux';
+import {productBySortSelector} from '../selectors/products';
+import {onProductsLoad} from '../thunks/products';
+import Games from '../components/games';
 
 const mapStateToProps = state => ({
-  games: productBySortSelector(state),
-  isLoading: state.products.isLoading
+	games: productBySortSelector(state),
+	isLoading: state.products.isLoading
 });
 
 const mapDispatchToProps = {
-  getItems: onProductsLoad
+	getItems: onProductsLoad
 };
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+	mapStateToProps,
+	mapDispatchToProps
 )(Games);

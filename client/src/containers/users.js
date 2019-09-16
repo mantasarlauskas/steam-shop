@@ -1,17 +1,17 @@
-import { connect } from "react-redux";
-import { getUsers } from "../thunks/users";
-import Users from "../components/users";
+import {connect} from 'react-redux';
+import {getUsers} from '../thunks/users';
+import Users from '../components/users';
 
-const mapStateToProps = ({ users: { list, isLoading } }) => ({
-  users: list,
-  isLoading
+const mapStateToProps = ({users: {list, isLoading}}) => ({
+	users: list,
+	isLoading
 });
 
 const mapDispatchToProps = {
-  getItems: getUsers
+	getItems: getUsers
 };
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+	mapStateToProps,
+	mapDispatchToProps
 )(Users);

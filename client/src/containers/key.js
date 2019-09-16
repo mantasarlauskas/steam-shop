@@ -1,12 +1,12 @@
-import { connect } from "react-redux";
-import { removeKey } from "../thunks/keys";
-import Key from "../components/key";
+import {connect} from 'react-redux';
+import {removeKey} from '../thunks/keys';
+import Key from '../components/key';
 
 const mapDispatchToProps = {
-  removeKey
+	removeKey
 };
 
 export default connect(
-  null,
-  mapDispatchToProps
+	null,
+	mapDispatchToProps
 )(Key);

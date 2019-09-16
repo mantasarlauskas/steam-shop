@@ -1,8 +1,8 @@
 export default {
-  noMatch: {
-    padding: 50
-  },
-  text: {
-    textAlign: "center"
-  }
+	noMatch: {
+		padding: 50
+	},
+	text: {
+		textAlign: 'center'
+	}
 };

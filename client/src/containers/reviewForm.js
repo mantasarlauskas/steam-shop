@@ -1,12 +1,12 @@
-import { connect } from "react-redux";
-import { addReview } from "../thunks/reviews";
-import ReviewForm from "../components/reviewForm";
+import {connect} from 'react-redux';
+import {addReview} from '../thunks/reviews';
+import ReviewForm from '../components/reviewForm';
 
 const mapDispatchToProps = {
-  addReview
+	addReview
 };
 
 export default connect(
-  null,
-  mapDispatchToProps
+	null,
+	mapDispatchToProps
 )(ReviewForm);

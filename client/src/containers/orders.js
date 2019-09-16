@@ -1,18 +1,18 @@
-import { connect } from "react-redux";
-import { getOrders } from "../thunks/orders";
-import { orderSelector } from "../selectors/order";
-import Orders from "../components/orders";
+import {connect} from 'react-redux';
+import {getOrders} from '../thunks/orders';
+import {orderSelector} from '../selectors/order';
+import Orders from '../components/orders';
 
 const mapStateToProps = state => ({
-  items: orderSelector(state),
-  isLoading: state.orders.isLoading
+	items: orderSelector(state),
+	isLoading: state.orders.isLoading
 });
 
 const mapDispatchToProps = {
-  getItems: getOrders
+	getItems: getOrders
 };
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+	mapStateToProps,
+	mapDispatchToProps
 )(Orders);
