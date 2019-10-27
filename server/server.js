@@ -36,6 +36,18 @@ app.use('/api/orders', orders);
 app.use('/api/reviews', reviews);
 app.use('/api/order-keys', orderKeys);
 
+app.all('/api/*', (req, res) => {
+	res.status(404).json({error: 'endpoint does not exist'});
+});
+
+app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname + '/../client/public/index.html'));
+});
+
+app.all('*', (req, res) => {
+	res.status(404).json({error: 'endpoint does not exist'});
+});
+
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 if (process.env.NODE_ENV === 'production') {

@@ -53,7 +53,7 @@ router.put('/', async ({body: {title, price, description, logo, id}, headers: {a
 				await product.update({title, price, description, logo});
 				res.status(200).json({success: 'Product was updated'});
 			} else {
-				res.status(400).json({error: 'Product does not exist'});
+				res.status(404).json({error: 'Product does not exist'});
 			}
 		} else {
 			res.status(400).json({error: 'title, price, description, id and logo fields are required'});
@@ -72,7 +72,7 @@ router.delete('/', async ({body: {id}, headers: {authorization}}, res) => {
 				await product.destroy();
 				res.status(200).json({success: 'Product was deleted'});
 			} else {
-				res.status(400).json({error: 'Product does not exist'});
+				res.status(404).json({error: 'Product does not exist'});
 			}
 		} else {
 			res.status(400).json({error: 'id field is required'});
@@ -108,7 +108,24 @@ router.get('/:id', async ({params: {id}}, res) => {
 	if (data) {
 		res.json({product: data});
 	} else {
-		res.status(400).json({error: 'Product does not exist'});
+		res.status(404).json({error: 'Product does not exist'});
+	}
+});
+
+router.get('/:id/keys', async ({params: {id}, headers: {authorization}}, res) => {
+	const token = getToken(authorization);
+	if (verifyAdmin(token, res)) {
+		const product = await Product.findOne({where: {id}});
+		if (product) {
+			const keys = await Key.findAll({where: {game_id: id}});
+			if (keys.length) {
+				res.json({keys});
+			} else {
+				res.status(404).json({error: 'Product does not have any keys'});
+			}
+		} else {
+			res.status(404).json({error: 'Product does not exist'});
+		}
 	}
 });
 

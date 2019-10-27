@@ -9,8 +9,12 @@ router.post('/', async ({body: {text, game_id, rating}, headers: {authorization}
 	const user = verifyUser(token, res);
 	if (user) {
 		if (text && game_id && rating) {
-			await Review.create({text, game_id, rating, user_id: user.id});
-			res.status(201).json({success: 'Review was added'});
+			if (rating >=1 && rating <= 5) {
+				await Review.create({text, game_id, rating, user_id: user.id});
+				res.status(201).json({success: 'Review was added'});
+			} else {
+				res.status(400).json({error: 'Rating must be between 1 and 5'});
+			}
 		} else {
 			res.status(400).json({error: 'text, game_id and rating fields are required'});
 		}
@@ -27,7 +31,7 @@ router.put('/', async ({body: {text, id, rating}, headers: {authorization}}, res
 				review.update({text, rating});
 				res.status(200).json({success: 'Review was updated'});
 			} else {
-				res.status(400).json({error: 'Review does not exist'});
+				res.status(404).json({error: 'Review does not exist'});
 			}
 		} else {
 			res.status(400).json({error: 'text, id and rating fields are required'});
@@ -48,10 +52,10 @@ router.delete(
 						await review.destroy();
 						res.status(200).json({success: 'Review was deleted'});
 					} else {
-						res.status(401).json({error: 'User does not have rights'});
+						res.status(403).json({error: 'User does not have rights'});
 					}
 				} else {
-					res.status(400).json({error: 'Review does not exist'});
+					res.status(404).json({error: 'Review does not exist'});
 				}
 			} else {
 				res.status(400).json({error: 'id field is required'});
@@ -84,7 +88,11 @@ router.get('/:id', async ({params: {id}}, res) => {
 			}
 		]
 	});
-	res.json({reviews: parseResults(data)});
+	if (data) {
+		res.json({reviews: parseResults(data)});
+	} else {
+		res.status(404).json({error: 'Review does not exist'});
+	}
 });
 
 module.exports = router;

@@ -11,14 +11,14 @@ router.post('/login', async ({body: {username, password}}, res) => {
 		const results = await User.find({where: {username}});
 		const data = parseResults(results);
 		if (!data) {
-			res.status(400).json({error: 'User does not exist'});
+			res.status(401).json({error: 'User does not exist'});
 		} else if (data.isBanned === true) {
-			res.status(400).json({error: 'User is banned'});
+			res.status(403).json({error: 'User is banned'});
 		} else {
 			if (bcrypt.compareSync(password, data.password)) {
 				res.json({token: jwt.sign(data, 'key')});
 			} else {
-				res.status(400).json({error: 'Wrong password'});
+				res.status(401).json({error: 'Wrong password'});
 			}
 		}
 		return;
@@ -56,7 +56,7 @@ router.post('/password', async ({body: {password, currentPassword}, headers: {au
 				await data.update({password: bcrypt.hashSync(password, 10)});
 				res.status(200).json({success: 'Password changed'});
 			} else {
-				res.status(400).json({error: 'Wrong password'});
+				res.status(401).json({error: 'Wrong password'});
 			}
 		} else {
 			res.status(400).json({error: 'password and currentPassword fields are required'});

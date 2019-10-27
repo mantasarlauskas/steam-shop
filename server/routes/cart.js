@@ -20,7 +20,7 @@ router.post('/', async ({body: {game_id}, headers: {authorization}}, res) => {
 				});
 				res.status(201).json({success: 'Key was added to cart'});
 			} else {
-				res.status(400).json({error: 'Product does not have unused keys'});
+				res.status(404).json({error: 'Product does not have unused keys'});
 			}
 		} else {
 			res.status(400).json({error: 'game_id field is required'});
@@ -44,7 +44,7 @@ router.delete('/', async ({body: {game_id}, headers: {authorization}}, res) => {
 				);
 				res.status(200).json({success: 'Key was removed from cart'});
 			} else {
-				res.status(400).json({error: 'Key was not found in cart'});
+				res.status(404).json({error: 'Key was not found in cart'});
 			}
 		} else {
 			res.status(400).json({error: 'game_id field is required'});

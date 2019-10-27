@@ -9,24 +9,31 @@ router.post('/', async ({headers: {authorization}}, res) => {
 	const token = getToken(authorization);
 	const user = verifyUser(token, res);
 	if (user) {
-		const order = await Order.create({user_id: user.id});
 		const data = await Cart.findAll({
 			where: {
 				user_id: user.id,
 				order_id: null
 			}
 		});
-		data.forEach(async cart => {
-			if (cart) {
-				await cart.update({order_id: parseResults(order).id});
-				const product = await Product.find({where: {id: cart.game_id}});
-				product &&
-				(await product.update({
-					timesBought: parseInt(product.timesBought) + 1
-				}));
-			}
-		});
-		res.status(200).json({success: 'Order was created'});
+
+		if (data.length > 0) {
+			const order = await Order.create({user_id: user.id});
+			data.forEach(async cart => {
+				if (cart) {
+					await cart.update({order_id: parseResults(order).id});
+					const product = await Product.find({where: {id: cart.game_id}});
+					product &&
+					(await product.update({
+						timesBought: parseInt(product.timesBought) + 1
+					}));
+				}
+			});
+
+			res.status(201).json({success: 'Order was created'});
+		} else {
+			res.status(400).json({success: 'Shopping cart is empty'});
+		}
+
 	}
 });
 

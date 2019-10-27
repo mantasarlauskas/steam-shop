@@ -12,12 +12,12 @@ const verifyAdmin = (token, res) => {
 	if (token) {
 		return jwt.verify(token, 'key', (err, user) => {
 			if (err) {
-				res.status(400).json({error: 'Wrong token'});
+				res.status(401).json({error: 'Wrong token'});
 				return false;
 			} else if (user.role === 1) {
 				return true;
 			} else {
-				res.status(401).json({error: 'User does not have rights'});
+				res.status(403).json({error: 'User does not have rights'});
 				return false;
 			}
 		});
@@ -30,12 +30,12 @@ const verifySelf = (token, id, res) => {
 	if (token) {
 		return jwt.verify(token, 'key', (err, user) => {
 			if (err) {
-				res.status(400).json({error: 'Wrong token'});
+				res.status(401).json({error: 'Wrong token'});
 				return false;
 			} else if (user.id === id) {
 				return true;
 			} else {
-				res.status(401).json({error: 'User does not have rights'});
+				res.status(403).json({error: 'User does not have rights'});
 				return false;
 			}
 		});
@@ -48,7 +48,7 @@ const verifyUser = (token, res) => {
 	if (token) {
 		return jwt.verify(token, 'key', (err, user) => {
 			if (err) {
-				res.status(400).json({error: 'Wrong token'});
+				res.status(401).json({error: 'Wrong token'});
 				return false;
 			} else {
 				return user;

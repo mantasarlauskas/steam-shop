@@ -1,5 +1,6 @@
 const {Router} = require('express');
 const jwt = require('jsonwebtoken');
+const validator = require('email-validator');
 const {User} = require('../models/index');
 const {
 	getToken,
@@ -11,13 +12,18 @@ const {
 
 const router = Router();
 
-router.post('/', async ({body: {email, id}, headers: {authorization}}, res) => {
+router.post('/', async ({body: {email}, headers: {authorization}}, res) => {
 	const token = getToken(authorization);
+	const { id } = jwt.decode(token);
 	if (verifySelf(token, id, res)) {
 		if (email && id) {
-			const user = await User.find({where: {id}});
-			await user.update({email});
-			res.status(200).json({success: 'Email was changed'});
+			if (validator.validate(email)) {
+				const user = await User.find({where: {id}});
+				await user.update({email});
+				res.status(200).json({success: 'Email was changed'});
+			} else {
+				res.status(400).json({error: 'Wrong email format'});
+			}
 		} else {
 			res.status(400).json({error: 'email and id fields are required'});
 		}

@@ -26,7 +26,7 @@ router.get('/:id', async ({headers: {authorization}, params: {id}}, res) => {
 		if (cart && (user.role === 1 || user.id === cart[0].user_id)) {
 			res.json({orderKeys: cart});
 		} else {
-			res.status(400).json({error: 'User does not have access'});
+			res.status(403).json({error: 'User does not have access'});
 		}
 	}
 });

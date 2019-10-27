@@ -25,7 +25,7 @@ router.put('/', async ({body: {id, game_id, steam_key}, headers: {authorization}
 				await key.update({game_id, steam_key});
 				res.status(200).json({success: 'Key was updated'});
 			} else {
-				res.status(400).json({error: 'Key does not exist'});
+				res.status(404).json({error: 'Key does not exist'});
 			}
 		} else {
 			res.status(400).json({error: 'id, game_id and steam_key fields are required'});
@@ -42,7 +42,7 @@ router.delete('/', async ({body: {id}, headers: {authorization}}, res) => {
 				await key.destroy();
 				res.status(200).json({success: 'Key was deleted'});
 			} else {
-				res.status(400).json({error: 'Key does not exist'});
+				res.status(404).json({error: 'Key does not exist'});
 			}
 		} else {
 			res.status(400).json({error: 'id field is required'});
@@ -76,7 +76,7 @@ router.get(
 			if (data) {
 				res.json({key: data});
 			} else {
-				res.status(400).json({error: 'Key does not exist'});
+				res.status(404).json({error: 'Key does not exist'});
 			}
 		}
 	}
