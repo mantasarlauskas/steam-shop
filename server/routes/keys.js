@@ -8,8 +8,8 @@ router.post('/', async ({body: {game_id, steam_key}, headers: {authorization}}, 
 	const token = getToken(authorization);
 	if (verifyAdmin(token, res)) {
 		if (game_id && steam_key) {
-			await Key.create({game_id, steam_key});
-			res.status(201).json({success: 'Key was added'});
+			const key = await Key.create({game_id, steam_key});
+			res.status(201).json({success: 'Key was added', key});
 		} else {
 			res.status(400).json({error: 'game_id and steam_key fields are required'});
 		}
@@ -23,7 +23,7 @@ router.put('/', async ({body: {id, game_id, steam_key}, headers: {authorization}
 			const key = await Key.findOne({where: {id}});
 			if (key) {
 				await key.update({game_id, steam_key});
-				res.status(200).json({success: 'Key was updated'});
+				res.status(200).json({success: 'Key was updated', key});
 			} else {
 				res.status(404).json({error: 'Key does not exist'});
 			}

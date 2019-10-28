@@ -64,3 +64,5 @@ app.get('*', (req, res) => {
 const server = http.listen(port, () => {
 	console.log('server is listening on port', server.address().port);
 });
+
+module.exports = app;

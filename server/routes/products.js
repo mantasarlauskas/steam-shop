@@ -36,8 +36,8 @@ router.post('/', async ({body: {title, price, description, logo}, headers: {auth
 	const token = getToken(authorization);
 	if (verifyAdmin(token, res)) {
 		if (title && price && description && logo) {
-			await Product.create({title, price, description, logo});
-			res.status(201).json({success: 'Product was added'});
+			const product = await Product.create({title, price, description, logo});
+			res.status(201).json({success: 'Product was added', product});
 		} else {
 			res.status(400).json({error: 'title, price, description and logo fields are required'});
 		}
@@ -50,8 +50,8 @@ router.put('/', async ({body: {title, price, description, logo, id}, headers: {a
 		if (title && price && description && logo && id) {
 			const product = await Product.findOne({where: {id}});
 			if (product) {
-				await product.update({title, price, description, logo});
-				res.status(200).json({success: 'Product was updated'});
+				const updatedProduct = await product.update({title, price, description, logo});
+				res.status(200).json({success: 'Product was updated', product: updatedProduct});
 			} else {
 				res.status(404).json({error: 'Product does not exist'});
 			}
@@ -109,23 +109,6 @@ router.get('/:id', async ({params: {id}}, res) => {
 		res.json({product: data});
 	} else {
 		res.status(404).json({error: 'Product does not exist'});
-	}
-});
-
-router.get('/:id/keys', async ({params: {id}, headers: {authorization}}, res) => {
-	const token = getToken(authorization);
-	if (verifyAdmin(token, res)) {
-		const product = await Product.findOne({where: {id}});
-		if (product) {
-			const keys = await Key.findAll({where: {game_id: id}});
-			if (keys.length) {
-				res.json({keys});
-			} else {
-				res.status(404).json({error: 'Product does not have any keys'});
-			}
-		} else {
-			res.status(404).json({error: 'Product does not exist'});
-		}
 	}
 });
 

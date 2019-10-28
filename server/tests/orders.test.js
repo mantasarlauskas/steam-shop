@@ -1,5 +1,6 @@
 const request = require('supertest');
-const {loginAsAdmin, addProductToCart, serverUrl} = require('./helpers');
+const server = require('../server');
+const {loginAsAdmin, addProductToCart} = require('./helpers');
 
 const endPoint = '/api/orders';
 
@@ -7,27 +8,27 @@ describe('Orders', () => {
 	let token;
 
 	beforeAll(async (done) => {
-		token = await loginAsAdmin();
-		await addProductToCart(1, token);
+		token = await loginAsAdmin(server);
+		await addProductToCart(server,1, token);
 		done();
 	});
 
 	it('should create a new order', (done) => {
-		request(serverUrl)
+		request(server)
 			.post(endPoint)
 			.set('Authorization', `Bearer ${token}`)
 			.expect(201, {success: 'Order was created'}, done);
 	});
 
 	it('should return empty shopping cart error message', (done) => {
-		request(serverUrl)
+		request(server)
 			.post(endPoint)
 			.set('Authorization', `Bearer ${token}`)
 			.expect(400, {success: 'Shopping cart is empty'}, done);
 	});
 
 	it('should return user order list', (done) => {
-		request(serverUrl)
+		request(server)
 			.get(endPoint)
 			.set('Authorization', `Bearer ${token}`)
 			.expect(200)

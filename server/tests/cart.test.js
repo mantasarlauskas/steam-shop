@@ -1,5 +1,6 @@
 const request = require('supertest');
-const {loginAsAdmin, serverUrl} = require('./helpers');
+const server = require('../server');
+const {loginAsAdmin} = require('./helpers');
 
 const endPoint = '/api/cart';
 
@@ -7,12 +8,12 @@ describe('Cart', () => {
 	let token;
 
 	beforeAll(async (done) => {
-		token = await loginAsAdmin();
+		token = await loginAsAdmin(server);
 		done();
 	});
 
 	it('should add product to cart', (done) => {
-		request(serverUrl)
+		request(server)
 			.post(endPoint)
 			.send({
 				game_id: 1,
@@ -22,7 +23,7 @@ describe('Cart', () => {
 	});
 
 	it('should not add product to cart and return error message', (done) => {
-		request(serverUrl)
+		request(server)
 			.post(endPoint)
 			.send({
 				game_id: 9,
@@ -32,7 +33,7 @@ describe('Cart', () => {
 	});
 
 	it('should remove product from cart', (done) => {
-		request(serverUrl)
+		request(server)
 			.delete(endPoint)
 			.send({
 				game_id: 1,
@@ -42,7 +43,7 @@ describe('Cart', () => {
 	});
 
 	it('should return key not found error message', (done) => {
-		request(serverUrl)
+		request(server)
 			.delete(endPoint)
 			.send({
 				game_id: 9,

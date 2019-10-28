@@ -1,5 +1,6 @@
 const request = require('supertest');
-const {loginAsAdmin, serverUrl} = require('./helpers');
+const {loginAsAdmin} = require('./helpers');
+const server = require('../server');
 
 const endPoint = '/api/reviews';
 
@@ -7,12 +8,12 @@ describe('Reviews', () => {
 	let token;
 
 	beforeAll(async (done) => {
-		token = await loginAsAdmin();
+		token = await loginAsAdmin(server);
 		done();
 	});
 
 	it('should create a new review', (done) => {
-		request(serverUrl)
+		request(server)
 			.post(endPoint)
 			.send({
 				text: 'masterpiece',
@@ -24,7 +25,7 @@ describe('Reviews', () => {
 	});
 
 	it('should not create review and return rating error message', (done) => {
-		request(serverUrl)
+		request(server)
 			.post(endPoint)
 			.send({
 				text: 'masterpiece',

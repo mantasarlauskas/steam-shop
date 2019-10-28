@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "jest --coverage"
+    "test": "rm -rf ./coverage && jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -30,7 +30,12 @@
   "jest": {
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
-      "/node_modules/"
+      "/node_modules/",
+      "/server/config",
+      "/server/migrations",
+      "/server/models",
+      "helpers.js",
+      "server.js"
     ]
   }
 }
