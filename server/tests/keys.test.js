@@ -12,7 +12,26 @@ describe('Keys', () => {
 		done();
 	});
 
+	afterAll(() => {
+		server.close();
+	});
+
 	describe('POST', () => {
+		it('should create a new key', async (done) => {
+			const {body: {success, key}} = await request(server)
+				.post(endPoint)
+				.send({
+					game_id: 1,
+					steam_key: '123-4asdsad-213123'
+				})
+				.set('Authorization', `Bearer ${token}`)
+				.expect(201);
+			expect(success).toBe('Key was added');
+			expect(key).not.toBeUndefined();
+			newKey = key;
+			done();
+		});
+
 		it('should create a new key', async (done) => {
 			const {body: {success, key}} = await request(server)
 				.post(endPoint)

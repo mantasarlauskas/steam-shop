@@ -10,7 +10,7 @@ public/*.css
 /**/node_modules
 
 # testing
-/coverage
+/server/coverage
 
 # production
 /client/build

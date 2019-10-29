@@ -61,8 +61,6 @@ app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname + '/../client/public/index.html'));
 });
 
-const server = http.listen(port, () => {
-	console.log('server is listening on port', server.address().port);
-});
+const server = app.listen(port);
 
-module.exports = app;
+module.exports = server;

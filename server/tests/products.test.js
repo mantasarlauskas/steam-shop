@@ -12,6 +12,10 @@ describe('Products', () => {
 		done();
 	});
 
+	afterAll(() => {
+		server.close();
+	});
+
 	describe('POST', () => {
 		it('should create a new product with a review', async (done) => {
 			const {body: {success, product}} = await request(server)

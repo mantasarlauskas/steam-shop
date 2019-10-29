@@ -4,7 +4,7 @@ const server = require('../server');
 const {
 	loginWithCredentials,
 	loginAsAdmin,
-	getUsers,
+	getUser,
 	expectTokenNotFoundError,
 	expectFieldRequiredError
 } = require('./helpers');
@@ -13,6 +13,10 @@ const username = uniqid();
 
 describe('Registration', () => {
 	const endPoint = '/api/register';
+
+	afterAll(() => {
+		server.close();
+	});
 
 	it('should create a new user', done => {
 		request(server)
@@ -27,7 +31,7 @@ describe('Registration', () => {
 
 	it('should return user list with new user', async (done) => {
 		const token = await loginAsAdmin(server);
-		const users = await getUsers(server, token);
+		const {body: {users}} = await request(server).get('/api/users').set('Authorization', `Bearer ${token}`);
 		const user = users.find(user => user.username === username);
 		expect(user).not.toBeUndefined();
 		done();
@@ -52,6 +56,10 @@ describe('Registration', () => {
 
 describe('Login', () => {
 	const endPoint = '/api/login';
+
+	afterAll(() => {
+		server.close();
+	});
 
 	it('should login user and return token', function (done) {
 		request(server)
@@ -106,6 +114,10 @@ describe('Login', () => {
 describe('Password', () => {
 	const endPoint = '/api/password';
 	let token;
+
+	afterAll(() => {
+		server.close();
+	});
 
 	beforeAll(async (done) => {
 		token = await loginWithCredentials(server, username, 'user123123');

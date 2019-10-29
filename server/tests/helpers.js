@@ -1,4 +1,5 @@
 const request = require('supertest');
+const jwt = require('jsonwebtoken');
 
 const loginWithCredentials = (server, username, password) => {
 	return request(server)
@@ -23,11 +24,11 @@ const addProductToCart = (server, game_id, token) => {
 		.set('Authorization', `Bearer ${token}`);
 };
 
-const getUsers = (server, token) => {
+const getUser = (server, id, token) => {
 	return request(server)
-		.get('/api/users')
+		.get(`/api/users/${id}`)
 		.set('Authorization', `Bearer ${token}`)
-		.then(({body: {users}}) => users);
+		.then(({body: {user}}) => user);
 };
 
 const getKey = (server, token, id) => {
@@ -64,7 +65,7 @@ module.exports = {
 	loginAsAdmin,
 	loginWithCredentials,
 	addProductToCart,
-	getUsers,
+	getUser,
 	getKey,
 	getProduct,
 	expectTokenNotFoundError,

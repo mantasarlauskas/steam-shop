@@ -8,7 +8,7 @@ router.post('/', async ({body: {game_id, steam_key}, headers: {authorization}}, 
 	const token = getToken(authorization);
 	if (verifyAdmin(token, res)) {
 		if (game_id && steam_key) {
-			const key = await Key.create({game_id, steam_key});
+			const key = await Key.create({game_id, steam_key, isUsed: 0});
 			res.status(201).json({success: 'Key was added', key});
 		} else {
 			res.status(400).json({error: 'game_id and steam_key fields are required'});

@@ -4,8 +4,7 @@
     "password": "rootas123",
     "database": "steam-shop",
     "host": "localhost",
-    "dialect": "mysql",
-    "logging": false
+    "dialect": "mysql"
   },
   "test": {
     "username": "rootas123",
@@ -13,7 +12,8 @@
     "database": "steam-shop",
     "host": "localhost",
     "dialect": "mysql",
-    "logging": false
+    "logging": false,
+    "operatorsAliases": false
   },
   "production": {
     "username": "rootas123",
@@ -21,6 +21,7 @@
     "database": "steam-shop",
     "host": "localhost",
     "dialect": "mysql",
-    "logging": false
+    "logging": false,
+    "operatorsAliases": false
   }
 }

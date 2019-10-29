@@ -6,7 +6,6 @@ const {
 	getToken,
 	verifyAdmin,
 	verifySelf,
-	verifyUser,
 	parseResults
 } = require('../helpers');
 
@@ -14,7 +13,7 @@ const router = Router();
 
 router.post('/', async ({body: {email}, headers: {authorization}}, res) => {
 	const token = getToken(authorization);
-	const { id } = jwt.decode(token);
+	const id = (jwt.decode(token) || {}).id;
 	if (verifySelf(token, id, res)) {
 		if (email && id) {
 			if (validator.validate(email)) {
@@ -40,13 +39,12 @@ router.get('/', async ({headers: {authorization}}, res) => {
 
 router.get('/:id', async ({headers: {authorization}, params: {id}}, res) => {
 	const token = getToken(authorization);
-	const user = verifyUser(token, res);
-	if (user) {
+	if (verifyAdmin(token, res)) {
 		const data = await User.find({where: {id}});
-		if (data.id === user.id) {
-			res.json({token: jwt.sign(parseResults(data), 'key')});
+		if (data) {
+			res.json({user: parseResults(data)});
 		} else {
-			res.status(400).json({error: 'Wrong user'});
+			res.status(404).json({error: 'User does not exist'});
 		}
 	}
 });

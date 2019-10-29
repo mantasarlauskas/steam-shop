@@ -12,6 +12,10 @@ describe('Reviews', () => {
 		done();
 	});
 
+	afterAll(() => {
+		server.close();
+	});
+
 	it('should create a new review', (done) => {
 		request(server)
 			.post(endPoint)
