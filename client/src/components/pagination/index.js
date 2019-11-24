@@ -72,6 +72,10 @@ class Pagination extends Component {
 	render() {
 		const {page, itemsPerPage} = this.state;
 		const {itemLength, tablePagination} = this.props;
+		if (itemLength === 0) {
+			return null;
+		}
+
 		return tablePagination ? (
 			<TablePagination
 				rowsPerPageOptions={[5, 10, 25]}
